@@ -1,10 +1,10 @@
+import { AddImmediateInstruction } from "../instructions/AddImmediateInstruction";
 import { AddInstruction } from "../instructions/AddInstruction";
 import { Instruction } from "../instructions/Instruction";
-import { AddImmediateInstruction } from "../instructions/AddImmediateInstruction";
-import { SubInstruction } from "../instructions/SubInstruction";
-import { SubImmediateInstruction } from "../instructions/SubImmediateInstruction";
-import { LoadWordInstruction } from "../instructions/LoadWordInstruction";
 import { LoadByteInstruction } from "../instructions/LoadByteInstruction";
+import { LoadWordInstruction } from "../instructions/LoadWordInstruction";
+import { SubImmediateInstruction } from "../instructions/SubImmediateInstruction";
+import { SubInstruction } from "../instructions/SubInstruction";
 
 const OPCODES: { [code: string]: { new(...args: number[]): Instruction; }; } = {
 	"ADD": AddInstruction,
