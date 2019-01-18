@@ -28,6 +28,14 @@ export const OPCODES: { [code: string]: Instruction; } = {
 	"SNE": new RegisterInstruction((a, b) => (a !== b) ? 1 : 0),
 	"SNEI": new ImmediateInstruction((a, b) => (a !== b) ? 1 : 0),
 	
+	// Logic
+	"AND": new RegisterInstruction((a, b) => a & b),
+	"ANDI": new ImmediateInstruction((a, b) => a & b),
+	"OR": new RegisterInstruction((a, b) => a | b),
+	"ORI": new ImmediateInstruction((a, b) => a | b),
+	"XOR": new RegisterInstruction((a, b) => a ^ b),
+	"XORI": new ImmediateInstruction((a, b) => a ^ b),
+	
 	// Storage
 	"LW": new LoadInstruction((st, addr) => st.getMemoryWord(addr)),
 	"LB": new LoadInstruction((st, addr) => st.getMemoryByte(addr))
