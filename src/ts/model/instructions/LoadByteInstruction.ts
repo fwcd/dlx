@@ -2,9 +2,9 @@ import { Instruction } from "./Instruction";
 import { ProcessorState } from "../ProcessorState";
 
 /**
- * Loads a word from memory.
+ * Loads a byte from memory.
  */
-export class LoadWordInstruction implements Instruction {
+export class LoadByteInstruction implements Instruction {
 	private dest: number;
 	private offset: number;
 	private addressRegister: number;
@@ -17,6 +17,6 @@ export class LoadWordInstruction implements Instruction {
 	
 	public execute(state: ProcessorState) {
 		const storage = state.getStorage();
-		storage.setRegister(this.dest, storage.getMemoryWord(this.offset + storage.getRegister(this.addressRegister)));
+		storage.setRegister(this.dest, storage.getMemoryByte(this.offset + storage.getRegister(this.addressRegister)));
 	}
 }
