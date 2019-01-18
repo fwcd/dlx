@@ -1,6 +1,9 @@
-/// <reference path="../../../node_modules/monaco-editor/monaco.d.ts" />
+/// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 
-import { DLX_GRAMMAR } from "./grammar/DLXGrammar";
+import { DLXCompletionProvider } from "./DLXCompletionProvider";
+import { DLX_GRAMMAR } from "./DLXGrammar";
+
+const DLX_LANGUAGE_ID = "dlx-assembly";
 
 export class EditorView {
 	private editor: monaco.editor.IStandaloneCodeEditor;
@@ -9,7 +12,7 @@ export class EditorView {
 		const editorWidget = document.getElementById("editor");
 		this.setupLanguageConfig();
 		this.editor = monaco.editor.create(editorWidget, {
-			language: "dlx-assembly",
+			language: DLX_LANGUAGE_ID,
 			minimap: {
 				enabled: false
 			},
@@ -22,8 +25,9 @@ export class EditorView {
 	}
 	
 	private setupLanguageConfig(): void {
-		monaco.languages.register({ id: "dlx-assembly" });
-		monaco.languages.setMonarchTokensProvider("dlx-assembly", DLX_GRAMMAR);
+		monaco.languages.register({ id: DLX_LANGUAGE_ID });
+		monaco.languages.setMonarchTokensProvider(DLX_LANGUAGE_ID, DLX_GRAMMAR);
+		monaco.languages.registerCompletionItemProvider(DLX_LANGUAGE_ID, new DLXCompletionProvider());
 	}
 	
 	public relayout(): void {

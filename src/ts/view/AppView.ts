@@ -1,4 +1,4 @@
-import { EditorView } from "./EditorView";
+import { EditorView } from "./editor/EditorView";
 
 export class AppView {
 	private editor = new EditorView();

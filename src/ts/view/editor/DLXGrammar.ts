@@ -15,5 +15,6 @@ export const DLX_GRAMMAR = <monaco.languages.IMonarchLanguage> {
 		comment: [
 			[/\/\//, "comment"]
 		]
-	}
+	},
+	ignoreCase: true
 };
