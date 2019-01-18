@@ -9,6 +9,7 @@ export const OPCODES: { [code: string]: Instruction; } = {
 	"ADDI": new ImmediateInstruction((a, b) => a + b),
 	"SUB": new RegisterInstruction((a, b) => a - b),
 	"SUBI": new ImmediateInstruction((a, b) => a - b),
+	"MULT": new RegisterInstruction((a, b) => a * b),
 	
 	// Shifts
 	"SLL": new RegisterInstruction((a, b) => a << b),
