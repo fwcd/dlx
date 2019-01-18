@@ -5,5 +5,5 @@ import { ProcessorState } from "../ProcessorState";
  * row of assembly code.
  */
 export interface Instruction {
-	execute(state: ProcessorState): void;
+	execute(state: ProcessorState, ...args: number[]): void;
 }
