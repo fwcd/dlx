@@ -1,9 +1,15 @@
-import { ProcessorState } from "./ProcessorState";
+import { ProcessorState } from "./processor/ProcessorState";
+import { FileStateModel } from "./file/FileStateModel";
 
 export class AppModel {
-	private state = new ProcessorState();
+	private processorState = new ProcessorState();
+	private fileState = new FileStateModel();
 	
-	public getState(): ProcessorState {
-		return this.state;
+	public getProcessorState(): ProcessorState {
+		return this.processorState;
+	}
+	
+	public getFileState(): FileStateModel {
+		return this.fileState;
 	}
 }

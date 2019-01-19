@@ -1,6 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 
-import { OPCODES } from "../../model/instructions/Opcodes";
+import { OPCODES } from "../../model/processor/instructions/Opcodes";
 
 export class DLXHoverProvider implements monaco.languages.HoverProvider {
 	public provideHover(model: monaco.editor.ITextModel, position: monaco.Position): monaco.languages.Hover {

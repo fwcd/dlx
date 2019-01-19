@@ -1,4 +1,4 @@
-import { ProcessorStorage } from "../../model/ProcessorStorage";
+import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 
 export class StorageCellView {
 	private element = document.createElement("input");

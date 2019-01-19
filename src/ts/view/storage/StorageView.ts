@@ -1,6 +1,6 @@
 import { MemoryView } from "./MemoryView";
 import { RegistersView } from "./RegistersView";
-import { ProcessorStorage } from "../../model/ProcessorStorage";
+import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 
 export class StorageView {
 	private registers = new RegistersView();

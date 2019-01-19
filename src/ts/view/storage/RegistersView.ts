@@ -1,4 +1,4 @@
-import { ProcessorStorage } from "../../model/ProcessorStorage";
+import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
 
 export class RegistersView {
