@@ -9,9 +9,9 @@ export class EditorView {
 	private editor: monaco.editor.IStandaloneCodeEditor;
 	
 	public initialize(): void {
-		const editorWidget = document.getElementById("editor");
+		const element = document.getElementById("editor");
 		this.setupLanguageConfig();
-		this.editor = monaco.editor.create(editorWidget, {
+		this.editor = monaco.editor.create(element, {
 			language: DLX_LANGUAGE_ID,
 			minimap: {
 				enabled: false

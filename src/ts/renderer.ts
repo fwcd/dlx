@@ -1,6 +1,7 @@
 import { AppView } from "./view/AppView";
 
 const appView = new AppView();
+appView.initializeStorage();
 
 // Monaco editor
 

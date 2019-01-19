@@ -20,3 +20,24 @@ html, body {
 	width: 0px; /* The width is managed by flex-grow */
 	height: 100%;
 }
+
+#storage {
+	flex: 1 0 0;
+	display: flex;
+	flex-flow: column;
+}
+
+#registers {
+	flex: 1 0 auto;
+}
+
+#memory {
+	flex: 1 0 auto;
+	flex-flow: row;
+	flex-wrap: wrap;
+	overflow-wrap: normal;
+}
+
+input[type=text] {
+	width: 20px;
+}

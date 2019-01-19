@@ -7,9 +7,9 @@ export class ProcessorStorage {
 	private memory: Int8Array;
 	private memoryStartAddress: number;
 	
-	public constructor(registerCount: number, memoryBytes: number, memoryStartAddress: number) {
+	public constructor(registerCount: number, memoryByteCount: number, memoryStartAddress: number) {
 		this.registers = new Int32Array(registerCount);
-		this.memory = new Int8Array(memoryBytes);
+		this.memory = new Int8Array(memoryByteCount);
 		this.memoryStartAddress = memoryStartAddress;
 	}
 	
@@ -32,20 +32,26 @@ export class ProcessorStorage {
 	}
 	
 	public getMemoryByte(address: number): number {
-		const index = address - this.memoryStartAddress;
-		if (index >= 0 && index < this.memory.length) {
-			return this.memory[index];
-		} else {
-			throw new Error("Could not read memory location with address " + address + " (index: " + index + ") which is out of bounds!");
-		}
+		return this.getMemoryByteByIndex(address - this.memoryStartAddress);
 	}
 	
 	public setMemoryByte(address: number, newValue: number): void {
-		const index = address - this.memoryStartAddress;
+		this.setMemoryByteByIndex(address - this.memoryStartAddress, newValue);
+	}
+	
+	public getMemoryByteByIndex(index: number): number {
+		if (index >= 0 && index < this.memory.length) {
+			return this.memory[index];
+		} else {
+			throw new Error("Could not read memory location with index " + index + " which is out of bounds!");
+		}
+	}
+	
+	public setMemoryByteByIndex(index: number, newValue: number): void {
 		if (index >= 0 && index < this.memory.length) {
 			this.memory[index] = newValue;
 		} else {
-			throw new Error("Could not write to memory location with address " + address + " (index: " + index + ") which is out of bounds!");
+			throw new Error("Could not write to memory location with index " + index + " which is out of bounds!");
 		}
 	}
 	
@@ -58,5 +64,17 @@ export class ProcessorStorage {
 		this.setMemoryByte(address + 1, (newValue >> 16) & 0xFF);
 		this.setMemoryByte(address + 2, (newValue >> 8) & 0xFF);
 		this.setMemoryByte(address + 3, newValue & 0xFF);
+	}
+	
+	public getRegisterCount(): number {
+		return this.registers.length;
+	}
+	
+	public getMemoryByteCount(): number {
+		return this.memory.length;
+	}
+	
+	public getMemoryWordCount(): number {
+		return this.getMemoryByteCount() / 4;
 	}
 }
