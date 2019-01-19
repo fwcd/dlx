@@ -19,4 +19,8 @@ export class ImmediateInstruction implements Instruction {
 		
 		storage.setRegister(dest, this.operation(storage.getRegister(left), literal));
 	}
+	
+	public describe(): string {
+		return "Operates on a value in a register and a literal. Places the result in a third register.";
+	}
 }

@@ -9,7 +9,8 @@ export class DLXCompletionProvider implements monaco.languages.CompletionItemPro
 				.map(opc => <monaco.languages.CompletionItem> {
 					label: opc,
 					kind: monaco.languages.CompletionItemKind.Keyword,
-					insertText: opc
+					insertText: opc,
+					documentation: OPCODES[opc].describe()
 				})
 		};
 	}

@@ -21,4 +21,8 @@ export class StoreInstruction implements Instruction {
 		
 		this.setter(storage, address, storage.getRegister(register));
 	}
+	
+	public describe(): string {
+		return "Stores the value of a register in memory.";
+	}
 }

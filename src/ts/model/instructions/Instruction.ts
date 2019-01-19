@@ -6,4 +6,6 @@ import { ProcessorState } from "../ProcessorState";
  */
 export interface Instruction {
 	execute(state: ProcessorState, ...args: number[]): void;
+	
+	describe(): string;
 }

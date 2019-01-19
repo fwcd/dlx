@@ -21,4 +21,8 @@ export class LoadInstruction implements Instruction {
 		
 		storage.setRegister(dest, this.getter(storage, address));
 	}
+	
+	public describe(): string {
+		return "Loads from memory to a register.";
+	}
 }

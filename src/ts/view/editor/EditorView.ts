@@ -5,6 +5,7 @@ import { DLX_GRAMMAR } from "./DLXGrammar";
 import { DLXLanguageConfiguration } from "./DLXLanguageConfiguration";
 import { DLXDefinitionProvider } from "./DLXDefinitionProvider";
 import { DLXRenameProvider } from "./DLXRenameProvider";
+import { DLXHoverProvider } from "./DLXHoverProvider";
 
 const DLX_LANGUAGE_ID = "dlx-assembly";
 
@@ -38,6 +39,7 @@ export class EditorView {
 		monaco.languages.setLanguageConfiguration(DLX_LANGUAGE_ID, new DLXLanguageConfiguration());
 		monaco.languages.registerDefinitionProvider(DLX_LANGUAGE_ID, new DLXDefinitionProvider());
 		monaco.languages.registerRenameProvider(DLX_LANGUAGE_ID, new DLXRenameProvider());
+		monaco.languages.registerHoverProvider(DLX_LANGUAGE_ID, new DLXHoverProvider());
 	}
 	
 	public relayout(): void {

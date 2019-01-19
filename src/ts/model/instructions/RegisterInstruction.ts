@@ -19,4 +19,8 @@ export class RegisterInstruction implements Instruction {
 		
 		storage.setRegister(dest, this.operation(storage.getRegister(left), storage.getRegister(right)));
 	}
+	
+	public describe(): string {
+		return "Operates on two registers and places the result in a third register.";
+	}
 }
