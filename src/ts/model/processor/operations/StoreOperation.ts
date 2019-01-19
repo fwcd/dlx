@@ -1,22 +1,22 @@
-import { Instruction } from "./Instruction";
+import { Operation } from "./Operation";
 import { ProcessorState } from "../ProcessorState";
 import { ProcessorStorage } from "../ProcessorStorage";
 
 /**
  * Stores a register in memory.
  */
-export class StoreInstruction implements Instruction {
+export class StoreOperation implements Operation {
 	private setter: (storage: ProcessorStorage, address: number, value: number) => void;
 	
 	public constructor(setter: (storage: ProcessorStorage) => number) {
 		this.setter = setter;
 	}
 	
-	public execute(state: ProcessorState, ...args: number[]) {
+	public execute(state: ProcessorState, numericArgs: number[], labelArgs: string[]) {
 		const storage = state.getStorage();
-		const offset = args[0];
-		const addressRegister = args[1];
-		const register = args[2];
+		const offset = numericArgs[0];
+		const addressRegister = numericArgs[1];
+		const register = numericArgs[2];
 		const address = offset + storage.getRegister(addressRegister);
 		
 		this.setter(storage, address, storage.getRegister(register));
@@ -24,5 +24,9 @@ export class StoreInstruction implements Instruction {
 	
 	public describe(): string {
 		return "Stores the value of a register in memory.";
+	}
+	
+	public getExpectedArgCount(): number {
+		return 3;
 	}
 }

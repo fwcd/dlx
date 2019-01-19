@@ -1,6 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 
-import { OPCODES } from "../../model/processor/instructions/Opcodes";
+import { OPCODES } from "../../model/processor/operations/Opcodes";
 
 export const DLX_GRAMMAR = <monaco.languages.IMonarchLanguage> {
 	keywords: Object.keys(OPCODES),

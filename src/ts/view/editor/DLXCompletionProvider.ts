@@ -1,6 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 
-import { OPCODES } from "../../model/processor/instructions/Opcodes";
+import { OPCODES } from "../../model/processor/operations/Opcodes";
 
 export class DLXCompletionProvider implements monaco.languages.CompletionItemProvider {
 	public provideCompletionItems(): monaco.languages.CompletionList {

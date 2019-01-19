@@ -7,7 +7,6 @@ import { DLXDefinitionProvider } from "./DLXDefinitionProvider";
 import { DLXRenameProvider } from "./DLXRenameProvider";
 import { DLXHoverProvider } from "./DLXHoverProvider";
 import { FileStateModel } from "../../model/file/FileStateModel";
-import { Debouncer } from "../../model/utils/Debouncer";
 import { diagnosticsToMarkers } from "./DLXDiagnosticsConverter";
 
 const DLX_LANGUAGE_ID = "dlx-assembly";
@@ -15,7 +14,6 @@ const DLX_LANGUAGE_ID = "dlx-assembly";
 export class EditorView {
 	private fileStateModel: FileStateModel;
 	private editor: monaco.editor.IStandaloneCodeEditor;
-	private modelUpdateDebouncer = new Debouncer(250);
 	
 	public constructor(fileStateModel: FileStateModel) {
 		this.fileStateModel = fileStateModel;
@@ -46,15 +44,17 @@ export class EditorView {
 	private setupModelListeners(): void {
 		const editorModel = this.editor.getModel();
 		editorModel.onDidChangeContent(e => {
-			this.modelUpdateDebouncer.runMaybe(() => {
-				this.fileStateModel.setText(editorModel.getLinesContent());
-			});
+			this.updateModel(editorModel);
 		});
 		this.fileStateModel.addDiagnosticsListener(diags => {
 			monaco.editor.setModelMarkers(editorModel, DLX_LANGUAGE_ID, diagnosticsToMarkers(diags));
 		});
 	}
 	
+	private updateModel(editorModel: monaco.editor.ITextModel) {
+		this.fileStateModel.setText(editorModel.getLinesContent());
+	}
+
 	private setupLanguage(): void {
 		monaco.languages.register({ id: DLX_LANGUAGE_ID });
 		monaco.languages.setMonarchTokensProvider(DLX_LANGUAGE_ID, DLX_GRAMMAR);

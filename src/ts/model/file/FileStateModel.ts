@@ -2,18 +2,24 @@ import { AssemblyProgram } from "../processor/AssemblyProgram";
 import { AssemblyParser } from "../parse/AssemblyParser";
 import { ListenerList, Listener } from "../utils/ListenerList";
 import { AssemblyDiagnostic } from "../parse/AssemblyDiagnostic";
+import { Debouncer } from "../utils/Debouncer";
 
 export class FileStateModel {
-	private parser = new AssemblyParser();
+	private parser: AssemblyParser;
 	private program?: AssemblyProgram;
 	private diagnostics: AssemblyDiagnostic[] = [];
+	private diagnosticsDebouncer = new Debouncer(250);
 	
 	private diagnosticsListeners = new ListenerList<AssemblyDiagnostic[]>();
 	private programListeners = new ListenerList<AssemblyProgram>();
 	
+	public constructor() {
+		this.parser = new AssemblyParser(diags => this.diagnostics = diags);
+	}
+	
 	public setText(lines: string[]): void {
-		this.program = this.parser.parse(lines, diags => this.diagnostics = diags);
-		this.diagnosticsListeners.fire(this.diagnostics);
+		this.program = this.parser.parse(lines);
+		this.diagnosticsDebouncer.run(() => this.diagnosticsListeners.fire(this.diagnostics));
 		this.programListeners.fire(this.program);
 	}
 	
