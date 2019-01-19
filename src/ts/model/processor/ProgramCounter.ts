@@ -1,5 +1,5 @@
 export class ProgramCounter {
-	private index: number;
+	private index: number = 0;
 	
 	public increment(): void {
 		this.index++;

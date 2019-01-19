@@ -16,8 +16,9 @@ export class MemoryView {
 		for (let i = 0; i < byteCount; i++) {
 			const cell = new StorageCellView(
 				() => model.getMemoryByteByIndex(i),
-				value => model.setMemoryByteByIndex(i, value)
+				value => model.setMemoryByteByIndex(i, value, true /* silent */)
 			);
+			model.addMemoryByteListener(i, () => cell.update());
 			this.element.appendChild(cell.getElement());
 		}
 	}

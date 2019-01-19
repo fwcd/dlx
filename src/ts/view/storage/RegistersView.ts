@@ -16,11 +16,12 @@ export class RegistersView {
 		for (let i = 0; i < registerCount; i++) {
 			const cell = new StorageCellView(
 				() => model.getRegister(i),
-				value => model.setRegister(i, value)
+				value => model.setRegister(i, value, true /* silent */)
 			);
 			if (i == 0) {
 				cell.setChangeable(false);
 			}
+			model.addRegisterListener(i, () => cell.update());
 			this.element.appendChild(cell.getElement());
 		}
 	}

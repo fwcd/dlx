@@ -6,7 +6,7 @@ import { Debouncer } from "../utils/Debouncer";
 
 export class FileStateModel {
 	private parser: AssemblyParser;
-	private program?: AssemblyProgram;
+	private program?: AssemblyProgram = null;
 	private diagnostics: AssemblyDiagnostic[] = [];
 	private diagnosticsDebouncer = new Debouncer(250);
 	
@@ -31,4 +31,8 @@ export class FileStateModel {
 	public addDiagnosticsListener(listener: Listener<AssemblyDiagnostic[]>): void { this.diagnosticsListeners.add(listener); }
 	
 	public removeDiagnosticsListener(listener: Listener<AssemblyDiagnostic[]>): void { this.diagnosticsListeners.remove(listener); }
+	
+	public getProgram(): AssemblyProgram | null {
+		return this.program;
+	}
 }
