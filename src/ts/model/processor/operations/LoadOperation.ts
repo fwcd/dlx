@@ -1,6 +1,6 @@
-import { Operation } from "./Operation";
-import { ProcessorState } from "../ProcessorState";
 import { ProcessorStorage } from "../ProcessorStorage";
+import { Operation } from "./Operation";
+import { OperationExecutionParams } from "./OperationExecutionParams";
 
 /**
  * Loads from memory to a register.
@@ -12,11 +12,11 @@ export class LoadOperation implements Operation {
 		this.getter = getter;
 	}
 	
-	public execute(state: ProcessorState, numericArgs: number[], labelArgs: string[]) {
-		const storage = state.getStorage();
-		const dest = numericArgs[0];
-		const offset = numericArgs[1];
-		const addressRegister = numericArgs[2];
+	public execute(params: OperationExecutionParams) {
+		const storage = params.state.getStorage();
+		const dest = params.numericArgs[0];
+		const offset = params.numericArgs[1];
+		const addressRegister = params.numericArgs[2];
 		const address = offset + storage.getRegister(addressRegister);
 		
 		storage.setRegister(dest, this.getter(storage, address));

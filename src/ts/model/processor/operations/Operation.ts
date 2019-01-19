@@ -1,10 +1,11 @@
 import { ProcessorState } from "../ProcessorState";
+import { OperationExecutionParams } from "./OperationExecutionParams";
 
 /**
  * A machine operation.
  */
 export interface Operation {
-	execute(state: ProcessorState, numericArgs: number[], labelArgs: string[]): void;
+	execute(params: OperationExecutionParams): void;
 	
 	getExpectedArgCount(): number;
 	

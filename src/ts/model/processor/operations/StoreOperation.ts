@@ -1,6 +1,6 @@
 import { Operation } from "./Operation";
-import { ProcessorState } from "../ProcessorState";
 import { ProcessorStorage } from "../ProcessorStorage";
+import { OperationExecutionParams } from "./OperationExecutionParams";
 
 /**
  * Stores a register in memory.
@@ -12,11 +12,11 @@ export class StoreOperation implements Operation {
 		this.setter = setter;
 	}
 	
-	public execute(state: ProcessorState, numericArgs: number[], labelArgs: string[]) {
-		const storage = state.getStorage();
-		const offset = numericArgs[0];
-		const addressRegister = numericArgs[1];
-		const register = numericArgs[2];
+	public execute(params: OperationExecutionParams) {
+		const storage = params.state.getStorage();
+		const offset = params.numericArgs[0];
+		const addressRegister = params.numericArgs[1];
+		const register = params.numericArgs[2];
 		const address = offset + storage.getRegister(addressRegister);
 		
 		this.setter(storage, address, storage.getRegister(register));

@@ -1,5 +1,5 @@
 import { Operation } from "./Operation";
-import { ProcessorState } from "../ProcessorState";
+import { OperationExecutionParams } from "./OperationExecutionParams";
 
 /**
  * Performs an operation on a register and a literal.
@@ -11,11 +11,11 @@ export class ImmediateOperation implements Operation {
 		this.operation = operation;
 	}
 	
-	public execute(state: ProcessorState, numericArgs: number[], labelArgs: string[]) {
-		const storage = state.getStorage();
-		const dest = numericArgs[0];
-		const left = numericArgs[1];
-		const literal = numericArgs[2];
+	public execute(params: OperationExecutionParams) {
+		const storage = params.state.getStorage();
+		const dest = params.numericArgs[0];
+		const left = params.numericArgs[1];
+		const literal = params.numericArgs[2];
 		
 		storage.setRegister(dest, this.operation(storage.getRegister(left), literal));
 	}
