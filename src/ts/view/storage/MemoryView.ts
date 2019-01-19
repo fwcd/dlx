@@ -5,6 +5,12 @@ export class MemoryView {
 	private element = document.getElementById("memory");
 	
 	public initialize(model: ProcessorStorage): void {
+		// Create header
+		const header = document.createElement("h3");
+		header.innerText = "Memory";
+		this.element.appendChild(header);
+		
+		// Create memory cells
 		const byteCount = model.getMemoryByteCount();
 		
 		for (let i = 0; i < byteCount; i++) {

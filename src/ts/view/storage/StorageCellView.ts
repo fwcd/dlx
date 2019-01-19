@@ -9,6 +9,10 @@ export class StorageCellView {
 		this.element.addEventListener("keyup", e => setter(+this.element.value));
 	}
 	
+	public setChangeable(changeable: boolean): void {
+		this.element.disabled = !changeable;
+	}
+	
 	public getElement(): HTMLElement {
 		return this.element;
 	}
