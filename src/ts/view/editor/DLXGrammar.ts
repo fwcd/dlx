@@ -10,10 +10,11 @@ export const DLX_GRAMMAR = <monaco.languages.IMonarchLanguage> {
 				"@keywords": "keyword",
 				"@default": "identifier"
 			}}],
+			{ include: '@whitespace' },
 			[/\d+/, "number"]
 		],
-		comment: [
-			[/\/\//, "comment"]
+		whitespace: [
+			[/\/.*/, "comment"]
 		]
 	},
 	ignoreCase: true
