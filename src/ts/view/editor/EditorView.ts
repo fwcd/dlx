@@ -37,7 +37,8 @@ export class EditorView {
 		});
 		this.editor.getModel().updateOptions({
 			tabSize: 8,
-			insertSpaces: false
+			insertSpaces: false,
+			trimAutoWhitespace: false
 		});
 		this.setupModelListeners();
 	}
