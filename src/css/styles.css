@@ -33,8 +33,9 @@ html, body {
 
 #memory {
 	flex: 1 0 auto;
-	flex-flow: row;
-	flex-wrap: wrap;
+}
+
+.storage-cell-container {
 	overflow-wrap: normal;
 }
 
