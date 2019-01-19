@@ -9,6 +9,11 @@
 		<div id="app">
 			<div id="editor"></div>
 			<div id="storage">
+				<div id="controls">
+					<button>Run</button>
+					<button>Step</button>
+					<button>Stop</button>
+				</div>
 				<div id="registers" class="storage-cell-container"></div>
 				<div id="memory" class="storage-cell-container"></div>
 			</div>
@@ -24,7 +29,7 @@
 		// Save Monaco's amd require and restore Node's require
 		var amdRequire = global.require;
 		global.require = nodeRequire;
-		// require node modules before loader.js comes in
+		// Require node modules before loader.js comes in
 		var path = require('path');
 		function uriFromPath(_path) {
 			var pathName = path.resolve(_path).replace(/\\/g, '/');
@@ -36,13 +41,10 @@
 		amdRequire.config({
 			baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min'))
 		});
-		// workaround monaco-css not understanding the environment
 		self.module = undefined;
-		// workaround monaco-typescript not understanding the environment
 		self.process.browser = true;
 	</script>
 	<script>
-		// You can also require other files to run in this process
 		require('./js/renderer.js');
 	</script>
 </html>

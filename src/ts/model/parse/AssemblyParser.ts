@@ -118,6 +118,7 @@ export class AssemblyParser {
 			return null;
 		}
 		const matches = rawArgs.match(ASM_ARGUMENT_MATCH_REGEX) || [];
+		console.log(matches);
 		
 		if (matches.length !== expectedArgCount) {
 			const argsStartCol = asmLine.indexOf(rawArgs) + 1;

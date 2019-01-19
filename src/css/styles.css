@@ -21,6 +21,10 @@ html, body {
 	height: 100%;
 }
 
+#controls {
+	flex: 0 0 0;
+}
+
 #storage {
 	flex: 1 0 0;
 	display: flex;

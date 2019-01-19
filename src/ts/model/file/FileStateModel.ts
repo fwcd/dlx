@@ -14,10 +14,11 @@ export class FileStateModel {
 	private programListeners = new ListenerList<AssemblyProgram>();
 	
 	public constructor() {
-		this.parser = new AssemblyParser(diags => this.diagnostics = diags);
+		this.parser = new AssemblyParser(diags => diags.forEach(it => this.diagnostics.push(it)));
 	}
 	
 	public setText(lines: string[]): void {
+		this.diagnostics = [];
 		this.program = this.parser.parse(lines);
 		this.diagnosticsDebouncer.run(() => this.diagnosticsListeners.fire(this.diagnostics));
 		this.programListeners.fire(this.program);
