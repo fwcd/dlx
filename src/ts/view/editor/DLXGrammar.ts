@@ -11,7 +11,8 @@ export const DLX_GRAMMAR = <monaco.languages.IMonarchLanguage> {
 				"@default": "identifier"
 			}}],
 			{ include: '@whitespace' },
-			[/\d+/, "number"]
+			[/#?\d+/, "number"],
+			[/R[1-9]+/, "identifier"]
 		],
 		whitespace: [
 			[/\/.*/, "comment"]

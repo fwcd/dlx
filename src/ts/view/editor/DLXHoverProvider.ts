@@ -5,22 +5,23 @@ import { OPCODES } from "../../model/processor/operations/Opcodes";
 export class DLXHoverProvider implements monaco.languages.HoverProvider {
 	public provideHover(model: monaco.editor.ITextModel, position: monaco.Position): monaco.languages.Hover {
 		const word = model.getWordAtPosition(position);
-		let contents: monaco.IMarkdownString[] = [];
 		
-		if (word !== null && word.word in OPCODES) {
-			contents = [{
-				value: OPCODES[word.word].describe()
-			}];
+		if (word != null && word.word in OPCODES) {
+			return {
+				contents: [{
+					value: OPCODES[word.word].describe()
+				}],
+				range: {
+					startColumn: word.startColumn,
+					endColumn: word.endColumn,
+					startLineNumber: position.lineNumber,
+					endLineNumber: position.lineNumber
+				}
+			};
+		} else {
+			return {
+				contents: []
+			};
 		}
-		
-		return {
-			contents: contents,
-			range: {
-				startColumn: word.startColumn,
-				endColumn: word.endColumn,
-				startLineNumber: position.lineNumber,
-				endLineNumber: position.lineNumber
-			}
-		};
 	}
 }
