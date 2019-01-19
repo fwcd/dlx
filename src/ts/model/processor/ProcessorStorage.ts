@@ -100,6 +100,9 @@ export class ProcessorStorage {
 		for (let i = 0; i < memoryByteCount; i++) {
 			this.memory[i] = 0;
 		}
+		
+		this.fireRegisterListeners();
+		this.fireMemoryListeners();
 	}
 	
 	private fireRegisterListener(index: number): void {
@@ -107,7 +110,19 @@ export class ProcessorStorage {
 	}
 	
 	private fireMemoryListener(index: number): void {
-		this.memoryListeners[index].fire(this.getRegister(index));
+		this.memoryListeners[index].fire(this.getMemoryByteByIndex(index));
+	}
+	
+	private fireRegisterListeners(): void {
+		for (let index in this.registerListeners) {
+			this.fireRegisterListener(+index);
+		}
+	}
+	
+	private fireMemoryListeners(): void {
+		for (let index in this.memoryListeners) {
+			this.fireMemoryListener(+index);
+		}
 	}
 	
 	public addRegisterListener(index: number, listener: Listener<number>): void {

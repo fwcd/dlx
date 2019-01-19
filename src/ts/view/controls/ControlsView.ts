@@ -10,10 +10,12 @@ export class ControlsView {
 		const launchButton = document.getElementById("launchbutton");
 		const stepButton = document.getElementById("stepbutton");
 		const stopButton = document.getElementById("stopbutton");
+		const clearButton = document.getElementById("clearbutton");
 		
 		launchButton.addEventListener("click", () => this.performLaunch());
 		stepButton.addEventListener("click", () => this.performStep());
 		stopButton.addEventListener("click", () => this.performStop());
+		clearButton.addEventListener("click", () => this.performClear());
 	}
 	
 	private showMessage(message: string): void {
@@ -54,5 +56,9 @@ export class ControlsView {
 		} else {
 			executor.halt();
 		}
+	}
+	
+	private performClear(): void {
+		this.model.getProcessorState().getStorage().reset();
 	}
 }

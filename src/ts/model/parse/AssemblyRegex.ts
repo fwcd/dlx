@@ -24,4 +24,4 @@ export const ASM_LITERAL_ARGUMENT_REGEX = /#([0-9]+)/;
  * 
  * * Group 1 captures the value
  */
-export const ASM_REGISTER_ARGUMENT_REGEX = /\(?R([0-9]+)\)?/;
+export const ASM_REGISTER_ARGUMENT_REGEX = /\(?[Rr]([0-9]+)\)?/;
