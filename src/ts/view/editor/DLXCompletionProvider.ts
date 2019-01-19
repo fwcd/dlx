@@ -3,7 +3,7 @@
 import { OPCODES } from "../../model/instructions/Opcodes";
 
 export class DLXCompletionProvider implements monaco.languages.CompletionItemProvider {
-	provideCompletionItems(): monaco.languages.CompletionList {
+	public provideCompletionItems(): monaco.languages.CompletionList {
 		return {
 			suggestions: Object.keys(OPCODES)
 				.map(opc => <monaco.languages.CompletionItem> {

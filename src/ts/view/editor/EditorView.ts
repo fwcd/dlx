@@ -3,6 +3,7 @@
 import { DLXCompletionProvider } from "./DLXCompletionProvider";
 import { DLX_GRAMMAR } from "./DLXGrammar";
 import { DLXLanguageConfiguration } from "./DLXLanguageConfiguration";
+import { DLXDefinitionProvider } from "./DLXDefinitionProvider";
 
 const DLX_LANGUAGE_ID = "dlx-assembly";
 
@@ -34,6 +35,7 @@ export class EditorView {
 		monaco.languages.setMonarchTokensProvider(DLX_LANGUAGE_ID, DLX_GRAMMAR);
 		monaco.languages.registerCompletionItemProvider(DLX_LANGUAGE_ID, new DLXCompletionProvider());
 		monaco.languages.setLanguageConfiguration(DLX_LANGUAGE_ID, new DLXLanguageConfiguration());
+		monaco.languages.registerDefinitionProvider(DLX_LANGUAGE_ID, new DLXDefinitionProvider());
 	}
 	
 	public relayout(): void {
