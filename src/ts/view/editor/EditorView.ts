@@ -1,19 +1,21 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 
-import { DLXCompletionProvider } from "./DLXCompletionProvider";
-import { DLX_GRAMMAR } from "./DLXGrammar";
-import { DLXLanguageConfiguration } from "./DLXLanguageConfiguration";
-import { DLXDefinitionProvider } from "./DLXDefinitionProvider";
-import { DLXRenameProvider } from "./DLXRenameProvider";
-import { DLXHoverProvider } from "./DLXHoverProvider";
 import { FileStateModel } from "../../model/file/FileStateModel";
+import { DLXCompletionProvider } from "./DLXCompletionProvider";
+import { DLXDefinitionProvider } from "./DLXDefinitionProvider";
 import { diagnosticsToMarkers } from "./DLXDiagnosticsConverter";
+import { DLX_GRAMMAR } from "./DLXGrammar";
+import { DLXHoverProvider } from "./DLXHoverProvider";
+import { DLXLanguageConfiguration } from "./DLXLanguageConfiguration";
+import { DLXRenameProvider } from "./DLXRenameProvider";
+import { EditorLineHighlighter } from "./EditorLineHighlighter";
 
 const DLX_LANGUAGE_ID = "dlx-assembly";
 
 export class EditorView {
 	private fileStateModel: FileStateModel;
 	private editor: monaco.editor.IStandaloneCodeEditor;
+	private lineHighlighter: EditorLineHighlighter;
 	
 	public constructor(fileStateModel: FileStateModel) {
 		this.fileStateModel = fileStateModel;
@@ -33,6 +35,7 @@ export class EditorView {
 			wordBasedSuggestions: false,
 			theme: "vs-dark"
 		});
+		this.lineHighlighter = new EditorLineHighlighter(this.editor);
 		this.editor.getModel().updateOptions({
 			tabSize: 8,
 			insertSpaces: false,
@@ -67,5 +70,13 @@ export class EditorView {
 	
 	public relayout(): void {
 		this.editor.layout();
+	}
+	
+	public highlightLine(lineIndex: number): void {
+		this.lineHighlighter.highlight(lineIndex);
+	}
+	
+	public clearHighlighting(): void {
+		this.lineHighlighter.removeHighlightings();
 	}
 }

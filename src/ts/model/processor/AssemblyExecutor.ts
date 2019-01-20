@@ -58,6 +58,10 @@ export class AssemblyExecutor {
 		}
 	}
 	
+	public getProgramCounter(): ProgramCounter {
+		return this.counter;
+	}
+	
 	private getNextInstruction(): Instruction {
 		return this.program.instructions[this.counter.getIndex()];
 	}

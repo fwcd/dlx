@@ -1,7 +1,10 @@
+import { ListenerList, Listener } from "../utils/ListenerList";
+
 export class ProgramCounter {
 	private index: number = 0;
 	private labelIndices: { [label: string]: number; };
 	private jumped = false;
+	private listeners = new ListenerList<number>();
 	
 	public constructor(labelIndices: { [label: string]: number; }) {
 		this.labelIndices = labelIndices;
@@ -9,11 +12,13 @@ export class ProgramCounter {
 	
 	public increment(): void {
 		this.index++;
+		this.listeners.fire(this.index);
 	}
 	
 	public jumpTo(index: number): void {
 		this.index = index;
 		this.jumped = true;
+		this.listeners.fire(this.index);
 	}
 	
 	public jumpToLabel(label: string): void {
@@ -34,5 +39,13 @@ export class ProgramCounter {
 	
 	public didJump(): boolean {
 		return this.jumped;
+	}
+	
+	public addListener(listener: Listener<number>): void {
+		this.listeners.add(listener);
+	}
+	
+	public removeListener(listener: Listener<number>): void {
+		this.listeners.remove(listener);
 	}
 }

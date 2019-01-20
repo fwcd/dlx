@@ -11,11 +11,13 @@ export class ControlsView {
 		const stepButton = document.getElementById("stepbutton");
 		const stopButton = document.getElementById("stopbutton");
 		const clearButton = document.getElementById("clearbutton");
+		const highlightLineCheckBox = document.getElementById("highlightlinecheck") as HTMLInputElement;
 		
 		launchButton.addEventListener("click", () => this.performLaunch());
 		stepButton.addEventListener("click", () => this.performStep());
 		stopButton.addEventListener("click", () => this.performStop());
 		clearButton.addEventListener("click", () => this.performClear());
+		highlightLineCheckBox.addEventListener("change", () => this.setLineHighlighting(highlightLineCheckBox.checked));
 	}
 	
 	private showMessage(message: string): void {
@@ -60,5 +62,9 @@ export class ControlsView {
 	
 	private performClear(): void {
 		this.model.getProcessorState().getStorage().reset();
+	}
+	
+	private setLineHighlighting(highlightLines: boolean): void {
+		this.model.getSettings().setHighlightLines(highlightLines);
 	}
 }

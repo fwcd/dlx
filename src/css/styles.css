@@ -46,3 +46,7 @@ html, body {
 input[type=text] {
 	width: 20px;
 }
+
+.editor-line-highlight {
+	background-color: rgba(255, 217, 0, 0.26);
+}
