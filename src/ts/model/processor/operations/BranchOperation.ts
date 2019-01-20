@@ -1,5 +1,6 @@
 import { Operation } from "./Operation";
 import { OperationExecutionParams } from "./OperationExecutionParams";
+import { OperationResult } from "./OperationResult";
 
 /**
  * Performs a jump if a certain condition holds.
@@ -11,7 +12,7 @@ export class BranchOperation implements Operation {
 		this.condition = condition;
 	}
 	
-	public execute(params: OperationExecutionParams) {
+	public execute(params: OperationExecutionParams): OperationResult {
 		const operand = params.numericArgs[0];
 		
 		if (this.condition(params.state.getStorage().getRegister(operand))) {
@@ -21,6 +22,8 @@ export class BranchOperation implements Operation {
 				params.counter.jumpTo(params.numericArgs[1]);
 			}
 		}
+		
+		return {};
 	}
 	
 	public describe(): string {
