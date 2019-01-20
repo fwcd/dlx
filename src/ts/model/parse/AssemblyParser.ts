@@ -118,14 +118,16 @@ export class AssemblyParser {
 	
 	private splitArgs(rawArgs: string, expectedArgCount: number, asmLine: string, lineIndex: number): string[] {
 		if (rawArgs == null) {
-			this.diagnosticsHandler([{
-				line: lineIndex,
-				code: asmLine,
-				startColumn: 1,
-				endColumn: asmLine.length + 1,
-				severity: AssemblyDiagnosticSeverity.WARNING,
-				message: "Missing args"
-			}]);
+			if (expectedArgCount > 0) {
+				this.diagnosticsHandler([{
+					line: lineIndex,
+					code: asmLine,
+					startColumn: 1,
+					endColumn: asmLine.length + 1,
+					severity: AssemblyDiagnosticSeverity.WARNING,
+					message: "Missing args"
+				}]);
+			}
 			return null;
 		}
 		const matches = rawArgs.match(ASM_ARGUMENT_MATCH_REGEX) || [];

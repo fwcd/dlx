@@ -4,6 +4,7 @@ import { LoadOperation } from "./LoadOperation";
 import { RegisterOperation } from "./RegisterOperation";
 import { JumpOperation } from "./JumpOperation";
 import { BranchOperation } from "./BranchOperation";
+import { HaltOperation } from "./HaltOperation";
 
 export const OPCODES: { [code: string]: Operation; } = {
 	// Arithmetic
@@ -52,5 +53,8 @@ export const OPCODES: { [code: string]: Operation; } = {
 	
 	// Branches
 	"BEQZ": new BranchOperation(v => v === 0),
-	"BNEZ": new BranchOperation(v => v !== 0)
+	"BNEZ": new BranchOperation(v => v !== 0),
+	
+	// Other
+	"HALT": new HaltOperation()
 };

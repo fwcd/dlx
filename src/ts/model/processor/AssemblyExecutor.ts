@@ -52,7 +52,7 @@ export class AssemblyExecutor {
 		this.validateInstruction(instruction);
 		this.counter.resetJumpFlag();
 		
-		instruction.operation.execute({
+		const result = instruction.operation.execute({
 			counter: this.counter,
 			state: this.state,
 			labelArgs: instruction.labelArgs,
@@ -63,7 +63,10 @@ export class AssemblyExecutor {
 			this.counter.increment();
 		}
 		
-		if (this.counter.getIndex() >= this.program.instructions.length) {
+		const reachedEnd = this.counter.getIndex() >= this.program.instructions.length;
+		const shouldHalt = (result.shouldHalt == null) ? false : result.shouldHalt;
+		
+		if (reachedEnd || shouldHalt) {
 			this.halt();
 		}
 		
