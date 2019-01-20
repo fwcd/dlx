@@ -7,13 +7,15 @@ export class ControlsView {
 	public constructor(model: AppModel) {
 		this.model = model;
 		
-		const launchButton = document.getElementById("launchbutton");
+		const runButton = document.getElementById("runbutton");
+		const resumeButton = document.getElementById("resumebutton");
 		const stepButton = document.getElementById("stepbutton");
 		const stopButton = document.getElementById("stopbutton");
 		const clearButton = document.getElementById("clearbutton");
 		const highlightLineCheckBox = document.getElementById("highlightlinecheck") as HTMLInputElement;
 		
-		launchButton.addEventListener("click", () => this.performLaunch());
+		runButton.addEventListener("click", () => this.performRun());
+		resumeButton.addEventListener("click", () => this.performResume());
 		stepButton.addEventListener("click", () => this.performStep());
 		stopButton.addEventListener("click", () => this.performStop());
 		clearButton.addEventListener("click", () => this.performClear());
@@ -25,7 +27,37 @@ export class ControlsView {
 		alert(message);
 	}
 	
-	private performLaunch(): void {
+	private performRun(): void {
+		this.setupNewExecutor();
+		this.withExecutor(exec => window.setTimeout(() => exec.run(), 100));
+	}
+	
+	private performResume(): void {
+		this.withExecutor(exec => exec.resume());
+	}
+	
+	private performStep(): void {
+		this.withExecutor(exec => exec.step());
+	}
+	
+	private performStop(): void {
+		this.withExecutor(exec => exec.halt());
+	}
+	
+	private performClear(): void {
+		this.model.getProcessorState().getStorage().reset();
+	}
+	
+	private withExecutor(task: (exec: AssemblyExecutor) => void): void {
+		const executor = this.model.getExecutor();
+		if (executor == null) {
+			this.setupNewExecutor();
+		} else {
+			task(executor);
+		}
+	}
+	
+	private setupNewExecutor(): void {
 		const program = this.model.getFileState().getProgram();
 		if (program == null) {
 			this.showMessage("No program present!");
@@ -41,27 +73,8 @@ export class ControlsView {
 				program: program,
 				state: this.model.getProcessorState()
 			});
-			window.setTimeout(() => executor.run(), 100);
 			this.model.setExecutor(executor);
 		}
-	}
-	
-	private performStep(): void {
-		// TODO
-	}
-	
-	private performStop(): void {
-		const executor = this.model.getExecutor();
-		
-		if (executor == null) {
-			this.showMessage("No program is currently running!");
-		} else {
-			executor.halt();
-		}
-	}
-	
-	private performClear(): void {
-		this.model.getProcessorState().getStorage().reset();
 	}
 	
 	private setLineHighlighting(highlightLines: boolean): void {

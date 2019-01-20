@@ -93,6 +93,19 @@ export class AssemblyExecutor {
 		return instruction;
 	}
 	
+	public isHalted(): boolean {
+		return this.halted;
+	}
+	
+	public resume(): void {
+		this.halted = false;
+		this.run();
+	}
+	
+	public step(): void {
+		this.execNextInstruction();
+	}
+	
 	public addLineListener(listener: Listener<number>): void {
 		this.lineListeners.add(listener);
 	}
