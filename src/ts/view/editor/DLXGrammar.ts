@@ -6,13 +6,14 @@ export const DLX_GRAMMAR = <monaco.languages.IMonarchLanguage> {
 	keywords: Object.keys(OPCODES),
 	tokenizer: {
 		root: [
+			[/R\d+/, "attribute.name"],
+			[/#?\d+/, "number"],
+			[/([A-Za-z_]\w*):/, "attribute.value"],
 			[/[a-zA-Z_$][\w$]*/, { cases: {
 				"@keywords": "keyword",
 				"@default": "identifier"
 			}}],
-			{ include: '@whitespace' },
-			[/#?\d+/, "number"],
-			[/R[1-9]+/, "identifier"]
+			{ include: '@whitespace' }
 		],
 		whitespace: [
 			[/\/.*/, "comment"]
