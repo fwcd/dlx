@@ -48,7 +48,6 @@ export class AssemblyExecutor {
 			this.halt();
 		}
 		
-		this.lineListeners.fire(instruction.asmCodeLine);
 		this.validateInstruction(instruction);
 		this.counter.resetJumpFlag();
 		
@@ -66,6 +65,8 @@ export class AssemblyExecutor {
 		if (this.counter.getIndex() >= this.program.instructions.length) {
 			this.halt();
 		}
+		
+		this.lineListeners.fire(this.getNextInstruction().asmCodeLine);
 	}
 	
 	private validateInstruction(instruction: Instruction): void {
