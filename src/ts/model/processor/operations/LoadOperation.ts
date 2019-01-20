@@ -15,9 +15,9 @@ export class LoadOperation implements Operation {
 	public execute(params: OperationExecutionParams) {
 		const storage = params.state.getStorage();
 		const dest = params.numericArgs[0];
-		const offset = params.numericArgs[1];
+		const memOffset = params.numericArgs[1];
 		const addressRegister = params.numericArgs[2];
-		const address = offset + storage.getRegister(addressRegister);
+		const address = memOffset + storage.getRegister(addressRegister);
 		
 		storage.setRegister(dest, this.getter(storage, address));
 	}

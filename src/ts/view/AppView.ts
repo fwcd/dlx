@@ -31,7 +31,7 @@ export class AppView {
 			if (highlight) {
 				if (!this.executorListener) {
 					this.executorListener = executor => {
-						executor.getProgramCounter().addListener(index => {
+						executor.addLineListener(index => {
 							this.editor.highlightLine(index);
 						});
 					};

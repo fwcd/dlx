@@ -8,7 +8,6 @@ import { OPCODES } from "../processor/operations/Opcodes";
 type DiagnosticsHandler = (diags: AssemblyDiagnostic[]) => void;
 
 interface ParsedInstruction extends Instruction {
-	lineIndex: number;
 	label?: string;
 }
 
@@ -35,7 +34,7 @@ export class AssemblyParser {
 		const labelIndices: { [label: string]: number; } = {};
 		labelledInstructions
 			.filter(inst => inst.label)
-			.forEach(inst => labelIndices[inst.label] = inst.lineIndex - 1);
+			.forEach(inst => labelIndices[inst.label] = inst.asmCodeLine - 1);
 		
 		return {
 			instructions: labelledInstructions,
@@ -76,8 +75,8 @@ export class AssemblyParser {
 				operation: operation,
 				numericArgs: parsedArgs.numericArgs,
 				labelArgs: parsedArgs.labelArgs,
-				lineIndex: lineIndex,
-				label: label
+				label: label,
+				asmCodeLine: lineIndex
 			};
 		}
 	}

@@ -5,7 +5,8 @@ import { Operation } from "./operations/Operation";
  * line of assembly code.
  */
 export interface Instruction {
-	operation: Operation,
-	numericArgs: number[],
-	labelArgs: string[]
+	operation: Operation;
+	numericArgs: number[];
+	labelArgs: string[];
+	asmCodeLine: number;
 }

@@ -3,6 +3,7 @@ import { AssemblyExecutorParams } from "./AssemblyExecutorParams";
 import { Instruction } from "./Instruction";
 import { ProgramCounter } from "./ProgramCounter";
 import { ProcessorState } from "./ProcessorState";
+import { ListenerList, Listener } from "../utils/ListenerList";
 
 /**
  * A running assembly sequence/program.
@@ -13,7 +14,9 @@ export class AssemblyExecutor {
 	private counter: ProgramCounter;
 	private halted = false;
 	private instructionDelay: number;
+	
 	private messageHandler: (msg: string) => void;
+	private lineListeners = new ListenerList<number>();
 	
 	public constructor(params: AssemblyExecutorParams) {
 		this.program = params.program;
@@ -40,6 +43,13 @@ export class AssemblyExecutor {
 	
 	public execNextInstruction(): void {
 		const instruction = this.getNextInstruction();
+		
+		if (instruction == null) {
+			this.halt();
+		}
+		
+		this.lineListeners.fire(instruction.asmCodeLine);
+		this.validateInstruction(instruction);
 		this.counter.resetJumpFlag();
 		
 		instruction.operation.execute({
@@ -58,11 +68,36 @@ export class AssemblyExecutor {
 		}
 	}
 	
+	private validateInstruction(instruction: Instruction): void {
+		instruction.labelArgs.forEach(arg => {
+			if (arg == null) {
+				this.messageHandler("Warning: Found label argument " + arg + " in instruction " + instruction);
+			}
+		});
+		instruction.numericArgs.forEach(arg => {
+			if (arg == null) {
+				this.messageHandler("Warning: Found numeric argument " + arg + " in instruction " + instruction);
+			}
+		});
+	}
+	
 	public getProgramCounter(): ProgramCounter {
 		return this.counter;
 	}
 	
 	private getNextInstruction(): Instruction {
-		return this.program.instructions[this.counter.getIndex()];
+		const instruction = this.program.instructions[this.counter.getIndex()];
+		if (instruction == null) {
+			this.messageHandler("Warning: No instruction found at program counter index " + this.counter.getIndex());
+		}
+		return instruction;
+	}
+	
+	public addLineListener(listener: Listener<number>): void {
+		this.lineListeners.add(listener);
+	}
+	
+	public removeLineListener(listener: Listener<number>): void {
+		this.lineListeners.remove(listener);
 	}
 }
