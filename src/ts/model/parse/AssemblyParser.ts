@@ -35,7 +35,7 @@ export class AssemblyParser {
 		const labelIndices: { [label: string]: number; } = {};
 		labelledInstructions
 			.filter(inst => inst.label)
-			.forEach(inst => labelIndices[inst.label] = inst.lineIndex);
+			.forEach(inst => labelIndices[inst.label] = inst.lineIndex - 1);
 		
 		return {
 			instructions: labelledInstructions,

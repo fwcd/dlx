@@ -34,7 +34,7 @@ export class ControlsView {
 			}
 			
 			const executor = new AssemblyExecutor({
-				instructionDelay: 50,
+				instructionDelay: 40,
 				messageHandler: msg => this.showMessage(msg),
 				program: program,
 				state: this.model.getProcessorState()

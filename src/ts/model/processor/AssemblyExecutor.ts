@@ -10,7 +10,7 @@ import { ProcessorState } from "./ProcessorState";
 export class AssemblyExecutor {
 	private program: AssemblyProgram;
 	private state: ProcessorState;
-	private counter = new ProgramCounter();
+	private counter: ProgramCounter;
 	private halted = false;
 	private instructionDelay: number;
 	private messageHandler: (msg: string) => void;
@@ -19,7 +19,8 @@ export class AssemblyExecutor {
 		this.program = params.program;
 		this.state = params.state;
 		this.messageHandler = params.messageHandler;
-		this.instructionDelay = this.instructionDelay || 0;
+		this.instructionDelay = params.instructionDelay || 0;
+		this.counter = new ProgramCounter(params.program.labelIndices);
 	}
 	
 	public run(): void {
@@ -39,6 +40,7 @@ export class AssemblyExecutor {
 	
 	public execNextInstruction(): void {
 		const instruction = this.getNextInstruction();
+		this.counter.resetJumpFlag();
 		
 		instruction.operation.execute({
 			counter: this.counter,
@@ -46,7 +48,11 @@ export class AssemblyExecutor {
 			labelArgs: instruction.labelArgs,
 			numericArgs: instruction.numericArgs
 		});
-		this.counter.increment();
+		
+		if (!this.counter.didJump()) {
+			this.counter.increment();
+		}
+		
 		if (this.counter.getIndex() >= this.program.instructions.length) {
 			this.halt();
 		}
