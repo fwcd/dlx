@@ -13,6 +13,7 @@ export class AssemblyExecutor {
 	private state: ProcessorState;
 	private counter: ProgramCounter;
 	private halted = false;
+	private stopped = false;
 	private instructionDelay: number;
 	
 	private messageHandler: (msg: string) => void;
@@ -43,6 +44,7 @@ export class AssemblyExecutor {
 	
 	public stop(): void {
 		this.halt();
+		this.stopped = true;
 		this.lineListeners.fire(-1);
 	}
 	
@@ -71,8 +73,12 @@ export class AssemblyExecutor {
 		const reachedEnd = this.counter.getIndex() >= this.program.instructions.length;
 		const shouldHalt = (result.shouldHalt == null) ? false : result.shouldHalt;
 		
-		if (reachedEnd || shouldHalt) {
+		if (shouldHalt) {
 			this.halt();
+		}
+		
+		if (reachedEnd) {
+			this.stop();
 		}
 		
 		const nextInstruction = this.getNextInstruction();
@@ -104,6 +110,10 @@ export class AssemblyExecutor {
 	
 	public isHalted(): boolean {
 		return this.halted;
+	}
+	
+	public isStopped(): boolean {
+		return this.stopped;
 	}
 	
 	public resume(): void {

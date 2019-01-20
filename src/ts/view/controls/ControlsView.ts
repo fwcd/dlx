@@ -45,11 +45,10 @@ export class ControlsView {
 	
 	private withExecutor(task: (exec: AssemblyExecutor) => void): void {
 		const executor = this.model.getExecutor();
-		if (executor == null) {
+		if (executor == null || executor.isStopped()) {
 			this.setupNewExecutor();
-		} else {
-			task(executor);
 		}
+		task(this.model.getExecutor());
 	}
 	
 	private setupNewExecutor(): void {

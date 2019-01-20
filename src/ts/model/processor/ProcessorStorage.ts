@@ -50,7 +50,7 @@ export class ProcessorStorage {
 	
 	public getMemoryByteByIndex(index: number): number {
 		if (index >= 0 && index < this.memory.length) {
-			return this.memory[index];
+			return this.memory[index] & 0xFF;
 		} else {
 			throw new Error("Could not read memory location with index " + index + " which is out of bounds!");
 		}
@@ -74,9 +74,9 @@ export class ProcessorStorage {
 	}
 	
 	public setMemoryWord(address: number, newValue: number, silent?: boolean): void {
-		this.setMemoryByte(address, (newValue >> 24) & 0xFF, silent);
-		this.setMemoryByte(address + 1, (newValue >> 16) & 0xFF, silent);
-		this.setMemoryByte(address + 2, (newValue >> 8) & 0xFF, silent);
+		this.setMemoryByte(address, (newValue >>> 24) & 0xFF, silent);
+		this.setMemoryByte(address + 1, (newValue >>> 16) & 0xFF, silent);
+		this.setMemoryByte(address + 2, (newValue >>> 8) & 0xFF, silent);
 		this.setMemoryByte(address + 3, newValue & 0xFF, silent);
 	}
 	

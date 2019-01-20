@@ -31,13 +31,15 @@ export class AppView {
 			if (highlight) {
 				if (!this.executorListener) {
 					this.executorListener = executor => {
-						executor.addLineListener(index => {
-							if (index >= 0) {
-								this.editor.highlightLine(index);
-							} else {
-								this.editor.clearHighlighting();
-							}
-						});
+						if (executor != null) {
+							executor.addLineListener(index => {
+								if (index >= 0) {
+									this.editor.highlightLine(index);
+								} else {
+									this.editor.clearHighlighting();
+								}
+							});
+						}
 					};
 					this.model.addExecutorListener(this.executorListener);
 				}
