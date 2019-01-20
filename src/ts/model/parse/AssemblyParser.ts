@@ -70,7 +70,7 @@ export class AssemblyParser {
 					line: lineIndex,
 					code: asmLine,
 					startColumn: opcStartCol,
-					endColumn: opcStartCol + opc.length + 1,
+					endColumn: opcStartCol + opc.length,
 					severity: AssemblyDiagnosticSeverity.ERROR,
 					message: "Invalid Opcode: " + opc
 				}]);
