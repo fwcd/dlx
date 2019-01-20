@@ -32,7 +32,11 @@ export class AppView {
 				if (!this.executorListener) {
 					this.executorListener = executor => {
 						executor.addLineListener(index => {
-							this.editor.highlightLine(index);
+							if (index >= 0) {
+								this.editor.highlightLine(index);
+							} else {
+								this.editor.clearHighlighting();
+							}
 						});
 					};
 					this.model.addExecutorListener(this.executorListener);

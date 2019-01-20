@@ -41,6 +41,11 @@ export class AssemblyExecutor {
 		this.halted = true;
 	}
 	
+	public stop(): void {
+		this.halt();
+		this.lineListeners.fire(-1);
+	}
+	
 	public execNextInstruction(): void {
 		const instruction = this.getNextInstruction();
 		
@@ -70,7 +75,10 @@ export class AssemblyExecutor {
 			this.halt();
 		}
 		
-		this.lineListeners.fire(this.getNextInstruction().asmCodeLine);
+		const nextInstruction = this.getNextInstruction();
+		if (nextInstruction != null) {
+			this.lineListeners.fire(nextInstruction.asmCodeLine);
+		}
 	}
 	
 	private validateInstruction(instruction: Instruction): void {

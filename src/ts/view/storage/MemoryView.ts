@@ -11,14 +11,16 @@ export class MemoryView {
 		this.element.appendChild(header);
 		
 		// Create memory cells
-		const byteCount = model.getMemoryByteCount();
+		const wordCount = model.getMemoryWordCount();
+		const startAddress = model.getMemoryStartAddress();
 		
-		for (let i = 0; i < byteCount; i++) {
+		for (let i = 0; i < wordCount; i++) {
+			const address = startAddress + (i * 4);
 			const cell = new StorageCellView(
-				() => model.getMemoryByteByIndex(i),
-				value => model.setMemoryByteByIndex(i, value, true /* silent */)
+				() => model.getMemoryWord(address),
+				value => model.setMemoryWord(address, value, true /* silent */)
 			);
-			model.addMemoryByteListener(i, () => cell.update());
+			model.addMemoryWordListener(address, () => cell.update());
 			this.element.appendChild(cell.getElement());
 		}
 	}

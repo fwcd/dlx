@@ -10,7 +10,8 @@ export class ProcessorStorage {
 	private memoryStartAddress: number;
 	
 	private registerListeners: { [index: number]: ListenerList<number>; } = {};
-	private memoryListeners: { [address: number]: ListenerList<number>; } = {};
+	private memoryByteListeners: { [index: number]: ListenerList<number>; } = {};
+	private memoryWordListeners: { [index: number]: ListenerList<number>; } = {};
 	
 	public constructor(registerCount: number, memoryByteCount: number, memoryStartAddress: number) {
 		this.registers = new Int32Array(registerCount);
@@ -43,8 +44,8 @@ export class ProcessorStorage {
 		return this.getMemoryByteByIndex(address - this.memoryStartAddress);
 	}
 	
-	public setMemoryByte(address: number, newValue: number): void {
-		this.setMemoryByteByIndex(address - this.memoryStartAddress, newValue);
+	public setMemoryByte(address: number, newValue: number, silent?: boolean): void {
+		this.setMemoryByteByIndex(address - this.memoryStartAddress, newValue, silent);
 	}
 	
 	public getMemoryByteByIndex(index: number): number {
@@ -58,8 +59,10 @@ export class ProcessorStorage {
 	public setMemoryByteByIndex(index: number, newValue: number, silent?: boolean): void {
 		if (index >= 0 && index < this.memory.length) {
 			this.memory[index] = newValue;
-			if (silent != null && !silent) {
-				this.fireMemoryListener(index);
+			if (silent == null || !silent) {
+				const address = index + this.memoryStartAddress;
+				this.fireMemoryByteListener(address);
+				this.fireMemoryWordListener(address);
 			}
 		} else {
 			throw new Error("Could not write to memory location with index " + index + " which is out of bounds!");
@@ -70,11 +73,11 @@ export class ProcessorStorage {
 		return (this.getMemoryByte(address) << 24) | (this.getMemoryByte(address + 1) << 16) | (this.getMemoryByte(address + 2) << 8) | this.getMemoryByte(address + 3);
 	}
 	
-	public setMemoryWord(address: number, newValue: number): void {
-		this.setMemoryByte(address, (newValue >> 24) & 0xFF);
-		this.setMemoryByte(address + 1, (newValue >> 16) & 0xFF);
-		this.setMemoryByte(address + 2, (newValue >> 8) & 0xFF);
-		this.setMemoryByte(address + 3, newValue & 0xFF);
+	public setMemoryWord(address: number, newValue: number, silent?: boolean): void {
+		this.setMemoryByte(address, (newValue >> 24) & 0xFF, silent);
+		this.setMemoryByte(address + 1, (newValue >> 16) & 0xFF, silent);
+		this.setMemoryByte(address + 2, (newValue >> 8) & 0xFF, silent);
+		this.setMemoryByte(address + 3, newValue & 0xFF, silent);
 	}
 	
 	public getRegisterCount(): number {
@@ -89,28 +92,48 @@ export class ProcessorStorage {
 		return this.getMemoryByteCount() / 4;
 	}
 	
-	public reset(): void {
+	public getMemoryStartAddress(): number {
+		return this.memoryStartAddress;
+	}
+	
+	public clearRegisters(): void {
 		const registerCount = this.getRegisterCount();
-		const memoryByteCount = this.getMemoryByteCount();
-		
 		for (let i = 0; i < registerCount; i++) {
 			this.registers[i] = 0;
 		}
-		
+		this.fireRegisterListeners();
+	}
+	
+	public clearMemory(): void {
+		const memoryByteCount = this.getMemoryByteCount();
 		for (let i = 0; i < memoryByteCount; i++) {
 			this.memory[i] = 0;
 		}
-		
-		this.fireRegisterListeners();
 		this.fireMemoryListeners();
 	}
 	
-	private fireRegisterListener(index: number): void {
-		this.registerListeners[index].fire(this.getRegister(index));
+	public clear(): void {
+		this.clearRegisters();
+		this.clearMemory();
 	}
 	
-	private fireMemoryListener(index: number): void {
-		this.memoryListeners[index].fire(this.getMemoryByteByIndex(index));
+	private fireRegisterListener(index: number): void {
+		if (index in this.registerListeners) {
+			this.registerListeners[index].fire(this.getRegister(index));
+		}
+	}
+	
+	private fireMemoryByteListener(address: number): void {
+		if (address in this.memoryByteListeners) {
+			this.memoryByteListeners[address].fire(this.getMemoryByte(address));
+		}
+	}
+	
+	private fireMemoryWordListener(address: number): void {
+		const wordAddress = this.addressOfWordAt(address);
+		if (wordAddress in this.memoryWordListeners) {
+			this.memoryWordListeners[wordAddress].fire(this.getMemoryWord(wordAddress));
+		}
 	}
 	
 	private fireRegisterListeners(): void {
@@ -120,8 +143,11 @@ export class ProcessorStorage {
 	}
 	
 	private fireMemoryListeners(): void {
-		for (let index in this.memoryListeners) {
-			this.fireMemoryListener(+index);
+		for (let address in this.memoryByteListeners) {
+			this.fireMemoryWordListener(+address);
+		}
+		for (let address in this.memoryWordListeners) {
+			this.fireMemoryWordListener(+address);
 		}
 	}
 	
@@ -136,14 +162,29 @@ export class ProcessorStorage {
 		this.registerListeners[index].remove(listener);
 	}
 	
-	public addMemoryByteListener(index: number, listener: Listener<number>): void {
-		if (!(index in this.memoryListeners)) {
-			this.memoryListeners[index] = new ListenerList();
-		}
-		this.memoryListeners[index].add(listener);
+	private addressOfWordAt(byteAddress: number): number {
+		return Math.floor(byteAddress / 4) * 4;
 	}
 	
-	public removeMemoryByteListener(index: number, listener: Listener<number>): void {
-		this.memoryListeners[index].remove(listener);
+	public addMemoryWordListener(address: number, listener: Listener<number>): void {
+		if (!(address in this.memoryWordListeners)) {
+			this.memoryWordListeners[address] = new ListenerList();
+		}
+		this.memoryWordListeners[address].add(listener);
+	}
+	
+	public removeMemoryWordListener(address: number, listener: Listener<number>): void {
+		this.memoryWordListeners[address].remove(listener);
+	}
+	
+	public addMemoryByteListener(address: number, listener: Listener<number>): void {
+		if (!(address in this.memoryByteListeners)) {
+			this.memoryByteListeners[address] = new ListenerList();
+		}
+		this.memoryByteListeners[address].add(listener);
+	}
+	
+	public removeMemoryByteListener(address: number, listener: Listener<number>): void {
+		this.memoryByteListeners[address].remove(listener);
 	}
 }

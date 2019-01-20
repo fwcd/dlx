@@ -41,11 +41,12 @@ export class ControlsView {
 	}
 	
 	private performStop(): void {
-		this.withExecutor(exec => exec.halt());
+		this.withExecutor(exec => exec.stop());
+		this.model.setExecutor(null);
 	}
 	
 	private performClear(): void {
-		this.model.getProcessorState().getStorage().reset();
+		this.model.getProcessorState().getStorage().clear();
 	}
 	
 	private withExecutor(task: (exec: AssemblyExecutor) => void): void {

@@ -6,6 +6,7 @@ import { JumpOperation } from "./JumpOperation";
 import { BranchOperation } from "./BranchOperation";
 import { HaltOperation } from "./HaltOperation";
 import { StoreOperation } from "./StoreOperation";
+import { JumpRegisterOperation } from "./JumpRegisterOperation";
 
 export const OPCODES: { [code: string]: Operation; } = {
 	// Arithmetic
@@ -53,6 +54,7 @@ export const OPCODES: { [code: string]: Operation; } = {
 	
 	// Jumps
 	"J": new JumpOperation(),
+	"JR": new JumpRegisterOperation(),
 	
 	// Branches
 	"BEQZ": new BranchOperation(v => v === 0),
