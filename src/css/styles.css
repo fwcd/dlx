@@ -44,7 +44,7 @@ html, body {
 }
 
 input[type=text] {
-	width: 20px;
+	width: 40px;
 }
 
 .editor-line-highlight {

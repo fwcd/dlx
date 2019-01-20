@@ -1,5 +1,5 @@
 # DLX
-A DLX assembly simulator for JavaScript.
+A [DLX](https://en.wikipedia.org/wiki/DLX) assembly simulator running on Electron.
 
 ## To Use
 * `npm install`
