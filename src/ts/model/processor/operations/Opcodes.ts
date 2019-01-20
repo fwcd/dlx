@@ -3,6 +3,7 @@ import { Operation } from "./Operation";
 import { LoadOperation } from "./LoadOperation";
 import { RegisterOperation } from "./RegisterOperation";
 import { JumpOperation } from "./JumpOperation";
+import { BranchOperation } from "./BranchOperation";
 
 export const OPCODES: { [code: string]: Operation; } = {
 	// Arithmetic
@@ -47,5 +48,9 @@ export const OPCODES: { [code: string]: Operation; } = {
 	"LB": new LoadOperation((st, addr) => st.getMemoryByte(addr)),
 	
 	// Jumps
-	"J": new JumpOperation()
+	"J": new JumpOperation(),
+	
+	// Branches
+	"BEQZ": new BranchOperation(v => v === 0),
+	"BNEZ": new BranchOperation(v => v !== 0)
 };

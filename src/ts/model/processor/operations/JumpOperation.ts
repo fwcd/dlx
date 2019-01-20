@@ -16,7 +16,7 @@ export class JumpOperation implements Operation {
 	}
 	
 	public describe(): string {
-		return "Loads from memory to a register.";
+		return "Jumps.";
 	}
 	
 	public getExpectedArgCount(): number {
