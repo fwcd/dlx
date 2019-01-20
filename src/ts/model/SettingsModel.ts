@@ -4,7 +4,7 @@ import { ListenerList, Listener } from "./utils/ListenerList";
  * Contains user settings.
  */
 export class SettingsModel {
-	private highlightLines = false;
+	private highlightLines = true;
 	private highlightListeners = new ListenerList<boolean>();
 	
 	public getHighlightLines(): boolean { return this.highlightLines; }
@@ -14,7 +14,10 @@ export class SettingsModel {
 		this.highlightListeners.fire(highlightLines);
 	}
 	
-	public addHighlightListener(listener: Listener<boolean>): void { this.highlightListeners.add(listener); }
+	public addHighlightListener(listener: Listener<boolean>): void {
+		this.highlightListeners.add(listener);
+		listener(this.highlightLines);
+	}
 	
 	public removeHighlightListener(listener: Listener<boolean>): void { this.highlightListeners.remove(listener); }
 }
