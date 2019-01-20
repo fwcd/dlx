@@ -45,6 +45,7 @@ export class AssemblyExecutor {
 		const instruction = this.getNextInstruction();
 		
 		if (instruction == null) {
+			this.messageHandler("Warning: No instruction found at program counter index " + this.counter.getIndex());
 			this.halt();
 		}
 		
@@ -87,11 +88,7 @@ export class AssemblyExecutor {
 	}
 	
 	private getNextInstruction(): Instruction {
-		const instruction = this.program.instructions[this.counter.getIndex()];
-		if (instruction == null) {
-			this.messageHandler("Warning: No instruction found at program counter index " + this.counter.getIndex());
-		}
-		return instruction;
+		return this.program.instructions[this.counter.getIndex()];
 	}
 	
 	public isHalted(): boolean {
@@ -109,6 +106,10 @@ export class AssemblyExecutor {
 	
 	public addLineListener(listener: Listener<number>): void {
 		this.lineListeners.add(listener);
+		const instruction = this.getNextInstruction();
+		if (instruction != null) {
+			listener(instruction.asmCodeLine);
+		}
 	}
 	
 	public removeLineListener(listener: Listener<number>): void {
