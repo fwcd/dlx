@@ -11,14 +11,12 @@ export class ControlsView {
 		const resumeButton = document.getElementById("resumebutton");
 		const stepButton = document.getElementById("stepbutton");
 		const stopButton = document.getElementById("stopbutton");
-		const clearButton = document.getElementById("clearbutton");
 		const highlightLineCheckBox = document.getElementById("highlightlinecheck") as HTMLInputElement;
 		
 		runButton.addEventListener("click", () => this.performRun());
 		resumeButton.addEventListener("click", () => this.performResume());
 		stepButton.addEventListener("click", () => this.performStep());
 		stopButton.addEventListener("click", () => this.performStop());
-		clearButton.addEventListener("click", () => this.performClear());
 		highlightLineCheckBox.addEventListener("change", () => this.setLineHighlighting(highlightLineCheckBox.checked));
 	}
 	
@@ -43,10 +41,6 @@ export class ControlsView {
 	private performStop(): void {
 		this.withExecutor(exec => exec.stop());
 		this.model.setExecutor(null);
-	}
-	
-	private performClear(): void {
-		this.model.getProcessorState().getStorage().clear();
 	}
 	
 	private withExecutor(task: (exec: AssemblyExecutor) => void): void {

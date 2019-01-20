@@ -6,8 +6,19 @@ export class MemoryView {
 	
 	public initialize(model: ProcessorStorage): void {
 		// Create header
-		const header = document.createElement("h3");
-		header.innerText = "Memory";
+		const header = document.createElement("div");
+		header.classList.add("storage-header");
+		
+		const title = document.createElement("h3");
+		title.innerText = "Memory";
+		title.style.display = "inline";
+		header.appendChild(title);
+		
+		const clearButton = document.createElement("button");
+		clearButton.innerText = "Clear";
+		clearButton.addEventListener("click", () => model.clearMemory());
+		header.appendChild(clearButton);
+		
 		this.element.appendChild(header);
 		
 		// Create memory cells

@@ -6,8 +6,19 @@ export class RegistersView {
 	
 	public initialize(model: ProcessorStorage): void {
 		// Create header
-		const header = document.createElement("h3");
-		header.innerText = "Registers";
+		const header = document.createElement("div");
+		header.classList.add("storage-header");
+		
+		const title = document.createElement("h3");
+		title.innerText = "Registers";
+		title.style.display = "inline";
+		header.appendChild(title);
+		
+		const clearButton = document.createElement("button");
+		clearButton.innerText = "Clear";
+		clearButton.addEventListener("click", () => model.clearRegisters());
+		header.appendChild(clearButton);
+		
 		this.element.appendChild(header);
 		
 		// Create registers

@@ -50,3 +50,13 @@ input[type=text] {
 .editor-line-highlight {
 	background-color: rgba(255, 217, 0, 0.26);
 }
+
+.storage-header {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+h3 {
+	margin-left: 10px;
+	margin-right: 10px;
+}
