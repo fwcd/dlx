@@ -2,13 +2,18 @@ import { AssemblyProgram } from "../processor/AssemblyProgram";
 import { AssemblyDiagnostic } from "./AssemblyDiagnostic";
 import { AssemblyDiagnosticSeverity } from "./AssemblyDiagnosticSeverity";
 import { Instruction } from "../processor/Instruction";
-import { ASM_LINE_REGEX, ASM_ARGUMENT_MATCH_REGEX, ASM_REGISTER_ARGUMENT_REGEX, ASM_LITERAL_ARGUMENT_REGEX } from "./AssemblyRegex";
+import { ASM_LINE_REGEX, ASM_ARGUMENT_MATCH_REGEX, ASM_REGISTER_ARGUMENT_REGEX, ASM_LITERAL_ARGUMENT_REGEX, ASM_LABEL_REGEX } from "./AssemblyRegex";
 import { OPCODES } from "../processor/operations/Opcodes";
 
 type DiagnosticsHandler = (diags: AssemblyDiagnostic[]) => void;
 
 interface ParsedInstruction extends Instruction {
 	label?: string;
+}
+
+interface Indexed<T> {
+	value: T;
+	index: number;
 }
 
 interface ParsedArgs {
@@ -33,8 +38,12 @@ export class AssemblyParser {
 			
 		const labelIndices: { [label: string]: number; } = {};
 		labelledInstructions
-			.filter(inst => inst.label)
-			.forEach(inst => labelIndices[inst.label] = inst.asmCodeLine - 1);
+			.map((inst, i) => <Indexed<ParsedInstruction>> {
+				value: inst,
+				index: i
+			})
+			.filter(inst => inst.value.label)
+			.forEach(inst => labelIndices[inst.value.label] = inst.index);
 		
 		return {
 			instructions: labelledInstructions,
@@ -88,12 +97,15 @@ export class AssemblyParser {
 		
 		if (splittedArgs != null) {
 			splittedArgs.forEach(arg => {
+				const label = ASM_LABEL_REGEX.exec(arg);
 				const numeric = ASM_LITERAL_ARGUMENT_REGEX.exec(arg) || ASM_REGISTER_ARGUMENT_REGEX.exec(arg);
-				if (numeric == null) {
+				if (numeric != null) {
+					numericArgs.push(+(numeric[1]));
+				} else if (label != null) {
+					labelArgs.push(label[1]);
+				} else {
 					// Assume the argument is a label
 					labelArgs.push(arg);
-				} else {
-					numericArgs.push(+numeric[1]);
 				}
 			});
 		}

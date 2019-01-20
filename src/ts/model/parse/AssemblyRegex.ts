@@ -17,11 +17,18 @@ export const ASM_ARGUMENT_MATCH_REGEX = /[\w#]+/g;
  * 
  * * Group 1 captures the value
  */
-export const ASM_LITERAL_ARGUMENT_REGEX = /#?([0-9]+)/;
+export const ASM_LITERAL_ARGUMENT_REGEX = /^#?([0-9]+)$/;
+
+/**
+ * Matches a label name.
+ * 
+ * * Group 1 captures the value
+ */
+export const ASM_LABEL_REGEX = /^([A-Za-z_]\w*):?$/;
 
 /**
  * Matches a register argument.
  * 
  * * Group 1 captures the value
  */
-export const ASM_REGISTER_ARGUMENT_REGEX = /\(?[Rr]([0-9]+)\)?/;
+export const ASM_REGISTER_ARGUMENT_REGEX = /^\(?[Rr]([0-9]+)\)?$/;
