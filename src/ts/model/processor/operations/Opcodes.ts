@@ -5,6 +5,7 @@ import { RegisterOperation } from "./RegisterOperation";
 import { JumpOperation } from "./JumpOperation";
 import { BranchOperation } from "./BranchOperation";
 import { HaltOperation } from "./HaltOperation";
+import { StoreOperation } from "./StoreOperation";
 
 export const OPCODES: { [code: string]: Operation; } = {
 	// Arithmetic
@@ -47,6 +48,8 @@ export const OPCODES: { [code: string]: Operation; } = {
 	// Storage
 	"LW": new LoadOperation((st, addr) => st.getMemoryWord(addr)),
 	"LB": new LoadOperation((st, addr) => st.getMemoryByte(addr)),
+	"SW": new StoreOperation((st, addr, v) => st.setMemoryWord(addr, v)),
+	"SB": new StoreOperation((st, addr, v) => st.setMemoryByte(addr, v)),
 	
 	// Jumps
 	"J": new JumpOperation(),

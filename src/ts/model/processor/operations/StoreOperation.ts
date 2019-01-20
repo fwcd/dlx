@@ -9,7 +9,7 @@ import { OperationResult } from "./OperationResult";
 export class StoreOperation implements Operation {
 	private setter: (storage: ProcessorStorage, address: number, value: number) => void;
 	
-	public constructor(setter: (storage: ProcessorStorage) => number) {
+	public constructor(setter: (storage: ProcessorStorage, address: number, value: number) => void) {
 		this.setter = setter;
 	}
 	
