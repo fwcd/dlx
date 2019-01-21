@@ -23,7 +23,7 @@ export class ProcessorStorage {
 		if (index >= 0 && index < this.registers.length) {
 			return this.registers[index];
 		} else {
-			throw new Error("Could not read register with index " + index + " which is out of bounds!");
+			throw new Error("Could not read register at index " + index + " which is out of bounds!");
 		}
 	}
 	
@@ -36,23 +36,32 @@ export class ProcessorStorage {
 		} else if (index == 0) {
 			throw new Error("Can not write to the register at zero!");
 		} else {
-			throw new Error("Could not write to register with index " + index + " which is out of bounds!");
+			throw new Error("Could not write to register at index " + index + " which is out of bounds!");
 		}
 	}
 	
+	private memoryIndexToAddress(index: number): number {
+		return index + this.memoryStartAddress;
+	}
+	
+	private addressToMemoryIndex(address: number): number {
+		return address - this.memoryStartAddress;
+	}
+	
 	public getMemoryByte(address: number): number {
-		return this.getMemoryByteByIndex(address - this.memoryStartAddress);
+		return this.getMemoryByteByIndex(this.addressToMemoryIndex(address));
 	}
 	
 	public setMemoryByte(address: number, newValue: number, silent?: boolean): void {
-		this.setMemoryByteByIndex(address - this.memoryStartAddress, newValue, silent);
+		this.setMemoryByteByIndex(this.addressToMemoryIndex(address), newValue, silent);
 	}
 	
 	public getMemoryByteByIndex(index: number): number {
 		if (index >= 0 && index < this.memory.length) {
 			return this.memory[index] & 0xFF;
 		} else {
-			throw new Error("Could not read memory location with index " + index + " which is out of bounds!");
+			const address = this.memoryIndexToAddress(index);
+			throw new Error("Could not read memory location at address " + address + " which is out of bounds!");
 		}
 	}
 	
@@ -60,12 +69,13 @@ export class ProcessorStorage {
 		if (index >= 0 && index < this.memory.length) {
 			this.memory[index] = newValue;
 			if (silent == null || !silent) {
-				const address = index + this.memoryStartAddress;
+				const address = this.memoryIndexToAddress(index);
 				this.fireMemoryByteListener(address);
 				this.fireMemoryWordListener(address);
 			}
 		} else {
-			throw new Error("Could not write to memory location with index " + index + " which is out of bounds!");
+			const address = this.memoryIndexToAddress(index);
+			throw new Error("Could not write to memory location at address " + address + " which is out of bounds!");
 		}
 	}
 	

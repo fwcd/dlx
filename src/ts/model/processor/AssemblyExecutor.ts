@@ -61,31 +61,38 @@ export class AssemblyExecutor {
 		this.validateInstruction(instruction);
 		this.counter.resetJumpFlag();
 		
-		const result = instruction.operation.execute({
-			counter: this.counter,
-			state: this.state,
-			labelArgs: instruction.labelArgs,
-			numericArgs: instruction.numericArgs
-		});
+		try {
+			const result = instruction.operation.execute({
+				counter: this.counter,
+				state: this.state,
+				labelArgs: instruction.labelArgs,
+				numericArgs: instruction.numericArgs
+			});
 		
-		if (!this.counter.didJump()) {
-			this.counter.increment();
-		}
-		
-		const reachedEnd = this.counter.getIndex() >= this.program.instructions.length;
-		const shouldHalt = (result.shouldHalt == null) ? false : result.shouldHalt;
-		
-		if (shouldHalt) {
+			if (!this.counter.didJump()) {
+				this.counter.increment();
+			}
+			
+			const reachedEnd = this.counter.getIndex() >= this.program.instructions.length;
+			const shouldHalt = (result.shouldHalt == null) ? false : result.shouldHalt;
+			
+			if (shouldHalt) {
+				this.pause();
+			}
+			
+			if (reachedEnd) {
+				this.stop();
+			}
+			
+			const nextInstruction = this.getNextInstruction();
+			if (nextInstruction != null) {
+				this.lineListeners.fire(nextInstruction.asmCodeLine);
+			}
+		} catch (err) {
+			if (err instanceof Error) {
+				this.messageHandler(err.name + ": " + err.message);
+			}
 			this.pause();
-		}
-		
-		if (reachedEnd) {
-			this.stop();
-		}
-		
-		const nextInstruction = this.getNextInstruction();
-		if (nextInstruction != null) {
-			this.lineListeners.fire(nextInstruction.asmCodeLine);
 		}
 	}
 	
