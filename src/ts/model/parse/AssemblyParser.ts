@@ -180,7 +180,8 @@ export class AssemblyParser {
 			return null;
 		}
 		
-		const actualArgCount = matches.length - 1;
+		matches.shift();
+		const actualArgCount = matches.length;
 		
 		if (actualArgCount !== expectedArgCount) {
 			this.diagnosticsHandler([{
