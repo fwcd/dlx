@@ -12,11 +12,12 @@ export class AssemblyExecutor {
 	private program: AssemblyProgram;
 	private state: ProcessorState;
 	private counter: ProgramCounter;
-	private halted = false;
+	private paused = false;
 	private stopped = false;
 	private instructionDelay: number;
 	
 	private messageHandler: (msg: string) => void;
+	private pausedListeners = new ListenerList<boolean>();
 	private lineListeners = new ListenerList<number>();
 	
 	public constructor(params: AssemblyExecutorParams) {
@@ -28,22 +29,23 @@ export class AssemblyExecutor {
 	}
 	
 	public run(): void {
-		if (this.instructionDelay > 0 && !this.halted) {
+		if (this.instructionDelay > 0 && !this.paused) {
 			this.execNextInstruction();
 			window.setTimeout(() => this.run(), this.instructionDelay);
 		} else {
-			while (!this.halted) {
+			while (!this.paused) {
 				this.execNextInstruction();
 			}
 		}
 	}
 	
-	public halt(): void {
-		this.halted = true;
+	public pause(): void {
+		this.paused = true;
+		this.pausedListeners.fire(true);
 	}
 	
 	public stop(): void {
-		this.halt();
+		this.pause();
 		this.stopped = true;
 		this.lineListeners.fire(-1);
 	}
@@ -53,7 +55,7 @@ export class AssemblyExecutor {
 		
 		if (instruction == null) {
 			this.messageHandler("Warning: No instruction found at program counter index " + this.counter.getIndex());
-			this.halt();
+			this.pause();
 		}
 		
 		this.validateInstruction(instruction);
@@ -74,7 +76,7 @@ export class AssemblyExecutor {
 		const shouldHalt = (result.shouldHalt == null) ? false : result.shouldHalt;
 		
 		if (shouldHalt) {
-			this.halt();
+			this.pause();
 		}
 		
 		if (reachedEnd) {
@@ -109,7 +111,7 @@ export class AssemblyExecutor {
 	}
 	
 	public isHalted(): boolean {
-		return this.halted;
+		return this.paused;
 	}
 	
 	public isStopped(): boolean {
@@ -117,7 +119,8 @@ export class AssemblyExecutor {
 	}
 	
 	public resume(): void {
-		this.halted = false;
+		this.paused = false;
+		this.pausedListeners.fire(false);
 		this.run();
 	}
 	
@@ -135,5 +138,14 @@ export class AssemblyExecutor {
 	
 	public removeLineListener(listener: Listener<number>): void {
 		this.lineListeners.remove(listener);
+	}
+	
+	public addPausedListener(listener: Listener<boolean>): void {
+		this.pausedListeners.add(listener);
+		listener(this.paused);
+	}
+	
+	public removePausedListener(listener: Listener<boolean>): void {
+		this.pausedListeners.remove(listener);
 	}
 }

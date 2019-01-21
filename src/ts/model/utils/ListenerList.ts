@@ -13,7 +13,10 @@ export class ListenerList<T> {
 	}
 	
 	public remove(listener: Listener<T>): void {
-		this.listeners.splice(this.listeners.indexOf(listener), 1);
+		const index = this.listeners.indexOf(listener);
+		if (index >= 0) {
+			this.listeners.splice(index, 1);
+		}
 	}
 	
 	public fire(value: T): void {

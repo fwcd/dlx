@@ -1,22 +1,31 @@
 import { AppModel } from "../../model/AppModel";
 import { AssemblyExecutor } from "../../model/processor/AssemblyExecutor";
 
+const PAUSE_LABEL = "Pause";
+const RESUME_LABEL = "Resume";
+
 export class ControlsView {
 	private model: AppModel;
+	private runButton: HTMLElement;
+	private pauseButton: HTMLElement;
+	private stepButton: HTMLElement;
+	private stopButton: HTMLElement;
+	private pausedListener: (p: boolean) => void = paused => this.updatePauseLabel(paused);
 	
 	public constructor(model: AppModel) {
 		this.model = model;
 		
-		const runButton = document.getElementById("runbutton");
-		const resumeButton = document.getElementById("resumebutton");
-		const stepButton = document.getElementById("stepbutton");
-		const stopButton = document.getElementById("stopbutton");
+		this.runButton = document.getElementById("runbutton");
+		this.pauseButton = document.getElementById("pausebutton");
+		this.stepButton = document.getElementById("stepbutton");
+		this.stopButton = document.getElementById("stopbutton");
 		const highlightLineCheckBox = document.getElementById("highlightlinecheck") as HTMLInputElement;
+		this.updatePauseLabel(false);
 		
-		runButton.addEventListener("click", () => this.performRun());
-		resumeButton.addEventListener("click", () => this.performResume());
-		stepButton.addEventListener("click", () => this.performStep());
-		stopButton.addEventListener("click", () => this.performStop());
+		this.runButton.addEventListener("click", () => this.performRun());
+		this.pauseButton.addEventListener("click", () => this.performPause());
+		this.stepButton.addEventListener("click", () => this.performStep());
+		this.stopButton.addEventListener("click", () => this.performStop());
 		highlightLineCheckBox.addEventListener("change", () => this.setLineHighlighting(highlightLineCheckBox.checked));
 	}
 	
@@ -30,8 +39,18 @@ export class ControlsView {
 		this.withExecutor(exec => window.setTimeout(() => exec.run(), 100));
 	}
 	
-	private performResume(): void {
-		this.withExecutor(exec => exec.resume());
+	private performPause(): void {
+		this.withExecutor(exec => {
+			if (exec.isHalted()) {
+				exec.resume();
+			} else {
+				exec.pause();
+			}
+		});
+	}
+	
+	private updatePauseLabel(paused: boolean): void {
+		this.pauseButton.innerText = (paused ? RESUME_LABEL : PAUSE_LABEL);
 	}
 	
 	private performStep(): void {
@@ -58,7 +77,8 @@ export class ControlsView {
 		} else {
 			const previousExecutor = this.model.getExecutor();
 			if (previousExecutor != null) {
-				previousExecutor.halt();
+				previousExecutor.pause();
+				previousExecutor.removePausedListener(this.pausedListener);
 			}
 			
 			const executor = new AssemblyExecutor({
@@ -67,6 +87,7 @@ export class ControlsView {
 				program: program,
 				state: this.model.getProcessorState()
 			});
+			executor.addPausedListener(this.pausedListener);
 			this.model.setExecutor(executor);
 		}
 	}
