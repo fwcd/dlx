@@ -7,3 +7,7 @@ appView.initializeStorage();
 
 declare var amdRequire: any;
 amdRequire(["vs/editor/editor.main"], () => appView.initializeEditor());
+
+// Post-init
+
+appView.postInitialize();

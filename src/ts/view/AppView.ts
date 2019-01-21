@@ -4,6 +4,7 @@ import { AppModel } from "../model/AppModel";
 import { ControlsView } from "./controls/ControlsView";
 import { Listener } from "../model/utils/ListenerList";
 import { AssemblyExecutor } from "../model/processor/AssemblyExecutor";
+import * as Split from "split.js";
 
 export class AppView {
 	private model: AppModel;
@@ -49,6 +50,22 @@ export class AppView {
 					this.executorListener = null;
 				}
 				this.editor.clearHighlighting();
+			}
+		});
+	}
+	
+	public postInitialize(): void {
+		// Source: https://split.js.org/
+		Split([this.editor.getElement(), this.storage.getElement()], {
+			elementStyle: (dimension, size, gutterSize) => ({
+				'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+			}),
+			minSize: 200,
+			gutterStyle: (dimension, gutterSize) => ({
+				'flex-basis': `${gutterSize}px`,
+			}),
+			onDrag: () => {
+				this.editor.relayout();
 			}
 		});
 	}

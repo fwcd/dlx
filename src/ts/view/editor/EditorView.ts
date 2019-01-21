@@ -13,6 +13,7 @@ import { EditorLineHighlighter } from "./EditorLineHighlighter";
 const DLX_LANGUAGE_ID = "dlx-assembly";
 
 export class EditorView {
+	private element = document.getElementById("editor");
 	private fileStateModel: FileStateModel;
 	private editor: monaco.editor.IStandaloneCodeEditor;
 	private lineHighlighter: EditorLineHighlighter;
@@ -22,9 +23,8 @@ export class EditorView {
 	}
 	
 	public initialize(): void {
-		const element = document.getElementById("editor");
 		this.setupLanguage();
-		this.editor = monaco.editor.create(element, {
+		this.editor = monaco.editor.create(this.element, {
 			language: DLX_LANGUAGE_ID,
 			minimap: {
 				enabled: false
@@ -78,5 +78,9 @@ export class EditorView {
 	
 	public clearHighlighting(): void {
 		this.lineHighlighter.removeHighlightings();
+	}
+	
+	public getElement(): HTMLElement {
+		return this.element;
 	}
 }
