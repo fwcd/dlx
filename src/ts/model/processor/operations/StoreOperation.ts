@@ -28,6 +28,10 @@ export class StoreOperation implements Operation {
 		return "Stores the value of a register in memory.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *(\d+) *\( *R(\d+) *\) *, *R(\d+) *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 3;
 	}

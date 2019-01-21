@@ -30,6 +30,10 @@ export class BranchOperation implements Operation {
 		return "Branches if a condition is met.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *R(\d+) *, *(\w+) *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 2;
 	}

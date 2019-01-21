@@ -26,6 +26,10 @@ export class RegisterOperation implements Operation {
 		return "Operates on two registers and places the result in a third register.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *R(\d+) *, *R(\d+) *, *R(\d+) *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 3;
 	}

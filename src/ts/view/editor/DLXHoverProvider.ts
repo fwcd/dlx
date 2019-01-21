@@ -8,9 +8,9 @@ export class DLXHoverProvider implements monaco.languages.HoverProvider {
 		
 		if (word != null && word.word in OPCODES) {
 			return {
-				contents: [{
-					value: OPCODES[word.word].describe()
-				}],
+				contents: OPCODES[word.word].map(op => <monaco.IMarkdownString> {
+					value: op.describe()
+				}),
 				range: {
 					startColumn: word.startColumn,
 					endColumn: word.endColumn,

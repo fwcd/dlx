@@ -28,6 +28,10 @@ export class LoadOperation implements Operation {
 		return "Loads from memory to a register.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *R(\d+) *, *(\d+) *\( *R(\d+) *\) *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 3;
 	}

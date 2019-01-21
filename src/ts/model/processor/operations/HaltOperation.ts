@@ -18,6 +18,10 @@ export class HaltOperation implements Operation {
 		return "Halts the program.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 0;
 	}

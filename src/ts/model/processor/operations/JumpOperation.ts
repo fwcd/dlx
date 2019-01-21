@@ -21,6 +21,10 @@ export class JumpOperation implements Operation {
 		return "Jumps.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *(\w+) *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 1;
 	}

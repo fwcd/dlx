@@ -18,6 +18,10 @@ export class JumpRegisterOperation implements Operation {
 		return "Jumps to a position in a register.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *R(\d+) *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 1;
 	}

@@ -6,6 +6,8 @@ import { OperationResult } from "./OperationResult";
  * A machine operation.
  */
 export interface Operation {
+	getArgumentSyntax(): RegExp;
+	
 	execute(params: OperationExecutionParams): OperationResult;
 	
 	getExpectedArgCount(): number;

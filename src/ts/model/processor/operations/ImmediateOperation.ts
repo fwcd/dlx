@@ -26,6 +26,10 @@ export class ImmediateOperation implements Operation {
 		return "Operates on a value in a register and a literal. Places the result in a third register.";
 	}
 	
+	public getArgumentSyntax(): RegExp {
+		return /^ *R(\d+) *, *R(\d+) *, *#(\d+) *$/;
+	}
+	
 	public getExpectedArgCount(): number {
 		return 3;
 	}

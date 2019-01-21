@@ -5,7 +5,7 @@
  * * Group 2 captures the opcode
  * * Group 3 captures the (optional) arguments
  */
-export const ASM_LINE_REGEX = /^(?:(\w+):)?[ \t]*(\w+)[ \t]*([\w\(\)]+(?:, [\w\(\)#]+)*)?[ \t]*(?:\/.+)*$/;
+export const ASM_LINE_REGEX = /^(?:(\w+):)?[ \t]*(\w+)[ \t]*([\w\(\)]+(?:,[ \t]*[\w\(\)#]+)*)?[ \t]*(?:\/.+)*$/;
 
 /**
  * Matches an argument from a raw argument list.

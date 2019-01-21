@@ -4,6 +4,7 @@ import { AssemblyDiagnosticSeverity } from "./AssemblyDiagnosticSeverity";
 import { Instruction } from "../processor/Instruction";
 import { ASM_LINE_REGEX, ASM_ARGUMENT_MATCH_REGEX, ASM_REGISTER_ARGUMENT_REGEX, ASM_LITERAL_ARGUMENT_REGEX, ASM_LABEL_REGEX } from "./AssemblyRegex";
 import { OPCODES } from "../processor/operations/Opcodes";
+import { Operation } from "../processor/operations/Operation";
 
 type DiagnosticsHandler = (diags: AssemblyDiagnostic[]) => void;
 
@@ -53,45 +54,75 @@ export class AssemblyParser {
 	
 	private parseLine(asmLine: string, lineIndex: number): ParsedInstruction | null {
 		const match = ASM_LINE_REGEX.exec(asmLine);
+		
 		if (match == null) {
 			return null;
+		}
+		
+		let label = match[1];
+		const opc = match[2].toUpperCase();
+		const rawArgs = match[3];
+		const opcStartCol = asmLine.indexOf(opc) + 1;
+		
+		if (label === "") {
+			label = undefined;
+		}
+		
+		if (!(opc in OPCODES)) {
+			this.diagnosticsHandler([{
+				line: lineIndex,
+				code: asmLine,
+				startColumn: opcStartCol,
+				endColumn: opcStartCol + opc.length,
+				severity: AssemblyDiagnosticSeverity.ERROR,
+				message: "Invalid Opcode: " + opc
+			}]);
+			return null;
+		}
+		
+		const operation = this.findMatchingOperation(OPCODES[opc], rawArgs);
+		
+		if (operation == null) {
+			this.diagnosticsHandler([{
+				line: lineIndex,
+				code: asmLine,
+				startColumn: opcStartCol,
+				endColumn: opcStartCol + opc.length,
+				severity: AssemblyDiagnosticSeverity.WARNING,
+				message: "No operation found for the arguments " + rawArgs
+			}]);
+			return null;
+		}
+		
+		const parsedArgs = this.parseArgs(rawArgs, operation, asmLine, lineIndex);
+		
+		return <ParsedInstruction> {
+			operation: operation,
+			numericArgs: parsedArgs.numericArgs,
+			labelArgs: parsedArgs.labelArgs,
+			label: label,
+			asmCodeLine: lineIndex
+		};
+	}
+	
+	private findMatchingOperation(operations: Operation[], rawArgs: string): Operation | null {
+		if (rawArgs == null) {
+			return operations[0];
+		}
+		
+		const found = operations.filter(op => op.getArgumentSyntax().test(rawArgs));
+		
+		if (found.length > 0) {
+			return found.pop();
+		} else if (operations.length > 0) {
+			return operations[0]; // Otherwise try default
 		} else {
-			let label = match[1];
-			const opc = match[2].toUpperCase();
-			const rawArgs = match[3];
-			
-			if (label === "") {
-				label = undefined;
-			}
-			
-			if (!(opc in OPCODES)) {
-				const opcStartCol = asmLine.indexOf(opc) + 1;
-				this.diagnosticsHandler([{
-					line: lineIndex,
-					code: asmLine,
-					startColumn: opcStartCol,
-					endColumn: opcStartCol + opc.length,
-					severity: AssemblyDiagnosticSeverity.ERROR,
-					message: "Invalid Opcode: " + opc
-				}]);
-				return null;
-			}
-			
-			const operation = OPCODES[opc];
-			const parsedArgs = this.parseArgs(rawArgs, operation.getExpectedArgCount(), asmLine, lineIndex);
-			
-			return <ParsedInstruction> {
-				operation: operation,
-				numericArgs: parsedArgs.numericArgs,
-				labelArgs: parsedArgs.labelArgs,
-				label: label,
-				asmCodeLine: lineIndex
-			};
+			return null;
 		}
 	}
 	
-	private parseArgs(rawArgs: string, expectedArgCount: number, asmLine: string, lineIndex: number): ParsedArgs {
-		const splittedArgs = this.splitArgs(rawArgs, expectedArgCount, asmLine, lineIndex);
+	private parseArgs(rawArgs: string, operation: Operation, asmLine: string, lineIndex: number): ParsedArgs {
+		const splittedArgs = this.splitArgs(rawArgs, operation, asmLine, lineIndex);
 		const numericArgs: number[] = [];
 		const labelArgs: string[] = [];
 		
@@ -116,8 +147,10 @@ export class AssemblyParser {
 		};
 	}
 	
-	private splitArgs(rawArgs: string, expectedArgCount: number, asmLine: string, lineIndex: number): string[] {
-		if (rawArgs == null) {
+	private splitArgs(rawArgs: string, operation: Operation, asmLine: string, lineIndex: number): string[] {
+		const expectedArgCount = operation.getExpectedArgCount();
+		
+		if (rawArgs == null || rawArgs.length == 0) {
 			if (expectedArgCount > 0) {
 				this.diagnosticsHandler([{
 					line: lineIndex,
@@ -130,17 +163,33 @@ export class AssemblyParser {
 			}
 			return null;
 		}
-		const matches = rawArgs.match(ASM_ARGUMENT_MATCH_REGEX) || [];
 		
-		if (matches.length !== expectedArgCount) {
-			const argsStartCol = asmLine.indexOf(rawArgs) + 1;
+		const syntax = operation.getArgumentSyntax();
+		const matches = syntax.exec(rawArgs);
+		const argsStartCol = asmLine.indexOf(rawArgs) + 1;
+		
+		if (matches == null) {
 			this.diagnosticsHandler([{
 				line: lineIndex,
 				code: asmLine,
 				startColumn: argsStartCol,
 				endColumn: argsStartCol + rawArgs.length,
 				severity: AssemblyDiagnosticSeverity.WARNING,
-				message: "Expected " + expectedArgCount + " args, but got " + matches.length + ", Matched: " + rawArgs + " to " + matches
+				message: "Expected " + expectedArgCount + " args"
+			}]);
+			return null;
+		}
+		
+		const actualArgCount = matches.length - 1;
+		
+		if (actualArgCount !== expectedArgCount) {
+			this.diagnosticsHandler([{
+				line: lineIndex,
+				code: asmLine,
+				startColumn: argsStartCol,
+				endColumn: argsStartCol + rawArgs.length,
+				severity: AssemblyDiagnosticSeverity.WARNING,
+				message: "Expected " + expectedArgCount + " args, but got " + actualArgCount
 			}]);
 		}
 		
