@@ -6,6 +6,7 @@ import { OperationResult } from "./OperationResult";
  * Performs a jump if a certain condition holds.
  */
 export class BranchOperation implements Operation {
+	private argumentSyntax = /^ *R(\d+) *, *(\w+) *$/;
 	private condition: (value: number) => boolean;
 	
 	public constructor(condition: (value: number) => boolean) {
@@ -31,7 +32,7 @@ export class BranchOperation implements Operation {
 	}
 	
 	public getArgumentSyntax(): RegExp {
-		return /^ *R(\d+) *, *(\w+) *$/;
+		return this.argumentSyntax;
 	}
 	
 	public getExpectedArgCount(): number {

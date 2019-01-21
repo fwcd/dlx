@@ -6,6 +6,8 @@ import { OperationResult } from "./OperationResult";
  * Performs a jump to a position in a register.
  */
 export class JumpRegisterOperation implements Operation {
+	private argumentSyntax = /^ *R(\d+) *$/;
+	
 	public constructor() {}
 	
 	public execute(params: OperationExecutionParams): OperationResult {
@@ -19,7 +21,7 @@ export class JumpRegisterOperation implements Operation {
 	}
 	
 	public getArgumentSyntax(): RegExp {
-		return /^ *R(\d+) *$/;
+		return this.argumentSyntax;
 	}
 	
 	public getExpectedArgCount(): number {

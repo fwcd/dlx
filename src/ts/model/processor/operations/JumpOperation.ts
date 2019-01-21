@@ -6,6 +6,8 @@ import { OperationResult } from "./OperationResult";
  * Performs a jump.
  */
 export class JumpOperation implements Operation {
+	private argumentSyntax = /^ *(\w+) *$/;
+	
 	public constructor() {}
 	
 	public execute(params: OperationExecutionParams): OperationResult {
@@ -22,7 +24,7 @@ export class JumpOperation implements Operation {
 	}
 	
 	public getArgumentSyntax(): RegExp {
-		return /^ *(\w+) *$/;
+		return this.argumentSyntax;
 	}
 	
 	public getExpectedArgCount(): number {

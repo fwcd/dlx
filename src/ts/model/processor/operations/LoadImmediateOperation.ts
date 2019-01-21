@@ -7,6 +7,8 @@ import { OperationResult } from "./OperationResult";
  * Loads an immediate value to a register.
  */
 export class LoadImmediateOperation implements Operation {
+	private argumentSyntax = /^ *R(\d+) *, *#(\d+) *$/;
+	
 	public constructor() {}
 	
 	public execute(params: OperationExecutionParams): OperationResult {
@@ -23,7 +25,7 @@ export class LoadImmediateOperation implements Operation {
 	}
 	
 	public getArgumentSyntax(): RegExp {
-		return /^ *R(\d+) *, *#(\d+) *$/;
+		return this.argumentSyntax;
 	}
 	
 	public getExpectedArgCount(): number {

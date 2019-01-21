@@ -6,6 +6,7 @@ import { Operation } from "./Operation";
  * Halts the program.
  */
 export class HaltOperation implements Operation {
+	private argumentSyntax = /^ *$/;
 	public constructor() {}
 	
 	public execute(params: OperationExecutionParams): OperationResult {
@@ -19,7 +20,7 @@ export class HaltOperation implements Operation {
 	}
 	
 	public getArgumentSyntax(): RegExp {
-		return /^ *$/;
+		return this.argumentSyntax;
 	}
 	
 	public getExpectedArgCount(): number {

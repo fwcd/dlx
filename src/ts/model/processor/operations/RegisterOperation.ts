@@ -6,6 +6,7 @@ import { OperationResult } from "./OperationResult";
  * Performs an operation on two registers.
  */
 export class RegisterOperation implements Operation {
+	private argumentSyntax = /^ *R(\d+) *, *R(\d+) *, *R(\d+) *$/;
 	private operation: (a: number, b: number) => number;
 	
 	public constructor(operation: (a: number, b: number) => number) {
@@ -27,7 +28,7 @@ export class RegisterOperation implements Operation {
 	}
 	
 	public getArgumentSyntax(): RegExp {
-		return /^ *R(\d+) *, *R(\d+) *, *R(\d+) *$/;
+		return this.argumentSyntax;
 	}
 	
 	public getExpectedArgCount(): number {

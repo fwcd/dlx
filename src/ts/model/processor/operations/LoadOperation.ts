@@ -7,6 +7,8 @@ import { OperationResult } from "./OperationResult";
  * Loads from memory to a register.
  */
 export class LoadOperation implements Operation {
+	private argumentSyntax = /^ *R(\d+) *, *(\d+) *\( *R(\d+) *\) *$/;
+	
 	private getter: (storage: ProcessorStorage, address: number) => number;
 	
 	public constructor(getter: (storage: ProcessorStorage, address: number) => number) {
@@ -29,7 +31,7 @@ export class LoadOperation implements Operation {
 	}
 	
 	public getArgumentSyntax(): RegExp {
-		return /^ *R(\d+) *, *(\d+) *\( *R(\d+) *\) *$/;
+		return this.argumentSyntax;
 	}
 	
 	public getExpectedArgCount(): number {
