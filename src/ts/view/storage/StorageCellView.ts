@@ -1,21 +1,36 @@
 export class StorageCellView {
-	private element = document.createElement("input");
+	private element = document.createElement("div");
+	private textField = document.createElement("input");
 	private getter: () => number;
 	
-	public constructor(getter: () => number, setter: (v: number) => void) {
+	public constructor(getter: () => number, setter: (v: number) => void, name?: string) {
 		this.getter = getter;
 		
-		this.element.type = "text";
+		this.element.classList.add("storage-cell");
+		
+		// Configure and add label
+		
+		if (name) {
+			const label = document.createElement("label");
+			label.innerText = name;
+			this.element.appendChild(label);
+		}
+		
+		// Configure and add text field
+		
+		this.textField.type = "text";
 		this.update();
-		this.element.addEventListener("keyup", e => setter(+this.element.value));
+		this.textField.addEventListener("keyup", e => setter(+this.textField.value));
+		
+		this.element.appendChild(this.textField);
 	}
 	
 	public update(): void {
-		this.element.value = "" + this.getter();
+		this.textField.value = "" + this.getter();
 	}
 	
 	public setChangeable(changeable: boolean): void {
-		this.element.disabled = !changeable;
+		this.textField.disabled = !changeable;
 	}
 	
 	public getElement(): HTMLElement {

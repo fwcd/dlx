@@ -25,10 +25,11 @@ html, body {
 	flex: 0 0 0;
 }
 
-#storage {
+#storagebox {
 	flex: 1 0 0;
 	display: flex;
 	flex-flow: column;
+	align-items: center;
 }
 
 #registers {
@@ -39,8 +40,32 @@ html, body {
 	flex: 1 0 auto;
 }
 
+.storage {
+	display: flex;
+	flex-flow: column;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.storage-header {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 .storage-cell-container {
-	overflow-wrap: normal;
+	display: flex;
+	flex-flow: row;
+	flex-wrap: wrap;
+	text-align: center;
+	color: darkgray;
+	font-size: 0.7em;
+}
+
+.storage-cell {
+	display: flex;
+	flex-flow: column;
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 
 input[type=text] {
@@ -49,11 +74,6 @@ input[type=text] {
 
 .editor-line-highlight {
 	background-color: rgba(255, 217, 0, 0.26);
-}
-
-.storage-header {
-	margin-top: 10px;
-	margin-bottom: 10px;
 }
 
 h3 {

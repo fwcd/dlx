@@ -23,17 +23,23 @@ export class RegistersView {
 		
 		// Create registers
 		const registerCount = model.getRegisterCount();
+		const cellContainer = document.createElement("div");
+		
+		cellContainer.classList.add("storage-cell-container");
 		
 		for (let i = 0; i < registerCount; i++) {
 			const cell = new StorageCellView(
 				() => model.getRegister(i),
-				value => model.setRegister(i, value, true /* silent */)
+				value => model.setRegister(i, value, true /* silent */),
+				"R" + i
 			);
 			if (i == 0) {
 				cell.setChangeable(false);
 			}
 			model.addRegisterListener(i, () => cell.update());
-			this.element.appendChild(cell.getElement());
+			cellContainer.appendChild(cell.getElement());
 		}
+		
+		this.element.appendChild(cellContainer);
 	}
 }

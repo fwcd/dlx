@@ -24,15 +24,21 @@ export class MemoryView {
 		// Create memory cells
 		const wordCount = model.getMemoryWordCount();
 		const startAddress = model.getMemoryStartAddress();
+		const cellContainer = document.createElement("div");
+		
+		cellContainer.classList.add("storage-cell-container");
 		
 		for (let i = 0; i < wordCount; i++) {
 			const address = startAddress + (i * 4);
 			const cell = new StorageCellView(
 				() => model.getMemoryWord(address),
-				value => model.setMemoryWord(address, value, true /* silent */)
+				value => model.setMemoryWord(address, value, true /* silent */),
+				"" + address
 			);
 			model.addMemoryWordListener(address, () => cell.update());
-			this.element.appendChild(cell.getElement());
+			cellContainer.appendChild(cell.getElement());
 		}
+		
+		this.element.appendChild(cellContainer);
 	}
 }
