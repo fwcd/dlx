@@ -78,8 +78,10 @@ export class AppView {
 	}
 	
 	public postInitialize(): void {
+		const sidebox = document.getElementById("sidebox");
+		
 		// Source: https://split.js.org/
-		Split([this.editor.getElement(), this.storage.getElement()], {
+		Split([this.editor.getElement(), sidebox], {
 			elementStyle: (dimension, size, gutterSize) => ({
 				'flex-basis': `calc(${size}% - ${gutterSize}px)`,
 			}),
