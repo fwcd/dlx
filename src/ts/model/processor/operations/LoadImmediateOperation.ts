@@ -1,4 +1,3 @@
-import { ProcessorStorage } from "../ProcessorStorage";
 import { Operation } from "./Operation";
 import { OperationExecutionParams } from "./OperationExecutionParams";
 import { OperationResult } from "./OperationResult";
