@@ -14,22 +14,22 @@ export class MenuBarView {
 					{
 						label: "New",
 						accelerator: "CmdOrCtrl+N",
-						click(): void {}
+						click(): void { app.getFileLoader().newFile(); }
 					},
 					{
 						label: "Open",
 						accelerator: "CmdOrCtrl+O",
-						click(): void {}
+						click(): void { app.getFileLoader().showOpenDialog(); }
 					},
 					{
 						label: "Save",
 						accelerator: "CmdOrCtrl+S",
-						click(): void {}
+						click(): void { app.getFileLoader().save(); }
 					},
 					{
 						label: "Save As...",
 						accelerator: "CmdOrCtrl+Shift+S",
-						click(): void {}
+						click(): void { app.getFileLoader().showSaveAsDialog(); }
 					},
 					{ type: "separator" },
 					{

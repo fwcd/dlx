@@ -3,6 +3,7 @@ import { ParsedProgram } from "./ParsedProgram";
 import { AssemblyExecutor } from "./processor/AssemblyExecutor";
 import { SettingsModel } from "./SettingsModel";
 import { ListenerList, Listener } from "./utils/ListenerList";
+import { FileLoaderModel } from "./FileLoaderModel";
 
 /**
  * Encapsulates GUI-independent state of the application.
@@ -12,12 +13,15 @@ export class AppModel {
 	private parsedProgram = new ParsedProgram();
 	private executor?: AssemblyExecutor = null;
 	private settings = new SettingsModel();
+	private fileLoader = new FileLoaderModel();
 	
 	private executorListeners = new ListenerList<AssemblyExecutor>();
 	
 	public getProcessorState(): ProcessorState { return this.processorState; }
 	
 	public getParsedProgram(): ParsedProgram { return this.parsedProgram; }
+	
+	public getFileLoader(): FileLoaderModel { return this.fileLoader; }
 	
 	public setExecutor(executor: AssemblyExecutor): void {
 		this.executor = executor;

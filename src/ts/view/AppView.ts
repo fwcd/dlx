@@ -1,10 +1,11 @@
-import { EditorView } from "./editor/EditorView";
-import { StorageView } from "./storage/StorageView";
-import { AppModel } from "../model/AppModel";
-import { ControlsView } from "./controls/ControlsView";
-import { Listener } from "../model/utils/ListenerList";
-import { AssemblyExecutor } from "../model/processor/AssemblyExecutor";
 import * as Split from "split.js";
+import { AppModel } from "../model/AppModel";
+import { AssemblyExecutor } from "../model/processor/AssemblyExecutor";
+import { Listener } from "../model/utils/ListenerList";
+import { ControlsView } from "./controls/ControlsView";
+import { EditorView } from "./editor/EditorView";
+import { FileLoaderView } from "./FileLoaderView";
+import { StorageView } from "./storage/StorageView";
 
 export const APP_VERSION = 1.0;
 
@@ -12,6 +13,7 @@ export class AppView {
 	private model: AppModel;
 	private editor: EditorView;
 	private storage = new StorageView();
+	private fileLoader: FileLoaderView;
 	private controls: ControlsView;
 	
 	private executorListener?: Listener<AssemblyExecutor>;
@@ -20,6 +22,7 @@ export class AppView {
 		this.model = new AppModel();
 		this.editor = new EditorView(this.model.getParsedProgram());
 		this.controls = new ControlsView(this.model);
+		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
 	}
 	
 	public initializeStorage(): void {
@@ -71,4 +74,6 @@ export class AppView {
 			}
 		});
 	}
+	
+	public getFileLoader(): FileLoaderView { return this.fileLoader; }
 }

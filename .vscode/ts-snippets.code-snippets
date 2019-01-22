@@ -1,0 +1,16 @@
+{
+	"Added listener methods": {
+		"scope": "javascript, typescript",
+		"prefix": "listenermethods",
+		"body": [
+			"public add$1Listener(listener: Listener<$2>): void {",
+			"\tthis.$3Listeners.add(listener);",
+			"\tlistener(this.$3);",
+			"}",
+			"",
+			"public remove$1Listener(listener: Listener<$2>): void {",
+			"\tthis.$3Listeners.remove(listener);",
+			"}"
+		]
+	}
+}
