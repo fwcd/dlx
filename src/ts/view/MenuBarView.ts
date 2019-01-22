@@ -30,30 +30,44 @@ export class MenuBarView {
 						label: "Save As...",
 						accelerator: "CmdOrCtrl+Shift+S",
 						click(): void { app.getFileLoader().showSaveAsDialog(); }
-					},
-					{ type: "separator" },
-					{
-						label: "Run",
-						accelerator: "CmdOrCtrl+R",
-						click(): void {}
-					},
-					{
-						label: "Run Interpreter...",
-						accelerator: "CmdOrCtrl+Shift+R",
-						click(): void {}
 					}
 				]
 			},
 			{
 				label: "Edit",
 				submenu: [
-					{role: 'cut'},
-					{role: 'copy'},
-					{role: 'paste'}
+					{ role: 'cut' },
+					{ role: 'copy' },
+					{ role: 'paste' }
 				]
 			},
 			{
-				label: "About",
+				label: "Run",
+				submenu: [
+					{
+						label: "Run",
+						accelerator: "CmdOrCtrl+R",
+						click(): void { app.getControls().performRun(); }
+					},
+					{
+						label: "Step",
+						accelerator: "CmdOrCtrl+P",
+						click(): void { app.getControls().performStep(); }
+					},
+					{
+						label: "Pause/Resume",
+						accelerator: "CmdOrCtrl+Shift+P",
+						click(): void { app.getControls().performPause(); }
+					},
+					{
+						label: "Stop",
+						accelerator: "CmdOrCtrl+Shift+R",
+						click(): void { app.getControls().performStop(); }
+					}
+				]
+			},
+			{
+				label: "Other",
 				submenu: [
 					{
 						role: "toggledevtools"
@@ -61,7 +75,7 @@ export class MenuBarView {
 					{
 						label: "About DLX...",
 						click(): void {
-							alert("DLX v" + APP_VERSION + " by fwcd");
+							alert("DLX Assembly Simulator v" + APP_VERSION + " by fwcd");
 						}
 					}
 				]

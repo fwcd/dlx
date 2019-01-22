@@ -1,5 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 
+import * as fs from "fs";
 import { ParsedProgram } from "../../model/ParsedProgram";
 import { DLXCompletionProvider } from "./DLXCompletionProvider";
 import { DLXDefinitionProvider } from "./DLXDefinitionProvider";
@@ -9,6 +10,7 @@ import { DLXHoverProvider } from "./DLXHoverProvider";
 import { DLXLanguageConfiguration } from "./DLXLanguageConfiguration";
 import { DLXRenameProvider } from "./DLXRenameProvider";
 import { EditorLineHighlighter } from "./EditorLineHighlighter";
+import { FileLoaderModel } from "../../model/FileLoaderModel";
 
 const DLX_LANGUAGE_ID = "dlx-assembly";
 
@@ -17,9 +19,11 @@ export class EditorView {
 	private parsedProgram: ParsedProgram;
 	private editor: monaco.editor.IStandaloneCodeEditor;
 	private lineHighlighter: EditorLineHighlighter;
+	private fileLoader: FileLoaderModel;
 	
-	public constructor(parsedProgram: ParsedProgram) {
+	public constructor(parsedProgram: ParsedProgram, fileLoader: FileLoaderModel) {
 		this.parsedProgram = parsedProgram;
+		this.fileLoader = fileLoader;
 	}
 	
 	public initialize(): void {
@@ -42,20 +46,22 @@ export class EditorView {
 			trimAutoWhitespace: false
 		});
 		this.setupModelListeners();
+		this.setupFileLoader();
 	}
 	
 	private setupModelListeners(): void {
 		const editorModel = this.editor.getModel();
 		editorModel.onDidChangeContent(e => {
-			this.updateModel(editorModel);
+			this.onUpdateModel(editorModel);
 		});
 		this.parsedProgram.addDiagnosticsListener(diags => {
 			monaco.editor.setModelMarkers(editorModel, DLX_LANGUAGE_ID, diagnosticsToMarkers(diags));
 		});
 	}
 	
-	private updateModel(editorModel: monaco.editor.ITextModel) {
+	private onUpdateModel(editorModel: monaco.editor.ITextModel): void {
 		this.parsedProgram.setText(editorModel.getLinesContent());
+		this.fileLoader.onChangeFile();
 	}
 
 	private setupLanguage(): void {
@@ -66,6 +72,31 @@ export class EditorView {
 		monaco.languages.registerDefinitionProvider(DLX_LANGUAGE_ID, new DLXDefinitionProvider());
 		monaco.languages.registerRenameProvider(DLX_LANGUAGE_ID, new DLXRenameProvider());
 		monaco.languages.registerHoverProvider(DLX_LANGUAGE_ID, new DLXHoverProvider());
+	}
+	
+	private setupFileLoader(): void {
+		this.fileLoader.addClearListener(() => {
+			this.editor.getModel().setValue("");
+		});
+		this.fileLoader.addSaveListener(filePath => {
+			fs.writeFile(filePath, this.editor.getModel().getValue(), {
+				encoding: "utf-8"
+			}, err => {
+				if (err) {
+					console.log(err);
+				}
+			});
+		});
+		this.fileLoader.addOpenListener(filePath => {
+			fs.readFile(filePath, "utf-8", (err, data) => {
+				if (err) {
+					console.log(err);
+				} else {
+					this.editor.getModel().setValue(data);
+					this.fileLoader.onLoad(filePath);
+				}
+			});
+		});
 	}
 	
 	public relayout(): void {

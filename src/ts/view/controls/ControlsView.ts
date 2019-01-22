@@ -34,12 +34,11 @@ export class ControlsView {
 		alert(message);
 	}
 	
-	private performRun(): void {
-		this.setupNewExecutor();
-		this.withExecutor(exec => window.setTimeout(() => exec.run(), 100));
+	public performRun(): void {
+		this.withExecutor(exec => window.setTimeout(() => exec.run(), 100), /* shouldSetupNewExecutor */ true);
 	}
 	
-	private performPause(): void {
+	public performPause(): void {
 		this.withExecutor(exec => {
 			if (exec.isHalted()) {
 				exec.resume();
@@ -53,18 +52,18 @@ export class ControlsView {
 		this.pauseButton.innerText = (paused ? RESUME_LABEL : PAUSE_LABEL);
 	}
 	
-	private performStep(): void {
+	public performStep(): void {
 		this.withExecutor(exec => exec.step());
 	}
 	
-	private performStop(): void {
+	public performStop(): void {
 		this.withExecutor(exec => exec.stop());
 		this.model.setExecutor(null);
 	}
 	
-	private withExecutor(task: (exec: AssemblyExecutor) => void): void {
+	private withExecutor(task: (exec: AssemblyExecutor) => void, shouldSetupNewExecutor?: boolean): void {
 		const executor = this.model.getExecutor();
-		if (executor == null || executor.isStopped()) {
+		if (executor == null || executor.isStopped() || (shouldSetupNewExecutor != null && shouldSetupNewExecutor)) {
 			this.setupNewExecutor();
 		}
 		task(this.model.getExecutor());

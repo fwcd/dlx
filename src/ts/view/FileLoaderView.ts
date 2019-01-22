@@ -8,19 +8,6 @@ export class FileLoaderView {
 		this.model = model;
 	}
 	
-	public onLoad(filePath: string): void {
-		this.model.setUnedited(true);
-		this.model.setCurrentPath(filePath);
-		this.model.setSaved(true);
-	}
-	
-	public onChangeFile(): void {
-		this.model.setUnedited(false);
-		if (this.model.isSaved()) {
-			this.model.setSaved(false);
-		}
-	}
-	
 	public showOpenDialog(): void {
 		remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
 			properties: ["openFile"]

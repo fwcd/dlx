@@ -91,4 +91,17 @@ export class FileLoaderModel {
 	public addClearListener(listener: Listener<void>): void { this.clearListeners.add(listener); }
 	
 	public removeClearListener(listener: Listener<void>): void { this.clearListeners.remove(listener); }
+	
+	public onLoad(filePath: string): void {
+		this.setUnedited(true);
+		this.setCurrentPath(filePath);
+		this.setSaved(true);
+	}
+	
+	public onChangeFile(): void {
+		this.setUnedited(false);
+		if (this.isSaved()) {
+			this.setSaved(false);
+		}
+	}
 }

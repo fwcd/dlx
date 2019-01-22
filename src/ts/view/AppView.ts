@@ -21,16 +21,26 @@ export class AppView {
 	
 	public constructor() {
 		this.model = new AppModel();
-		this.editor = new EditorView(this.model.getParsedProgram());
+		this.editor = new EditorView(this.model.getParsedProgram(), this.model.getFileLoader());
 		this.controls = new ControlsView(this.model);
 		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
 		this.setupTitle();
 	}
 	
 	private setupTitle(): void {
-		this.model.getFileLoader().addPathListener(filePath => {
-			document.title = "DLX Assembly Simulator" + (filePath ? (" - " + path.basename(filePath)) : "")
-		})
+		const loader = this.model.getFileLoader();
+		loader.addPathListener(() => this.updateTitle());
+		loader.addSavedListener(() => this.updateTitle());
+	}
+	
+	private updateTitle(): void {
+		const loader = this.model.getFileLoader();
+		const filePath = loader.getCurrentPath();
+		const saved = this.model.getFileLoader().isSaved();
+		
+		document.title = "DLX Assembly Simulator"
+			+ (filePath ? (" - " + path.basename(filePath)) : "")
+			+ (saved ? "" : "*");
 	}
 	
 	public initializeStorage(): void {
@@ -84,4 +94,6 @@ export class AppView {
 	}
 	
 	public getFileLoader(): FileLoaderView { return this.fileLoader; }
+	
+	public getControls(): ControlsView { return this.controls; }
 }
