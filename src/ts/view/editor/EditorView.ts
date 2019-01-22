@@ -42,7 +42,7 @@ export class EditorView {
 		this.lineHighlighter = new EditorLineHighlighter(this.editor);
 		this.editor.getModel().updateOptions({
 			tabSize: 8,
-			insertSpaces: false,
+			insertSpaces: true,
 			trimAutoWhitespace: false
 		});
 		this.setupModelListeners();
