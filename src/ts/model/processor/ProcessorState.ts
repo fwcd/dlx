@@ -5,7 +5,7 @@ import { ProcessorStorage } from "./ProcessorStorage";
  * storage facilities.
  */
 export class ProcessorState {
-	private storage = new ProcessorStorage(32, 256, 1000);
+	private storage = new ProcessorStorage(32, 1024, 1000);
 	
 	public getStorage(): ProcessorStorage {
 		return this.storage;
