@@ -6,6 +6,8 @@ import { Listener } from "../model/utils/ListenerList";
 import { AssemblyExecutor } from "../model/processor/AssemblyExecutor";
 import * as Split from "split.js";
 
+export const APP_VERSION = 1.0;
+
 export class AppView {
 	private model: AppModel;
 	private editor: EditorView;
@@ -16,7 +18,7 @@ export class AppView {
 	
 	public constructor() {
 		this.model = new AppModel();
-		this.editor = new EditorView(this.model.getFileState());
+		this.editor = new EditorView(this.model.getParsedProgram());
 		this.controls = new ControlsView(this.model);
 	}
 	

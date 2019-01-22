@@ -1,5 +1,5 @@
 import { ProcessorState } from "./processor/ProcessorState";
-import { FileStateModel } from "./file/FileStateModel";
+import { ParsedProgram } from "./ParsedProgram";
 import { AssemblyExecutor } from "./processor/AssemblyExecutor";
 import { SettingsModel } from "./SettingsModel";
 import { ListenerList, Listener } from "./utils/ListenerList";
@@ -9,7 +9,7 @@ import { ListenerList, Listener } from "./utils/ListenerList";
  */
 export class AppModel {
 	private processorState = new ProcessorState();
-	private fileState = new FileStateModel();
+	private parsedProgram = new ParsedProgram();
 	private executor?: AssemblyExecutor = null;
 	private settings = new SettingsModel();
 	
@@ -17,7 +17,7 @@ export class AppModel {
 	
 	public getProcessorState(): ProcessorState { return this.processorState; }
 	
-	public getFileState(): FileStateModel { return this.fileState; }
+	public getParsedProgram(): ParsedProgram { return this.parsedProgram; }
 	
 	public setExecutor(executor: AssemblyExecutor): void {
 		this.executor = executor;

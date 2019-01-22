@@ -1,7 +1,12 @@
 import { AppView } from "./view/AppView";
+import { remote } from "electron";
+import { MenuBarView } from "./view/MenuBarView";
+
+const { Menu } = remote;
 
 const appView = new AppView();
 appView.initializeStorage();
+Menu.setApplicationMenu(new MenuBarView(appView).build());
 
 // Monaco editor
 

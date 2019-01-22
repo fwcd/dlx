@@ -1,6 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 
-import { FileStateModel } from "../../model/file/FileStateModel";
+import { ParsedProgram } from "../../model/ParsedProgram";
 import { DLXCompletionProvider } from "./DLXCompletionProvider";
 import { DLXDefinitionProvider } from "./DLXDefinitionProvider";
 import { diagnosticsToMarkers } from "./DLXDiagnosticsConverter";
@@ -14,12 +14,12 @@ const DLX_LANGUAGE_ID = "dlx-assembly";
 
 export class EditorView {
 	private element = document.getElementById("editor");
-	private fileStateModel: FileStateModel;
+	private parsedProgram: ParsedProgram;
 	private editor: monaco.editor.IStandaloneCodeEditor;
 	private lineHighlighter: EditorLineHighlighter;
 	
-	public constructor(fileStateModel: FileStateModel) {
-		this.fileStateModel = fileStateModel;
+	public constructor(parsedProgram: ParsedProgram) {
+		this.parsedProgram = parsedProgram;
 	}
 	
 	public initialize(): void {
@@ -49,13 +49,13 @@ export class EditorView {
 		editorModel.onDidChangeContent(e => {
 			this.updateModel(editorModel);
 		});
-		this.fileStateModel.addDiagnosticsListener(diags => {
+		this.parsedProgram.addDiagnosticsListener(diags => {
 			monaco.editor.setModelMarkers(editorModel, DLX_LANGUAGE_ID, diagnosticsToMarkers(diags));
 		});
 	}
 	
 	private updateModel(editorModel: monaco.editor.ITextModel) {
-		this.fileStateModel.setText(editorModel.getLinesContent());
+		this.parsedProgram.setText(editorModel.getLinesContent());
 	}
 
 	private setupLanguage(): void {

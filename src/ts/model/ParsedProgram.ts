@@ -1,10 +1,10 @@
-import { AssemblyProgram } from "../processor/AssemblyProgram";
-import { AssemblyParser } from "../parse/AssemblyParser";
-import { ListenerList, Listener } from "../utils/ListenerList";
-import { AssemblyDiagnostic } from "../parse/AssemblyDiagnostic";
-import { Debouncer } from "../utils/Debouncer";
+import { AssemblyProgram } from "./processor/AssemblyProgram";
+import { AssemblyParser } from "./parse/AssemblyParser";
+import { ListenerList, Listener } from "./utils/ListenerList";
+import { AssemblyDiagnostic } from "./parse/AssemblyDiagnostic";
+import { Debouncer } from "./utils/Debouncer";
 
-export class FileStateModel {
+export class ParsedProgram {
 	private parser: AssemblyParser;
 	private program?: AssemblyProgram = null;
 	private diagnostics: AssemblyDiagnostic[] = [];

@@ -71,7 +71,7 @@ export class ControlsView {
 	}
 	
 	private setupNewExecutor(): void {
-		const program = this.model.getFileState().getProgram();
+		const program = this.model.getParsedProgram().getProgram();
 		if (program == null) {
 			this.showMessage("No program present!");
 		} else {
