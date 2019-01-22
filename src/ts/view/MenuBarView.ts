@@ -56,6 +56,9 @@ export class MenuBarView {
 				label: "About",
 				submenu: [
 					{
+						role: "toggledevtools"
+					},
+					{
 						label: "About DLX...",
 						click(): void {
 							alert("DLX v" + APP_VERSION + " by fwcd");

@@ -1,4 +1,5 @@
 import * as Split from "split.js";
+import * as path from "path";
 import { AppModel } from "../model/AppModel";
 import { AssemblyExecutor } from "../model/processor/AssemblyExecutor";
 import { Listener } from "../model/utils/ListenerList";
@@ -23,6 +24,13 @@ export class AppView {
 		this.editor = new EditorView(this.model.getParsedProgram());
 		this.controls = new ControlsView(this.model);
 		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
+		this.setupTitle();
+	}
+	
+	private setupTitle(): void {
+		this.model.getFileLoader().addPathListener(filePath => {
+			document.title = "DLX Assembly Simulator" + (filePath ? (" - " + path.basename(filePath)) : "")
+		})
 	}
 	
 	public initializeStorage(): void {

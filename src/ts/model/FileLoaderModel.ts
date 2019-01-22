@@ -4,10 +4,28 @@ export class FileLoaderModel {
 	private saved = false;
 	private unedited = true;
 	private currentPath?: string = null;
+	
+	private saveListeners = new ListenerList<string>();
+	private openListeners = new ListenerList<string>();
+	private clearListeners = new ListenerList<void>();
 	private saveRequestListeners = new ListenerList<void>();
 	private savedListeners = new ListenerList<boolean>();
 	private uneditedListeners = new ListenerList<boolean>();
 	private pathListeners = new ListenerList<string>();
+	
+	public openFile(filePath: string): void {
+		this.openListeners.fire(filePath);
+	}
+	
+	public saveFile(filePath: string): void {
+		this.saveListeners.fire(filePath);
+		this.setCurrentPath(filePath);
+		this.setSaved(true);
+	}
+	
+	public clear(): void {
+		this.clearListeners.fire();
+	}
 	
 	public isSaved(): boolean { return this.saved; }
 	
@@ -61,4 +79,16 @@ export class FileLoaderModel {
 	public removePathListener(listener: Listener<string>): void {
 		this.pathListeners.remove(listener);
 	}
+	
+	public addSaveListener(listener: Listener<string>): void { this.saveListeners.add(listener); }
+	
+	public removeSaveListener(listener: Listener<string>): void { this.saveListeners.remove(listener); }
+	
+	public addOpenListener(listener: Listener<string>): void { this.openListeners.add(listener); }
+	
+	public removeOpenListener(listener: Listener<string>): void { this.openListeners.remove(listener); }
+	
+	public addClearListener(listener: Listener<void>): void { this.clearListeners.add(listener); }
+	
+	public removeClearListener(listener: Listener<void>): void { this.clearListeners.remove(listener); }
 }
