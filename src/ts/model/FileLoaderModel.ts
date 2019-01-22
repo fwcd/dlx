@@ -24,7 +24,7 @@ export class FileLoaderModel {
 	}
 	
 	public clear(): void {
-		this.clearListeners.fire();
+		this.clearListeners.fire(null);
 	}
 	
 	public isSaved(): boolean { return this.saved; }
