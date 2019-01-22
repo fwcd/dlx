@@ -29,6 +29,6 @@ export class LoadImmediateOperation implements Operation {
 	}
 	
 	public getExpectedArgCount(): number {
-		return 3;
+		return 2;
 	}
 }
