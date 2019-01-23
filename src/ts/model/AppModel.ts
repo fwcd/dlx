@@ -4,6 +4,7 @@ import { AssemblyExecutor } from "./processor/AssemblyExecutor";
 import { SettingsModel } from "./SettingsModel";
 import { ListenerList, Listener } from "./utils/ListenerList";
 import { FileLoaderModel } from "./FileLoaderModel";
+import { FormatSelectorModel } from "./format/FormatSelectorModel";
 
 /**
  * Encapsulates GUI-independent state of the application.
@@ -14,6 +15,7 @@ export class AppModel {
 	private executor?: AssemblyExecutor = null;
 	private settings = new SettingsModel();
 	private fileLoader = new FileLoaderModel();
+	private formatSelector = new FormatSelectorModel();
 	
 	private executorListeners = new ListenerList<AssemblyExecutor>();
 	
@@ -31,6 +33,8 @@ export class AppModel {
 	public getExecutor(): AssemblyExecutor | null { return this.executor; }
 	
 	public getSettings(): SettingsModel { return this.settings; }
+	
+	public getFormatSelector(): FormatSelectorModel { return this.formatSelector; }
 	
 	public addExecutorListener(listener: Listener<AssemblyExecutor>): void {
 		this.executorListeners.add(listener);
