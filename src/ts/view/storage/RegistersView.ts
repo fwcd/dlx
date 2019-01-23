@@ -1,12 +1,13 @@
 import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
+import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
 
 const REGISTERS_VIEW_CALLER_ID = -193820453422;
 
 export class RegistersView {
 	private element = document.getElementById("registers");
 	
-	public initialize(model: ProcessorStorage): void {
+	public initialize(model: ProcessorStorage, formatModel: FormatSelectorModel): void {
 		// Create header
 		const header = document.createElement("div");
 		header.classList.add("storage-header");

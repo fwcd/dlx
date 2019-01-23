@@ -1,12 +1,14 @@
 import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
+import { FormatSelectorView } from "./FormatSelectorView";
+import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
 
 const MEMORY_VIEW_CALLER_ID = 299837458793;
 
 export class MemoryView {
 	private element = document.getElementById("memory");
 	
-	public initialize(model: ProcessorStorage): void {
+	public initialize(model: ProcessorStorage, formatModel: FormatSelectorModel): void {
 		// Create header
 		const header = document.createElement("div");
 		header.classList.add("storage-header");
@@ -20,6 +22,9 @@ export class MemoryView {
 		clearButton.innerText = "Clear";
 		clearButton.addEventListener("click", () => model.clearMemory());
 		header.appendChild(clearButton);
+		
+		const formatView = new FormatSelectorView(formatModel);
+		header.appendChild(formatView.getElement());
 		
 		this.element.appendChild(header);
 		
