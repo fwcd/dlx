@@ -26,7 +26,6 @@ export class EditorView {
 	public constructor(parsedProgram: ParsedProgram, fileLoader: FileLoaderModel) {
 		this.parsedProgram = parsedProgram;
 		this.fileLoader = fileLoader;
-		this.breakpoints = new BreakpointsView(parsedProgram.getBreakpointManager());
 	}
 	
 	public initialize(): void {
@@ -43,6 +42,7 @@ export class EditorView {
 			theme: "vs-dark"
 		});
 		this.lineHighlighter = new EditorLineHighlighter(this.editor);
+		this.breakpoints = new BreakpointsView(this.parsedProgram.getBreakpointManager(), this.editor);
 		this.editor.getModel().updateOptions({
 			tabSize: 8,
 			insertSpaces: true,
@@ -108,7 +108,8 @@ export class EditorView {
 			const target = e.target.type;
 			if (target == monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
 				|| target == monaco.editor.MouseTargetType.GUTTER_VIEW_ZONE
-				|| target == monaco.editor.MouseTargetType.GUTTER_LINE_DECORATIONS) {
+				|| target == monaco.editor.MouseTargetType.GUTTER_LINE_DECORATIONS
+				|| target == monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS) {
 				this.breakpoints.onMouseDown(e.target.position.lineNumber);
 			}
 		});
