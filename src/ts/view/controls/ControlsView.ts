@@ -70,7 +70,7 @@ export class ControlsView {
 	}
 	
 	private setupNewExecutor(): void {
-		const program = this.model.getParsedProgram().getProgram();
+		const program = this.model.getParsedProgram();
 		if (program == null) {
 			this.showMessage("No program present!");
 		} else {
@@ -83,8 +83,9 @@ export class ControlsView {
 			const executor = new AssemblyExecutor({
 				instructionDelay: 40,
 				messageHandler: msg => this.showMessage(msg),
-				program: program,
-				state: this.model.getProcessorState()
+				program: program.getProgram(),
+				state: this.model.getProcessorState(),
+				breakpoints: program.getBreakpointManager()
 			});
 			executor.addPausedListener(this.pausedListener);
 			this.model.setExecutor(executor);

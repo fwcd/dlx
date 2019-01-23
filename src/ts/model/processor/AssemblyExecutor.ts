@@ -4,12 +4,14 @@ import { Instruction } from "./Instruction";
 import { ProgramCounter } from "./ProgramCounter";
 import { ProcessorState } from "./ProcessorState";
 import { ListenerList, Listener } from "../utils/ListenerList";
+import { BreakpointManager } from "../debugger/BreakpointManager";
 
 /**
  * A running assembly sequence/program.
  */
 export class AssemblyExecutor {
 	private program: AssemblyProgram;
+	private breakpoints: BreakpointManager;
 	private state: ProcessorState;
 	private counter: ProgramCounter;
 	private paused = false;
@@ -26,6 +28,7 @@ export class AssemblyExecutor {
 		this.messageHandler = params.messageHandler;
 		this.instructionDelay = params.instructionDelay || 0;
 		this.counter = new ProgramCounter(params.program.labelIndices);
+		this.breakpoints = params.breakpoints;
 	}
 	
 	public run(): void {
@@ -74,7 +77,8 @@ export class AssemblyExecutor {
 			}
 			
 			const reachedEnd = this.counter.getIndex() >= this.program.instructions.length;
-			const shouldHalt = (result.shouldHalt == null) ? false : result.shouldHalt;
+			const shouldHalt = ((result.shouldHalt == null) ? false : result.shouldHalt)
+				|| this.breakpoints.shouldBreakAt(this.counter.getIndex());
 			
 			if (shouldHalt) {
 				this.pause();
