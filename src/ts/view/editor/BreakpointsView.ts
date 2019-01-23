@@ -12,12 +12,24 @@ export class BreakpointsView {
 		this.model = model;
 		this.editor = editor;
 		
+		this.setupMouseListeners();
 		this.model.addBreakpointListener(bps => this.updateView(bps));
+	}
+	
+	private setupMouseListeners(): void {
+		this.editor.onMouseDown(e => {
+			const target = e.target.type;
+			if (target == monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+				|| target == monaco.editor.MouseTargetType.GUTTER_VIEW_ZONE
+				|| target == monaco.editor.MouseTargetType.GUTTER_LINE_DECORATIONS) {
+				this.onMouseDown(e.target.position.lineNumber);
+			}
+		});
 	}
 	
 	public onMouseDown(lineNumber: number): void {
 		// The lineNumber is 1-indexed
-		this.model.setBreakpoint(lineNumber);
+		this.model.toggleBreakpoint(lineNumber);
 	}
 	
 	private updateView(breakpoints: LineBreakpoint[]): void {
@@ -29,10 +41,9 @@ export class BreakpointsView {
 				endLineNumber: bp.lineNumber
 			},
 			options: {
-				glyphMarginClassName: "breakpoint",
-				glyphMarginHoverMessage: {
-					value: "Breakpoint" // TODO
-				}
+				className: "breakpoint",
+				isWholeLine: false,
+				glyphMarginClassName: "breakpoint"
 			}
 		});
 		this.decorationIds = this.editor.deltaDecorations(this.decorationIds, newDecorations);

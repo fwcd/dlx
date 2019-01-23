@@ -90,6 +90,7 @@ input[type=text] {
 
 .breakpoint {
 	background-color: red;
+	clip-path: circle(4px at center)
 }
 
 h3 {

@@ -21,7 +21,6 @@ export class EditorView {
 	private editor: monaco.editor.IStandaloneCodeEditor;
 	private lineHighlighter: EditorLineHighlighter;
 	private fileLoader: FileLoaderModel;
-	private breakpoints: BreakpointsView;
 	
 	public constructor(parsedProgram: ParsedProgram, fileLoader: FileLoaderModel) {
 		this.parsedProgram = parsedProgram;
@@ -39,10 +38,12 @@ export class EditorView {
 			autoIndent: true,
 			renderIndentGuides: true,
 			wordBasedSuggestions: false,
-			theme: "vs-dark"
+			theme: "vs-dark",
+			glyphMargin: true,
+			lineNumbersMinChars: 3
 		});
 		this.lineHighlighter = new EditorLineHighlighter(this.editor);
-		this.breakpoints = new BreakpointsView(this.parsedProgram.getBreakpointManager(), this.editor);
+		new BreakpointsView(this.parsedProgram.getBreakpointManager(), this.editor);
 		this.editor.getModel().updateOptions({
 			tabSize: 8,
 			insertSpaces: true,
@@ -50,7 +51,6 @@ export class EditorView {
 		});
 		this.setupModelListeners();
 		this.setupFileLoader();
-		this.setupMouseListeners();
 	}
 	
 	private setupModelListeners(): void {
@@ -65,6 +65,7 @@ export class EditorView {
 	
 	private onUpdateModel(editorModel: monaco.editor.ITextModel): void {
 		this.parsedProgram.setText(editorModel.getLinesContent());
+		this.parsedProgram.getBreakpointManager().fireListeners();
 		this.fileLoader.onChangeFile();
 	}
 
@@ -100,18 +101,6 @@ export class EditorView {
 					this.fileLoader.onLoad(filePath);
 				}
 			});
-		});
-	}
-	
-	private setupMouseListeners(): void {
-		this.editor.onMouseDown(e => {
-			const target = e.target.type;
-			if (target == monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
-				|| target == monaco.editor.MouseTargetType.GUTTER_VIEW_ZONE
-				|| target == monaco.editor.MouseTargetType.GUTTER_LINE_DECORATIONS
-				|| target == monaco.editor.MouseTargetType.GUTTER_LINE_NUMBERS) {
-				this.breakpoints.onMouseDown(e.target.position.lineNumber);
-			}
 		});
 	}
 	

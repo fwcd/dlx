@@ -12,6 +12,15 @@ export class BreakpointManager {
 		this.fireListeners();
 	}
 	
+	public toggleBreakpoint(lineNumber: number): void {
+		if (lineNumber in this.breakpoints) {
+			delete this.breakpoints[lineNumber];
+		} else {
+			this.breakpoints[lineNumber] = new Breakpoint();
+		}
+		this.fireListeners();
+	}
+	
 	public getBreakpoint(lineNumber: number): Breakpoint | null {
 		if (lineNumber in this.breakpoints) {
 			return this.breakpoints[lineNumber];
@@ -25,7 +34,7 @@ export class BreakpointManager {
 		return bp != null && bp.isEnabled();
 	}
 	
-	private fireListeners(): void {
+	public fireListeners(): void {
 		const lineBreakpoints: LineBreakpoint[] = [];
 		
 		for (let lineNumber in this.breakpoints) {
