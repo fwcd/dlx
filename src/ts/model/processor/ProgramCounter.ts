@@ -1,6 +1,10 @@
 import { ListenerList, Listener } from "../utils/ListenerList";
 
 export class ProgramCounter {
+	// The zero-indexed (!) current line
+	// in the execution flow. Note that whilst
+	// line numbers are usually starting from 1,
+	// the program counter will always start at 0.
 	private index: number = 0;
 	private labelIndices: { [label: string]: number; };
 	private jumped = false;

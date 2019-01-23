@@ -11,6 +11,7 @@ import { DLXLanguageConfiguration } from "./DLXLanguageConfiguration";
 import { DLXRenameProvider } from "./DLXRenameProvider";
 import { EditorLineHighlighter } from "./EditorLineHighlighter";
 import { FileLoaderModel } from "../../model/FileLoaderModel";
+import { BreakpointsView } from "./BreakpointsView";
 
 const DLX_LANGUAGE_ID = "dlx-assembly";
 
@@ -20,10 +21,12 @@ export class EditorView {
 	private editor: monaco.editor.IStandaloneCodeEditor;
 	private lineHighlighter: EditorLineHighlighter;
 	private fileLoader: FileLoaderModel;
+	private breakpoints: BreakpointsView;
 	
 	public constructor(parsedProgram: ParsedProgram, fileLoader: FileLoaderModel) {
 		this.parsedProgram = parsedProgram;
 		this.fileLoader = fileLoader;
+		this.breakpoints = new BreakpointsView(parsedProgram.getBreakpointManager());
 	}
 	
 	public initialize(): void {
@@ -47,6 +50,7 @@ export class EditorView {
 		});
 		this.setupModelListeners();
 		this.setupFileLoader();
+		this.setupMouseListeners();
 	}
 	
 	private setupModelListeners(): void {
@@ -96,6 +100,17 @@ export class EditorView {
 					this.fileLoader.onLoad(filePath);
 				}
 			});
+		});
+	}
+	
+	private setupMouseListeners(): void {
+		this.editor.onMouseDown(e => {
+			const target = e.target.type;
+			if (target == monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+				|| target == monaco.editor.MouseTargetType.GUTTER_VIEW_ZONE
+				|| target == monaco.editor.MouseTargetType.GUTTER_LINE_DECORATIONS) {
+				this.breakpoints.onMouseDown(e.target.position.lineNumber);
+			}
 		});
 	}
 	
