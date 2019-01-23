@@ -1,3 +1,7 @@
 export interface DataFormat {
-	binaryWordToString(word: number): string;
+	name: string;
+	
+	binaryToString(word: number): string;
+	
+	stringToBinary(str: string): number;
 }

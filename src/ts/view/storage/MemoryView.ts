@@ -37,11 +37,12 @@ export class MemoryView {
 		
 		for (let i = 0; i < wordCount; i++) {
 			const address = startAddress + (i * 4);
-			const cell = new StorageCellView(
-				() => model.getMemoryWord(address),
-				value => model.setMemoryWord(address, value, MEMORY_VIEW_CALLER_ID),
-				"" + address
-			);
+			const cell = new StorageCellView({
+				getter: () => model.getMemoryWord(address),
+				setter: value => model.setMemoryWord(address, value, MEMORY_VIEW_CALLER_ID),
+				formatModel: formatModel,
+				name: "" + address
+			});
 			model.addMemoryWordListener(address, () => cell.update(), MEMORY_VIEW_CALLER_ID);
 			cellContainer.appendChild(cell.getElement());
 		}

@@ -1,6 +1,8 @@
 import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
 import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
+import { FormatSelectorView } from "./FormatSelectorView";
+import { format } from "path";
 
 const REGISTERS_VIEW_CALLER_ID = -193820453422;
 
@@ -22,6 +24,9 @@ export class RegistersView {
 		clearButton.addEventListener("click", () => model.clearRegisters());
 		header.appendChild(clearButton);
 		
+		const formatView = new FormatSelectorView(formatModel);
+		header.appendChild(formatView.getElement());
+		
 		this.element.appendChild(header);
 		
 		// Create registers
@@ -31,11 +36,12 @@ export class RegistersView {
 		cellContainer.classList.add("storage-cell-container");
 		
 		for (let i = 0; i < registerCount; i++) {
-			const cell = new StorageCellView(
-				() => model.getRegister(i),
-				value => model.setRegister(i, value, REGISTERS_VIEW_CALLER_ID),
-				"R" + i
-			);
+			const cell = new StorageCellView({
+				getter: () => model.getRegister(i),
+				setter: value => model.setRegister(i, value, REGISTERS_VIEW_CALLER_ID),
+				formatModel: formatModel,
+				name: "R" + i
+			});
 			if (i == 0) {
 				cell.setChangeable(false);
 			}
