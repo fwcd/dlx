@@ -1,6 +1,8 @@
 import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
 
+const MEMORY_VIEW_CALLER_ID = 299837458793;
+
 export class MemoryView {
 	private element = document.getElementById("memory");
 	
@@ -32,10 +34,10 @@ export class MemoryView {
 			const address = startAddress + (i * 4);
 			const cell = new StorageCellView(
 				() => model.getMemoryWord(address),
-				value => model.setMemoryWord(address, value, true /* silent */),
+				value => model.setMemoryWord(address, value, MEMORY_VIEW_CALLER_ID),
 				"" + address
 			);
-			model.addMemoryWordListener(address, () => cell.update());
+			model.addMemoryWordListener(address, () => cell.update(), MEMORY_VIEW_CALLER_ID);
 			cellContainer.appendChild(cell.getElement());
 		}
 		

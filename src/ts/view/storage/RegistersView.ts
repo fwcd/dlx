@@ -1,6 +1,8 @@
 import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
 
+const REGISTERS_VIEW_CALLER_ID = -193820453422;
+
 export class RegistersView {
 	private element = document.getElementById("registers");
 	
@@ -30,13 +32,13 @@ export class RegistersView {
 		for (let i = 0; i < registerCount; i++) {
 			const cell = new StorageCellView(
 				() => model.getRegister(i),
-				value => model.setRegister(i, value, true /* silent */),
+				value => model.setRegister(i, value, REGISTERS_VIEW_CALLER_ID),
 				"R" + i
 			);
 			if (i == 0) {
 				cell.setChangeable(false);
 			}
-			model.addRegisterListener(i, () => cell.update());
+			model.addRegisterListener(i, () => cell.update(), REGISTERS_VIEW_CALLER_ID);
 			cellContainer.appendChild(cell.getElement());
 		}
 		

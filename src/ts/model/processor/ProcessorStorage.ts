@@ -157,11 +157,11 @@ export class ProcessorStorage {
 		}
 	}
 	
-	public addRegisterListener(index: number, listener: Listener<number>): void {
+	public addRegisterListener(index: number, listener: Listener<number>, callerID?: number): void {
 		if (!(index in this.registerListeners)) {
 			this.registerListeners[index] = new ListenerList();
 		}
-		this.registerListeners[index].add(listener);
+		this.registerListeners[index].add(listener, callerID);
 	}
 	
 	public removeRegisterListener(index: number, listener: Listener<number>): void {
@@ -172,22 +172,22 @@ export class ProcessorStorage {
 		return Math.floor(byteAddress / 4) * 4;
 	}
 	
-	public addMemoryWordListener(address: number, listener: Listener<number>): void {
+	public addMemoryWordListener(address: number, listener: Listener<number>, callerID?: number): void {
 		if (!(address in this.memoryWordListeners)) {
 			this.memoryWordListeners[address] = new ListenerList();
 		}
-		this.memoryWordListeners[address].add(listener);
+		this.memoryWordListeners[address].add(listener, callerID);
 	}
 	
 	public removeMemoryWordListener(address: number, listener: Listener<number>): void {
 		this.memoryWordListeners[address].remove(listener);
 	}
 	
-	public addMemoryByteListener(address: number, listener: Listener<number>): void {
+	public addMemoryByteListener(address: number, listener: Listener<number>, callerID?: number): void {
 		if (!(address in this.memoryByteListeners)) {
 			this.memoryByteListeners[address] = new ListenerList();
 		}
-		this.memoryByteListeners[address].add(listener);
+		this.memoryByteListeners[address].add(listener, callerID);
 	}
 	
 	public removeMemoryByteListener(address: number, listener: Listener<number>): void {
