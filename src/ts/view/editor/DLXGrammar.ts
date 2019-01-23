@@ -7,7 +7,7 @@ export const DLX_GRAMMAR = <monaco.languages.IMonarchLanguage> {
 	tokenizer: {
 		root: [
 			[/R\d+/, "attribute.name"],
-			[/#?\d+/, "number"],
+			[/#?-?\d+/, "number"],
 			[/([A-Za-z_]\w*):/, "attribute.value"],
 			[/[a-zA-Z_$][\w$]*/, { cases: {
 				"@keywords": "keyword",
