@@ -1,7 +1,7 @@
 import { Breakpoint } from "./Breakpoint";
 
 export class BreakpointManager {
-	private breakpoints: { [lineNumber: number]: Breakpoint; }
+	private breakpoints: { [lineNumber: number]: Breakpoint; } = {};
 	
 	public setBreakpoint(lineNumber: number): void {
 		this.breakpoints[lineNumber] = new Breakpoint();
