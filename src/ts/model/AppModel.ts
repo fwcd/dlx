@@ -15,7 +15,8 @@ export class AppModel {
 	private executor?: AssemblyExecutor = null;
 	private settings = new SettingsModel();
 	private fileLoader = new FileLoaderModel();
-	private formatSelector = new FormatSelectorModel();
+	private registersFormat = new FormatSelectorModel();
+	private memoryFormat = new FormatSelectorModel();
 	
 	private executorListeners = new ListenerList<AssemblyExecutor>();
 	
@@ -34,7 +35,9 @@ export class AppModel {
 	
 	public getSettings(): SettingsModel { return this.settings; }
 	
-	public getFormatSelector(): FormatSelectorModel { return this.formatSelector; }
+	public getRegistersFormat(): FormatSelectorModel { return this.registersFormat; }
+	
+	public getMemoryFormat(): FormatSelectorModel { return this.memoryFormat; }
 	
 	public addExecutorListener(listener: Listener<AssemblyExecutor>): void {
 		this.executorListeners.add(listener);

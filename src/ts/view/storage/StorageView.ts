@@ -8,9 +8,9 @@ export class StorageView {
 	private registers = new RegistersView();
 	private memory = new MemoryView();
 	
-	public initialize(model: ProcessorStorage, formatModel: FormatSelectorModel): void {
-		this.registers.initialize(model, formatModel);
-		this.memory.initialize(model, formatModel);
+	public initialize(model: ProcessorStorage, registersFormat: FormatSelectorModel, memoryFormat: FormatSelectorModel): void {
+		this.registers.initialize(model, registersFormat);
+		this.memory.initialize(model, memoryFormat);
 	}
 	
 	public getElement(): HTMLElement {
