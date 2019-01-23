@@ -3,12 +3,14 @@ import { AssemblyParser } from "./parse/AssemblyParser";
 import { ListenerList, Listener } from "./utils/ListenerList";
 import { AssemblyDiagnostic } from "./parse/AssemblyDiagnostic";
 import { Debouncer } from "./utils/Debouncer";
+import { BreakpointManager } from "./debugger/BreakpointManager";
 
 export class ParsedProgram {
 	private parser: AssemblyParser;
 	private program?: AssemblyProgram = null;
 	private diagnostics: AssemblyDiagnostic[] = [];
 	private diagnosticsDebouncer = new Debouncer(250);
+	private breakpointManager = new BreakpointManager();
 	
 	private diagnosticsListeners = new ListenerList<AssemblyDiagnostic[]>();
 	private programListeners = new ListenerList<AssemblyProgram>();
@@ -31,6 +33,8 @@ export class ParsedProgram {
 	public addDiagnosticsListener(listener: Listener<AssemblyDiagnostic[]>): void { this.diagnosticsListeners.add(listener); }
 	
 	public removeDiagnosticsListener(listener: Listener<AssemblyDiagnostic[]>): void { this.diagnosticsListeners.remove(listener); }
+	
+	public getBreakpointManager(): BreakpointManager { return this.breakpointManager; }
 	
 	public getProgram(): AssemblyProgram | null {
 		return this.program;
