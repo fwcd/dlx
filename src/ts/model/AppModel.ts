@@ -20,6 +20,12 @@ export class AppModel {
 	
 	private executorListeners = new ListenerList<AssemblyExecutor>();
 	
+	public constructor() {
+		const breakpoints = this.parsedProgram.getBreakpointManager();
+		this.fileLoader.addClearListener(() => breakpoints.clear());
+		this.fileLoader.addOpenListener(() => breakpoints.clear());
+	}
+	
 	public getProcessorState(): ProcessorState { return this.processorState; }
 	
 	public getParsedProgram(): ParsedProgram { return this.parsedProgram; }

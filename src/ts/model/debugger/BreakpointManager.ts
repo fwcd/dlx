@@ -29,6 +29,11 @@ export class BreakpointManager {
 		}
 	}
 	
+	public clear(): void {
+		this.breakpoints = {};
+		this.fireListeners();
+	}
+	
 	public shouldBreakAt(lineNumber: number): boolean {
 		const bp = this.getBreakpoint(lineNumber);
 		return bp != null && bp.isEnabled();
