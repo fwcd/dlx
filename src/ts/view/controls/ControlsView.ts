@@ -20,6 +20,7 @@ export class ControlsView {
 		this.stepButton = document.getElementById("stepbutton");
 		this.stopButton = document.getElementById("stopbutton");
 		const highlightLineCheckBox = document.getElementById("highlightlinecheck") as HTMLInputElement;
+		const signedIntsCheckBox = document.getElementById("signedints") as HTMLInputElement;
 		this.updatePauseLabel(false);
 		
 		this.runButton.addEventListener("click", () => this.performRun());
@@ -27,6 +28,7 @@ export class ControlsView {
 		this.stepButton.addEventListener("click", () => this.performStep());
 		this.stopButton.addEventListener("click", () => this.performStop());
 		highlightLineCheckBox.addEventListener("change", () => this.setLineHighlighting(highlightLineCheckBox.checked));
+		signedIntsCheckBox.addEventListener("change", () => this.setUseSignedIntegers(signedIntsCheckBox.checked));
 	}
 	
 	private showMessage(message: string): void {
@@ -94,5 +96,9 @@ export class ControlsView {
 	
 	private setLineHighlighting(highlightLines: boolean): void {
 		this.model.getSettings().setHighlightLines(highlightLines);
+	}
+	
+	private setUseSignedIntegers(useSignedInts: boolean): void {
+		this.model.getSettings().setUseSignedInts(useSignedInts);
 	}
 }
