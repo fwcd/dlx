@@ -3,28 +3,26 @@ import { OperationExecutionParams } from "./OperationExecutionParams";
 import { OperationResult } from "./OperationResult";
 
 /**
- * Performs a jump storing the next program counter.
+ * Performs a jump to a position in a register
+ * storing the next program counter.
  */
-export class JumpAndLinkOperation implements Operation {
-	private argumentSyntax = /^ *(\w+) *$/;
+export class JumpAndLinkRegisterOperation implements Operation {
+	private argumentSyntax = /^ *R(\d+) *$/;
 	
 	public constructor() {}
 	
 	public execute(params: OperationExecutionParams): OperationResult {
+		const register = params.numericArgs[0];
 		const npc = params.counter.getIndex() + 1;
-		params.state.getStorage().setRegister(31, npc);
 		
-		if (params.labelArgs.length > 0) {
-			params.counter.jumpToLabel(params.labelArgs[0]);
-		} else {
-			params.counter.jumpTo(params.numericArgs[0]);
-		}
+		params.state.getStorage().setRegister(31, npc);
+		params.counter.jumpTo(params.state.getStorage().getRegister(register));
 		
 		return {};
 	}
 	
 	public describe(): string {
-		return "Jumps and stores the NPC in R31.";
+		return "Jumps to a position in a register and stores the NPC in R31.";
 	}
 	
 	public getArgumentSyntax(): RegExp {
