@@ -59,44 +59,46 @@ export class AssemblyExecutor {
 		if (instruction == null) {
 			this.messageHandler("Warning: No instruction found at program counter index " + this.counter.getIndex());
 			this.pause();
-		}
-		
-		this.validateInstruction(instruction);
-		this.counter.resetJumpFlag();
-		
-		try {
-			const result = instruction.operation.execute({
-				counter: this.counter,
-				state: this.state,
-				labelArgs: instruction.labelArgs,
-				numericArgs: instruction.numericArgs
-			});
-		
-			if (!this.counter.didJump()) {
-				this.counter.increment();
-			}
+		} else {
+			this.validateInstruction(instruction);
+			this.counter.resetJumpFlag();
 			
-			const reachedEnd = this.counter.getIndex() >= this.program.instructions.length;
-			const shouldHalt = ((result.shouldHalt == null) ? false : result.shouldHalt)
-				|| this.breakpoints.shouldBreakAt(this.counter.getIndex());
+			try {
+				const result = instruction.operation.execute({
+					counter: this.counter,
+					state: this.state,
+					labelArgs: instruction.labelArgs,
+					numericArgs: instruction.numericArgs
+				});
 			
-			if (shouldHalt) {
+				if (!this.counter.didJump()) {
+					this.counter.increment();
+				}
+				
+				const reachedEnd = this.counter.getIndex() >= this.program.instructions.length;
+				const shouldHalt = ((result.shouldHalt == null) ? false : result.shouldHalt);
+				
+				if (shouldHalt) {
+					this.pause();
+				}
+				
+				if (reachedEnd) {
+					this.stop();
+				}
+				
+				const nextInstruction = this.getNextInstruction();
+				if (nextInstruction != null) {
+					this.lineListeners.fire(nextInstruction.asmCodeLine);
+					if (this.breakpoints.shouldBreakAt(nextInstruction.asmCodeLine)) {
+						this.pause();
+					}
+				}
+			} catch (err) {
+				if (err instanceof Error) {
+					this.messageHandler(err.name + ": " + err.message);
+				}
 				this.pause();
 			}
-			
-			if (reachedEnd) {
-				this.stop();
-			}
-			
-			const nextInstruction = this.getNextInstruction();
-			if (nextInstruction != null) {
-				this.lineListeners.fire(nextInstruction.asmCodeLine);
-			}
-		} catch (err) {
-			if (err instanceof Error) {
-				this.messageHandler(err.name + ": " + err.message);
-			}
-			this.pause();
 		}
 	}
 	
