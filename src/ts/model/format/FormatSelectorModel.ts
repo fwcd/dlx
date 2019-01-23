@@ -10,13 +10,13 @@ export class FormatSelectorModel {
 		return this.format;
 	}
 	
-	public setFormat(format: DataFormat): void {
+	public setFormat(format: DataFormat, callerID?: number): void {
 		this.format = format;
-		this.formatListeners.fire(format);
+		this.formatListeners.fire(format, callerID);
 	}
 	
-	public addFormatListener(listener: Listener<DataFormat>): void {
-		this.formatListeners.add(listener);
+	public addFormatListener(listener: Listener<DataFormat>, callerID?: number): void {
+		this.formatListeners.add(listener, callerID);
 		listener(this.format);
 	}
 	

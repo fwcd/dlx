@@ -27,12 +27,10 @@ export class ProcessorStorage {
 		}
 	}
 	
-	public setRegister(index: number, newValue: number, silent?: boolean): void {
+	public setRegister(index: number, newValue: number, callerID?: number): void {
 		if (index > 0 && index < this.registers.length) {
 			this.registers[index] = newValue;
-			if (silent == null || !silent) {
-				this.fireRegisterListener(index);
-			}
+			this.fireRegisterListener(index, callerID);
 		} else if (index == 0) {
 			throw new Error("Can not write to the register at zero!");
 		} else {
@@ -52,8 +50,8 @@ export class ProcessorStorage {
 		return this.getMemoryByteByIndex(this.addressToMemoryIndex(address));
 	}
 	
-	public setMemoryByte(address: number, newValue: number, silent?: boolean): void {
-		this.setMemoryByteByIndex(this.addressToMemoryIndex(address), newValue, silent);
+	public setMemoryByte(address: number, newValue: number, callerID?: number): void {
+		this.setMemoryByteByIndex(this.addressToMemoryIndex(address), newValue, callerID);
 	}
 	
 	public getMemoryByteByIndex(index: number): number {
@@ -65,14 +63,12 @@ export class ProcessorStorage {
 		}
 	}
 	
-	public setMemoryByteByIndex(index: number, newValue: number, silent?: boolean): void {
+	public setMemoryByteByIndex(index: number, newValue: number, callerID?: number): void {
 		if (index >= 0 && index < this.memory.length) {
 			this.memory[index] = newValue;
-			if (silent == null || !silent) {
-				const address = this.memoryIndexToAddress(index);
-				this.fireMemoryByteListener(address);
-				this.fireMemoryWordListener(address);
-			}
+			const address = this.memoryIndexToAddress(index);
+			this.fireMemoryByteListener(address, callerID);
+			this.fireMemoryWordListener(address, callerID);
 		} else {
 			const address = this.memoryIndexToAddress(index);
 			throw new Error("Could not write to memory location at address " + address + " which is out of bounds!");
@@ -83,11 +79,11 @@ export class ProcessorStorage {
 		return (this.getMemoryByte(address) << 24) | (this.getMemoryByte(address + 1) << 16) | (this.getMemoryByte(address + 2) << 8) | this.getMemoryByte(address + 3);
 	}
 	
-	public setMemoryWord(address: number, newValue: number, silent?: boolean): void {
-		this.setMemoryByte(address, (newValue >>> 24) & 0xFF, silent);
-		this.setMemoryByte(address + 1, (newValue >>> 16) & 0xFF, silent);
-		this.setMemoryByte(address + 2, (newValue >>> 8) & 0xFF, silent);
-		this.setMemoryByte(address + 3, newValue & 0xFF, silent);
+	public setMemoryWord(address: number, newValue: number, callerID?: number): void {
+		this.setMemoryByte(address, (newValue >>> 24) & 0xFF, callerID);
+		this.setMemoryByte(address + 1, (newValue >>> 16) & 0xFF, callerID);
+		this.setMemoryByte(address + 2, (newValue >>> 8) & 0xFF, callerID);
+		this.setMemoryByte(address + 3, newValue & 0xFF, callerID);
 	}
 	
 	public getRegisterCount(): number {
@@ -106,20 +102,20 @@ export class ProcessorStorage {
 		return this.memoryStartAddress;
 	}
 	
-	public clearRegisters(): void {
+	public clearRegisters(callerID?: number): void {
 		const registerCount = this.getRegisterCount();
 		for (let i = 0; i < registerCount; i++) {
 			this.registers[i] = 0;
 		}
-		this.fireRegisterListeners();
+		this.fireRegisterListeners(callerID);
 	}
 	
-	public clearMemory(): void {
+	public clearMemory(callerID?: number): void {
 		const memoryByteCount = this.getMemoryByteCount();
 		for (let i = 0; i < memoryByteCount; i++) {
 			this.memory[i] = 0;
 		}
-		this.fireMemoryListeners();
+		this.fireMemoryListeners(callerID);
 	}
 	
 	public clear(): void {
@@ -127,37 +123,37 @@ export class ProcessorStorage {
 		this.clearMemory();
 	}
 	
-	private fireRegisterListener(index: number): void {
+	private fireRegisterListener(index: number, callerID?: number): void {
 		if (index in this.registerListeners) {
-			this.registerListeners[index].fire(this.getRegister(index));
+			this.registerListeners[index].fire(this.getRegister(index), callerID);
 		}
 	}
 	
-	private fireMemoryByteListener(address: number): void {
+	private fireMemoryByteListener(address: number, callerID?: number): void {
 		if (address in this.memoryByteListeners) {
-			this.memoryByteListeners[address].fire(this.getMemoryByte(address));
+			this.memoryByteListeners[address].fire(this.getMemoryByte(address), callerID);
 		}
 	}
 	
-	private fireMemoryWordListener(address: number): void {
+	private fireMemoryWordListener(address: number, callerID?: number): void {
 		const wordAddress = this.addressOfWordAt(address);
 		if (wordAddress in this.memoryWordListeners) {
-			this.memoryWordListeners[wordAddress].fire(this.getMemoryWord(wordAddress));
+			this.memoryWordListeners[wordAddress].fire(this.getMemoryWord(wordAddress), callerID);
 		}
 	}
 	
-	private fireRegisterListeners(): void {
+	private fireRegisterListeners(callerID?: number): void {
 		for (let index in this.registerListeners) {
-			this.fireRegisterListener(+index);
+			this.fireRegisterListener(+index, callerID);
 		}
 	}
 	
-	private fireMemoryListeners(): void {
+	private fireMemoryListeners(callerID?: number): void {
 		for (let address in this.memoryByteListeners) {
-			this.fireMemoryWordListener(+address);
+			this.fireMemoryWordListener(+address, callerID);
 		}
 		for (let address in this.memoryWordListeners) {
-			this.fireMemoryWordListener(+address);
+			this.fireMemoryWordListener(+address, callerID);
 		}
 	}
 	
