@@ -6,13 +6,19 @@ import { ListenerList, Listener } from "./utils/ListenerList";
 export class SettingsModel {
 	private highlightLines = true;
 	private instructionDelay = 40;
+	private editorTheme = "vs-dark";
 	
 	private instructionDelayListeners = new ListenerList<number>();
+	private editorThemeListeners = new ListenerList<string>();
 	private highlightListeners = new ListenerList<boolean>();
 	
 	public getInstructionDelay(): number { return this.instructionDelay; }
 	
-	public setInstructionDelay(instructionDelay: number) { this.instructionDelay = instructionDelay; }
+	public setInstructionDelay(instructionDelay: number): void { this.instructionDelay = instructionDelay; }
+	
+	public getEditorTheme(): string { return this.editorTheme; }
+	
+	public setEditorTheme(editorTheme: string): void { this.editorTheme = editorTheme; }
 	
 	public getHighlightLines(): boolean { return this.highlightLines; }
 	
@@ -36,5 +42,13 @@ export class SettingsModel {
 	
 	public removeInstructionDelayListener(listener: Listener<number>): void {
 		this.instructionDelayListeners.remove(listener);
+	}
+	
+	public addEditorThemeListener(listener: Listener<string>, callerID?: number): void {
+		this.editorThemeListeners.add(listener, callerID);
+	}
+	
+	public removeEditorThemeListener(listener: Listener<string>): void {
+		this.editorThemeListeners.remove(listener);
 	}
 }
