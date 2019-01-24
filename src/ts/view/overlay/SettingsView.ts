@@ -1,4 +1,4 @@
-import { SettingsModel } from "../model/SettingsModel";
+import { SettingsModel } from "../../model/SettingsModel";
 
 export class SettingsView {
 	private element = document.createElement("div");

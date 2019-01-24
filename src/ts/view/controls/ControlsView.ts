@@ -1,7 +1,7 @@
 import { AppModel } from "../../model/AppModel";
 import { AssemblyExecutor } from "../../model/processor/AssemblyExecutor";
-import { OverlayView } from "../OverlayView";
-import { SettingsView } from "../SettingsView";
+import { OverlayView } from "../overlay/OverlayView";
+import { SettingsView } from "../overlay/SettingsView";
 
 const PAUSE_LABEL = "Pause";
 const RESUME_LABEL = "Resume";

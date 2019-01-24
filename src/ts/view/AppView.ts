@@ -7,7 +7,7 @@ import { ControlsView } from "./controls/ControlsView";
 import { EditorView } from "./editor/EditorView";
 import { FileLoaderView } from "./FileLoaderView";
 import { StorageView } from "./storage/StorageView";
-import { OverlayView } from "./OverlayView";
+import { OverlayView } from "./overlay/OverlayView";
 
 export const APP_VERSION = 1.0;
 
