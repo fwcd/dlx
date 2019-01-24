@@ -11,6 +11,13 @@ interface SettingParams<T> {
 	setter: (v: T) => void;
 }
 
+interface DropdownSettingParams extends SettingParams<string> {
+	values: {
+		key: string,
+		displayName: string
+	}[];
+}
+
 export class SettingsView {
 	private element = document.createElement("div");
 	
@@ -20,10 +27,31 @@ export class SettingsView {
 			getter: () => model.getHighlightLines(),
 			setter: v => model.setHighlightLines(v)
 		}), SETTINGS_CALLER_ID);
+		
 		model.addInstructionDelayListener(this.addNumberSetting({
 			name: "Instruction Delay",
 			getter: () => model.getInstructionDelay(),
 			setter: v => model.setInstructionDelay(v)
+		}), SETTINGS_CALLER_ID);
+		
+		model.addEditorThemeListener(this.addDropdownSetting({
+			name: "Editor Theme",
+			getter: () => model.getEditorTheme(),
+			setter: v => model.setEditorTheme(v),
+			values: [
+				{
+					key: "vs",
+					displayName: "Light (Visual Studio)"
+				},
+				{
+					key: "vs-dark",
+					displayName: "Dark (Visual Studio)"
+				},
+				{
+					key: "hc-black",
+					displayName: "High Constrast, Black"
+				}
+			]
 		}), SETTINGS_CALLER_ID);
 	}
 	
@@ -63,6 +91,30 @@ export class SettingsView {
 		this.element.appendChild(wrapper);
 		
 		return v => field.value = "" + v;
+	}
+	
+	private addDropdownSetting(params: DropdownSettingParams): Listener<string> {
+		const wrapper = document.createElement("div");
+		const label = document.createElement("label");
+		const dropdown = document.createElement("select");
+		
+		label.innerText = params.name + ": ";
+		
+		params.values.forEach(value => {
+			const option = document.createElement("option");
+			option.value = value.key;
+			option.innerText = value.displayName;
+			dropdown.appendChild(option);
+		});
+		
+		dropdown.value = params.getter();
+		dropdown.addEventListener("change", () => params.setter(dropdown.value));
+		
+		wrapper.appendChild(label);
+		wrapper.appendChild(dropdown);
+		this.element.appendChild(wrapper);
+		
+		return v => dropdown.value = v;
 	}
 	
 	public getElement(): HTMLElement {

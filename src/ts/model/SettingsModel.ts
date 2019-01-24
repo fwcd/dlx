@@ -18,7 +18,10 @@ export class SettingsModel {
 	
 	public getEditorTheme(): string { return this.editorTheme; }
 	
-	public setEditorTheme(editorTheme: string): void { this.editorTheme = editorTheme; }
+	public setEditorTheme(editorTheme: string): void {
+		this.editorTheme = editorTheme;
+		this.editorThemeListeners.fire(editorTheme);
+	}
 	
 	public getHighlightLines(): boolean { return this.highlightLines; }
 	

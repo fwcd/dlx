@@ -23,7 +23,7 @@ export class AppView {
 	
 	public constructor() {
 		this.model = new AppModel();
-		this.editor = new EditorView(this.model.getParsedProgram(), this.model.getFileLoader());
+		this.editor = new EditorView(this.model.getParsedProgram(), this.model.getFileLoader(), this.model.getSettings());
 		this.controls = new ControlsView(this.model, this.overlay);
 		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
 		this.setupTitle();

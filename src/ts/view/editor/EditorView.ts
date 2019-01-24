@@ -12,6 +12,7 @@ import { DLXRenameProvider } from "./DLXRenameProvider";
 import { EditorLineHighlighter } from "./EditorLineHighlighter";
 import { FileLoaderModel } from "../../model/FileLoaderModel";
 import { BreakpointsView } from "./BreakpointsView";
+import { SettingsModel } from "../../model/SettingsModel";
 
 const DLX_LANGUAGE_ID = "dlx-assembly";
 
@@ -21,10 +22,12 @@ export class EditorView {
 	private editor: monaco.editor.IStandaloneCodeEditor;
 	private lineHighlighter: EditorLineHighlighter;
 	private fileLoader: FileLoaderModel;
+	private settings: SettingsModel;
 	
-	public constructor(parsedProgram: ParsedProgram, fileLoader: FileLoaderModel) {
+	public constructor(parsedProgram: ParsedProgram, fileLoader: FileLoaderModel, settings: SettingsModel) {
 		this.parsedProgram = parsedProgram;
 		this.fileLoader = fileLoader;
+		this.settings = settings;
 	}
 	
 	public initialize(): void {
@@ -38,7 +41,7 @@ export class EditorView {
 			autoIndent: true,
 			renderIndentGuides: true,
 			wordBasedSuggestions: false,
-			theme: "vs-dark",
+			theme: this.settings.getEditorTheme(),
 			glyphMargin: true,
 			lineNumbersMinChars: 3
 		});
@@ -49,17 +52,20 @@ export class EditorView {
 			insertSpaces: true,
 			trimAutoWhitespace: false
 		});
-		this.setupModelListeners();
+		this.setupListeners();
 		this.setupFileLoader();
 	}
 	
-	private setupModelListeners(): void {
+	private setupListeners(): void {
 		const editorModel = this.editor.getModel();
 		editorModel.onDidChangeContent(e => {
 			this.onUpdateModel(editorModel);
 		});
 		this.parsedProgram.addDiagnosticsListener(diags => {
 			monaco.editor.setModelMarkers(editorModel, DLX_LANGUAGE_ID, diagnosticsToMarkers(diags));
+		});
+		this.settings.addEditorThemeListener(theme => {
+			monaco.editor.setTheme(theme);
 		});
 	}
 	
