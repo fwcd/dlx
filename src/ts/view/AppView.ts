@@ -7,6 +7,7 @@ import { ControlsView } from "./controls/ControlsView";
 import { EditorView } from "./editor/EditorView";
 import { FileLoaderView } from "./FileLoaderView";
 import { StorageView } from "./storage/StorageView";
+import { PopoverView } from "./PopoverView";
 
 export const APP_VERSION = 1.0;
 
@@ -16,6 +17,7 @@ export class AppView {
 	private storage = new StorageView();
 	private fileLoader: FileLoaderView;
 	private controls: ControlsView;
+	private popover = new PopoverView();
 	
 	private executorListener?: Listener<AssemblyExecutor>;
 	
