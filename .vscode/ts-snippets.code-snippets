@@ -34,13 +34,13 @@
 	"Setter": {
 		"scope": "javascript, typescript",
 		"prefix": "setter",
-		"body": "public set$1($3: $2): { this.$3 = $3; }"
+		"body": "public set$1($3: $2): void { this.$3 = $3; }"
 	},
 	"Setter with Listener": {
 		"scope": "javascript, typescript",
 		"prefix": "setterlistener",
 		"body": [
-			"public set$1($3: $2): $2 {",
+			"public set$1($3: $2): void {",
 			"\tthis.$3 = $3;",
 			"\tthis.$3Listeners.fire($3);",
 			"}"
@@ -52,7 +52,7 @@
 		"body": [
 			"public get$1(): $2 { return this.$3; }",
 			"",
-			"public set$1($3: $2): $2 {",
+			"public set$1($3: $2): void {",
 			"\tthis.$3 = $3;",
 			"\tthis.$3Listeners.fire($3);",
 			"}"
