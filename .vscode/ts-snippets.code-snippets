@@ -25,5 +25,37 @@
 			"\tthis.$3Listeners.remove(listener);",
 			"}"
 		]
+	},
+	"Getter": {
+		"scope": "javascript, typescript",
+		"prefix": "getter",
+		"body": "public get$1(): $2 { return this.$3; }"
+	},
+	"Setter": {
+		"scope": "javascript, typescript",
+		"prefix": "setter",
+		"body": "public set$1($3: $2): { this.$3 = $3; }"
+	},
+	"Setter with Listener": {
+		"scope": "javascript, typescript",
+		"prefix": "setterlistener",
+		"body": [
+			"public set$1($3: $2): $2 {",
+			"\tthis.$3 = $3;",
+			"\tthis.$3Listeners.fire($3);",
+			"}"
+		]
+	},
+	"Getter + Setter with Listener": {
+		"scope": "javascript, typescript",
+		"prefix": "getsetlistener",
+		"body": [
+			"public get$1(): $2 { return this.$3; }",
+			"",
+			"public set$1($3: $2): $2 {",
+			"\tthis.$3 = $3;",
+			"\tthis.$3Listeners.fire($3);",
+			"}"
+		]
 	}
 }
