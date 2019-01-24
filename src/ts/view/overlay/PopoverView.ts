@@ -2,6 +2,8 @@ export class PopoverView {
 	private element = document.createElement("div");
 	
 	public constructor(content: HTMLElement, close: () => void) {
+		this.element.classList.add("popover");
+		
 		const closeButton = document.createElement("button");
 		closeButton.innerText = "Close";
 		closeButton.addEventListener("click", () => close());

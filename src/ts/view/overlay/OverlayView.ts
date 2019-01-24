@@ -20,7 +20,7 @@ export class OverlayView {
 	
 	private setVisible(visible: boolean): void {
 		if (visible) {
-			this.element.style.display = "block";
+			this.element.style.display = "flex";
 		} else {
 			this.element.style.display = "none";
 		}

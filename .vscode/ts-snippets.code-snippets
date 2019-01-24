@@ -3,8 +3,8 @@
 		"scope": "javascript, typescript",
 		"prefix": "proplistenermethods",
 		"body": [
-			"public add$1Listener(listener: Listener<$2>): void {",
-			"\tthis.$3Listeners.add(listener);",
+			"public add$1Listener(listener: Listener<$2>, callerID?: number): void {",
+			"\tthis.$3Listeners.add(listener, callerID);",
 			"\tlistener(this.$3);",
 			"}",
 			"",
@@ -17,8 +17,8 @@
 		"scope": "javascript, typescript",
 		"prefix": "listenermethods",
 		"body": [
-			"public add$1Listener(listener: Listener<$2>): void {",
-			"\tthis.$3Listeners.add(listener);",
+			"public add$1Listener(listener: Listener<$2>, callerID?: number): void {",
+			"\tthis.$3Listeners.add(listener, callerID);",
 			"}",
 			"",
 			"public remove$1Listener(listener: Listener<$2>): void {",

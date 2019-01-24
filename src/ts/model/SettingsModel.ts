@@ -22,8 +22,8 @@ export class SettingsModel {
 		this.signedInts = signedInts;
 	}
 	
-	public addHighlightListener(listener: Listener<boolean>): void {
-		this.highlightListeners.add(listener);
+	public addHighlightListener(listener: Listener<boolean>, callerID?: number): void {
+		this.highlightListeners.add(listener, callerID);
 		listener(this.highlightLines);
 	}
 	
@@ -31,8 +31,8 @@ export class SettingsModel {
 		this.highlightListeners.remove(listener);
 	}
 	
-	public addSignedIntsListener(listener: Listener<boolean>): void {
-		this.signedIntsListeners.add(listener);
+	public addSignedIntsListener(listener: Listener<boolean>, callerID?: number): void {
+		this.signedIntsListeners.add(listener, callerID);
 	}
 	
 	public removeSignedIntsListener(listener: Listener<boolean>): void {
