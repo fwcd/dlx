@@ -1,5 +1,7 @@
 import { AppModel } from "../../model/AppModel";
 import { AssemblyExecutor } from "../../model/processor/AssemblyExecutor";
+import { PopoverView } from "../PopoverView";
+import { SettingsView } from "../SettingsView";
 
 const PAUSE_LABEL = "Pause";
 const RESUME_LABEL = "Resume";
@@ -13,7 +15,7 @@ export class ControlsView {
 	private settingsButton: HTMLElement;
 	private pausedListener: (p: boolean) => void = paused => this.updatePauseLabel(paused);
 	
-	public constructor(model: AppModel) {
+	public constructor(model: AppModel, popover: PopoverView) {
 		this.model = model;
 		
 		this.runButton = document.getElementById("runbutton");
@@ -27,6 +29,7 @@ export class ControlsView {
 		this.pauseButton.addEventListener("click", () => this.performPause());
 		this.stepButton.addEventListener("click", () => this.performStep());
 		this.stopButton.addEventListener("click", () => this.performStop());
+		this.settingsButton.addEventListener("click", () => popover.show(new SettingsView(model.getSettings()).getElement()));
 	}
 	
 	private showMessage(message: string): void {

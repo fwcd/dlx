@@ -24,7 +24,7 @@ export class AppView {
 	public constructor() {
 		this.model = new AppModel();
 		this.editor = new EditorView(this.model.getParsedProgram(), this.model.getFileLoader());
-		this.controls = new ControlsView(this.model);
+		this.controls = new ControlsView(this.model, this.popover);
 		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
 		this.setupTitle();
 	}
