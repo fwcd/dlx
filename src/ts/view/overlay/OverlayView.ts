@@ -1,22 +1,20 @@
+import { PopoverView } from "./PopoverView";
+
 export class OverlayView {
 	private element = document.getElementById("overlay");
-	private content?: HTMLElement;
+	private popover?: PopoverView;
 	
 	public constructor() {
-		const closeButton = document.createElement("button");
-		closeButton.innerText = "Close";
-		closeButton.addEventListener("click", () => this.setVisible(false));
-		this.element.appendChild(closeButton);
-		
 		this.setVisible(false);
 	}
 	
 	public show(content: HTMLElement): void {
-		if (this.content) {
-			this.element.removeChild(this.content);
+		if (this.popover) {
+			this.element.removeChild(this.popover.getElement());
 		}
-		this.element.appendChild(content);
-		this.content = content;
+		
+		this.popover = new PopoverView(content, () => this.setVisible(false));
+		this.element.appendChild(this.popover.getElement());
 		this.setVisible(true);
 	}
 	
