@@ -1,10 +1,13 @@
-export class PopoverView {
-	private element = document.getElementById("popover");
+export class OverlayView {
+	private element = document.getElementById("overlay");
 	private content?: HTMLElement;
 	
 	public constructor() {
 		const closeButton = document.createElement("button");
+		closeButton.innerText = "Close";
 		closeButton.addEventListener("click", () => this.setVisible(false));
+		this.element.appendChild(closeButton);
+		
 		this.setVisible(false);
 	}
 	

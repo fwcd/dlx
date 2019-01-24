@@ -7,7 +7,7 @@ import { ControlsView } from "./controls/ControlsView";
 import { EditorView } from "./editor/EditorView";
 import { FileLoaderView } from "./FileLoaderView";
 import { StorageView } from "./storage/StorageView";
-import { PopoverView } from "./PopoverView";
+import { OverlayView } from "./OverlayView";
 
 export const APP_VERSION = 1.0;
 
@@ -17,14 +17,14 @@ export class AppView {
 	private storage = new StorageView();
 	private fileLoader: FileLoaderView;
 	private controls: ControlsView;
-	private popover = new PopoverView();
+	private overlay = new OverlayView();
 	
 	private executorListener?: Listener<AssemblyExecutor>;
 	
 	public constructor() {
 		this.model = new AppModel();
 		this.editor = new EditorView(this.model.getParsedProgram(), this.model.getFileLoader());
-		this.controls = new ControlsView(this.model, this.popover);
+		this.controls = new ControlsView(this.model, this.overlay);
 		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
 		this.setupTitle();
 	}
