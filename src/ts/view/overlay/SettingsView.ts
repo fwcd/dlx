@@ -9,7 +9,12 @@ export class SettingsView {
 	private element = document.createElement("div");
 	
 	public constructor(model: SettingsModel) {
-		model.addHighlightListener(this.addBoolSetting("Highlight Lines", () => model.getHighlightLines(), v => model.setHighlightLines(v)), SETTINGS_CALLER_ID);
+		model.addHighlightListener(this.addBoolSetting(
+			"Highlight Lines",
+			() => model.getHighlightLines(),
+			v => model.setHighlightLines(v)),
+			SETTINGS_CALLER_ID
+		);
 	}
 	
 	private addBoolSetting(name: string, getter: () => boolean, setter: (v: boolean) => void): Listener<boolean> {
