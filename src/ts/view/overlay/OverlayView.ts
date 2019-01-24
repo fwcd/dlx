@@ -2,7 +2,13 @@ import { PopoverView } from "./PopoverView";
 
 export class OverlayView {
 	private element = document.getElementById("overlay");
+	private visible = false;
 	private popover?: PopoverView;
+	private escapeListener: (e: KeyboardEvent) => void = e => {
+		if (e.key === "Escape") {
+			this.setVisible(false);
+		}
+	};
 	
 	public constructor() {
 		this.setVisible(false);
@@ -19,10 +25,15 @@ export class OverlayView {
 	}
 	
 	private setVisible(visible: boolean): void {
-		if (visible) {
-			this.element.style.display = "flex";
-		} else {
-			this.element.style.display = "none";
+		if (visible != this.visible) {
+			if (visible) {
+				document.addEventListener("keydown", this.escapeListener);
+				this.element.style.display = "flex";
+			} else {
+				document.removeEventListener("keydown", this.escapeListener);
+				this.element.style.display = "none";
+			}
+			this.visible = visible;
 		}
 	}
 }
