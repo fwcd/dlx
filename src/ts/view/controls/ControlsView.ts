@@ -2,6 +2,7 @@ import { AppModel } from "../../model/AppModel";
 import { AssemblyExecutor } from "../../model/processor/AssemblyExecutor";
 import { OverlayView } from "../overlay/OverlayView";
 import { SettingsView } from "../overlay/SettingsView";
+import { Listener } from "../../model/utils/ListenerList";
 
 const PAUSE_LABEL = "Pause";
 const RESUME_LABEL = "Resume";
@@ -13,7 +14,8 @@ export class ControlsView {
 	private stepButton: HTMLElement;
 	private stopButton: HTMLElement;
 	private settingsButton: HTMLElement;
-	private pausedListener: (p: boolean) => void = paused => this.updatePauseLabel(paused);
+	
+	private pausedListener: Listener<boolean> = paused => this.updatePauseLabel(paused);
 	
 	public constructor(model: AppModel, overlay: OverlayView) {
 		this.model = model;
@@ -84,7 +86,7 @@ export class ControlsView {
 			}
 			
 			const executor = new AssemblyExecutor({
-				instructionDelay: 40,
+				instructionDelay: this.model.getSettings().getInstructionDelay(),
 				messageHandler: msg => this.showMessage(msg),
 				program: program.getProgram(),
 				state: this.model.getProcessorState(),

@@ -5,29 +5,39 @@ import { IDGenerator } from "../utils/IDGenerator";
 const SETTINGS_CALLER_ID = -75929827405666;
 const SETTINGS_ID_GENERATOR = new IDGenerator("SettingsView");
 
+interface SettingParams<T> {
+	name: string;
+	getter: () => T;
+	setter: (v: T) => void;
+}
+
 export class SettingsView {
 	private element = document.createElement("div");
 	
 	public constructor(model: SettingsModel) {
-		model.addHighlightListener(this.addBoolSetting(
-			"Highlight Lines",
-			() => model.getHighlightLines(),
-			v => model.setHighlightLines(v)),
-			SETTINGS_CALLER_ID
-		);
+		model.addHighlightListener(this.addBoolSetting({
+			name: "Highlight Lines",
+			getter: () => model.getHighlightLines(),
+			setter: v => model.setHighlightLines(v)
+		}), SETTINGS_CALLER_ID);
+		model.addInstructionDelayListener(this.addNumberSetting({
+			name: "Instruction Delay",
+			getter: () => model.getInstructionDelay(),
+			setter: v => model.setInstructionDelay(v)
+		}), SETTINGS_CALLER_ID);
 	}
 	
-	private addBoolSetting(name: string, getter: () => boolean, setter: (v: boolean) => void): Listener<boolean> {
+	private addBoolSetting(params: SettingParams<boolean>): Listener<boolean> {
 		const wrapper = document.createElement("div");
 		const label = document.createElement("label");
 		const checkbox = document.createElement("input");
 		
 		checkbox.type = "checkbox";
 		checkbox.id = SETTINGS_ID_GENERATOR.nextID();
-		checkbox.checked = getter();
-		checkbox.addEventListener("change", () => setter(checkbox.checked));
+		checkbox.checked = params.getter();
+		checkbox.addEventListener("change", () => params.setter(checkbox.checked));
 		
-		label.innerText = name;
+		label.innerText = params.name;
 		label.htmlFor = checkbox.id;
 		
 		wrapper.appendChild(checkbox);
@@ -35,6 +45,24 @@ export class SettingsView {
 		this.element.appendChild(wrapper);
 		
 		return v => checkbox.checked = v;
+	}
+	
+	private addNumberSetting(params: SettingParams<number>): Listener<number> {
+		const wrapper = document.createElement("div");
+		const label = document.createElement("label");
+		const field = document.createElement("input");
+		
+		label.innerText = params.name + ": ";
+		
+		field.type = "text";
+		field.value = "" + params.getter();
+		field.addEventListener("change", () => params.setter(+field.value));
+		
+		wrapper.appendChild(label);
+		wrapper.appendChild(field);
+		this.element.appendChild(wrapper);
+		
+		return v => field.value = "" + v;
 	}
 	
 	public getElement(): HTMLElement {
