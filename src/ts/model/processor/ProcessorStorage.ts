@@ -193,4 +193,16 @@ export class ProcessorStorage {
 	public removeMemoryByteListener(address: number, listener: Listener<number>): void {
 		this.memoryByteListeners[address].remove(listener);
 	}
+	
+	public resizeMemory(bytes: number): void {
+		const newMemory = new Int32Array(bytes);
+		newMemory.set(this.memory);
+		this.memory = newMemory;
+	}
+	
+	public resizeRegisters(count: number): void {
+		const newRegisters = new Int32Array(count);
+		newRegisters.set(this.registers);
+		this.registers = newRegisters;
+	}
 }
