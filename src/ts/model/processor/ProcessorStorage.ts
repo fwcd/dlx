@@ -107,6 +107,7 @@ export class ProcessorStorage {
 	
 	public setMemoryStartAddress(address: number): void {
 		this.memoryStartAddress = address;
+		this.memoryStartAddressListeners.fire(address);
 	}
 	
 	public clearRegisters(callerID?: number): void {
