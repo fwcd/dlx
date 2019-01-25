@@ -22,11 +22,10 @@ export class ListenerList<T> {
 	
 	public removeByID(callerID: number): void {
 		const count = this.listeners.length;
-		for (let i = 0; i < count; i++) {
+		for (let i = (count - 1); i >= 0; i--) {
 			const listener = this.listeners[i];
 			if (callerID === listener.callerID) {
 				this.listeners.splice(i, 1);
-				return;
 			}
 		}
 	}

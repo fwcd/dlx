@@ -74,4 +74,11 @@ export class SettingsModel {
 	public removeStorageCellWidthListener(listener: Listener<number>): void {
 		this.storageCellWidthListeners.remove(listener);
 	}
+	
+	public removeAllListenersFor(callerID: number): void {
+		this.editorThemeListeners.removeByID(callerID);
+		this.highlightListeners.removeByID(callerID);
+		this.instructionDelayListeners.removeByID(callerID);
+		this.storageCellWidthListeners.removeByID(callerID);
+	}
 }
