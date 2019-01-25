@@ -46,6 +46,12 @@ export class SettingsView implements View, Disposable {
 			setter: v => model.setStorageCellWidth(v)
 		}), this.settingsCallerId);
 		
+		model.addRegisterCountListener(this.addNumberSetting({
+			name: "Register Count",
+			getter: () => model.getRegisterCount(),
+			setter: v => model.setRegisterCount(v)
+		}), this.settingsCallerId);
+		
 		model.addMemoryStartAddressListener(this.addNumberSetting({
 			name: "Memory Start Address",
 			getter: () => model.getMemoryStartAddress(),
@@ -53,7 +59,7 @@ export class SettingsView implements View, Disposable {
 		}), this.settingsCallerId);
 		
 		model.addMemorySizeListener(this.addNumberSetting({
-			name: "Memory Size",
+			name: "Memory Size (in Bytes)",
 			getter: () => model.getMemorySize(),
 			setter: v => model.setMemorySize(v)
 		}), this.settingsCallerId);

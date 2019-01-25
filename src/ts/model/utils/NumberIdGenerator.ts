@@ -1,5 +1,5 @@
 export class NumberIdGenerator {
-	private index = 0;
+	private index = 10000;
 	
 	public nextID(): number {
 		const id = this.index;

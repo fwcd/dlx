@@ -228,16 +228,36 @@ export class ProcessorStorage {
 		this.memorySizeListeners.remove(listener);
 	}
 	
+	public removeMemoryByteListenersBy(callerID: number): void {
+		for (let key in this.memoryByteListeners) {
+			this.memoryByteListeners[key].removeByID(callerID);
+		}
+	}
+	
+	public removeMemoryWordListenersBy(callerID: number): void {
+		for (let key in this.memoryWordListeners) {
+			this.memoryWordListeners[key].removeByID(callerID);
+		}
+	}
+	
+	public removeRegisterListenersBy(callerID: number): void {
+		for (let key in this.registerListeners) {
+			this.registerListeners[key].removeByID(callerID);
+		}
+	}
+	
 	public resizeMemory(bytes: number): void {
-		const newMemory = new Int32Array(bytes);
-		newMemory.set(this.memory);
+		const newMemory = new Int8Array(bytes);
+		const copiedLength = Math.min(bytes, this.memory.length);
+		newMemory.set(this.memory.slice(0, copiedLength));
 		this.memory = newMemory;
 		this.memorySizeListeners.fire(bytes);
 	}
 	
 	public resizeRegisters(count: number): void {
 		const newRegisters = new Int32Array(count);
-		newRegisters.set(this.registers);
+		const copiedLength = Math.min(count, this.registers.length);
+		newRegisters.set(this.registers.slice(0, copiedLength));
 		this.registers = newRegisters;
 		this.registerCountListeners.fire(count);
 	}
