@@ -7,10 +7,12 @@ export class SettingsModel {
 	private highlightLines = true;
 	private instructionDelay = 40;
 	private storageCellWidth = 35;
+	private registerCount = 32;
 	private memoryStartAddress = 1000;
-	private memorySize = 1000;
+	private memorySize = 1024;
 	private editorTheme = "vs-dark";
 	
+	private registerCountListeners = new ListenerList<number>();
 	private memoryStartAddressListeners = new ListenerList<number>();
 	private memorySizeListeners = new ListenerList<number>();
 	private instructionDelayListeners = new ListenerList<number>();
@@ -55,6 +57,13 @@ export class SettingsModel {
 	public setHighlightLines(highlightLines: boolean): void {
 		this.highlightLines = highlightLines;
 		this.highlightListeners.fire(highlightLines);
+	}
+	
+	public getRegisterCount(): number { return this.registerCount; }
+	
+	public setRegisterCount(registerCount: number): void {
+		this.registerCount = registerCount;
+		this.registerCountListeners.fire(registerCount);
 	}
 	
 	public addHighlightListener(listener: Listener<boolean>, callerID?: number): void {
@@ -109,11 +118,20 @@ export class SettingsModel {
 		this.memoryStartAddressListeners.remove(listener);
 	}
 	
+	public addRegisterCountListener(listener: Listener<number>, callerID?: number): void {
+		this.registerCountListeners.add(listener, callerID);
+	}
+	
+	public removeRegisterCountListener(listener: Listener<number>): void {
+		this.registerCountListeners.remove(listener);
+	}
+	
 	public removeAllListenersFor(callerID: number): void {
 		this.editorThemeListeners.removeByID(callerID);
 		this.highlightListeners.removeByID(callerID);
 		this.instructionDelayListeners.removeByID(callerID);
 		this.storageCellWidthListeners.removeByID(callerID);
+		this.registerCountListeners.removeByID(callerID);
 		this.memorySizeListeners.removeByID(callerID);
 		this.memoryStartAddressListeners.removeByID(callerID);
 	}

@@ -12,6 +12,9 @@ export class ProcessorStorage {
 	private registerListeners: { [index: number]: ListenerList<number>; } = {};
 	private memoryByteListeners: { [index: number]: ListenerList<number>; } = {};
 	private memoryWordListeners: { [index: number]: ListenerList<number>; } = {};
+	private memorySizeListeners = new ListenerList<number>();
+	private memoryStartAddressListeners = new ListenerList<number>();
+	private registerCountListeners = new ListenerList<number>();
 	
 	public constructor(registerCount: number, memoryByteCount: number, memoryStartAddress: number) {
 		this.registers = new Int32Array(registerCount);
@@ -100,6 +103,10 @@ export class ProcessorStorage {
 	
 	public getMemoryStartAddress(): number {
 		return this.memoryStartAddress;
+	}
+	
+	public setMemoryStartAddress(address: number): void {
+		this.memoryStartAddress = address;
 	}
 	
 	public clearRegisters(callerID?: number): void {
@@ -194,15 +201,44 @@ export class ProcessorStorage {
 		this.memoryByteListeners[address].remove(listener);
 	}
 	
+	public addRegisterCountListener(listener: Listener<number>, callerID?: number): void {
+		this.registerCountListeners.add(listener, callerID);
+		listener(this.registers.length);
+	}
+	
+	public removeRegisterCountListener(listener: Listener<number>): void {
+		this.registerCountListeners.remove(listener);
+	}
+	
+	public addMemoryStartAddressListener(listener: Listener<number>, callerID?: number): void {
+		this.memoryStartAddressListeners.add(listener, callerID);
+		listener(this.memoryStartAddress);
+	}
+	
+	public removeMemoryStartAddressListener(listener: Listener<number>): void {
+		this.memoryStartAddressListeners.remove(listener);
+	}
+	
+	public addMemorySizeListener(listener: Listener<number>, callerID?: number): void {
+		this.memorySizeListeners.add(listener, callerID);
+		listener(this.memory.length);
+	}
+	
+	public removeMemorySizeListener(listener: Listener<number>): void {
+		this.memorySizeListeners.remove(listener);
+	}
+	
 	public resizeMemory(bytes: number): void {
 		const newMemory = new Int32Array(bytes);
 		newMemory.set(this.memory);
 		this.memory = newMemory;
+		this.memorySizeListeners.fire(bytes);
 	}
 	
 	public resizeRegisters(count: number): void {
 		const newRegisters = new Int32Array(count);
 		newRegisters.set(this.registers);
 		this.registers = newRegisters;
+		this.registerCountListeners.fire(count);
 	}
 }

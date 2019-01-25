@@ -10,10 +10,10 @@ import { FormatSelectorModel } from "./format/FormatSelectorModel";
  * Encapsulates GUI-independent state of the application.
  */
 export class AppModel {
-	private processorState = new ProcessorState();
+	private processorState: ProcessorState;
 	private parsedProgram = new ParsedProgram();
 	private executor?: AssemblyExecutor = null;
-	private settings = new SettingsModel();
+	private settings: SettingsModel;
 	private fileLoader = new FileLoaderModel();
 	private registersFormat = new FormatSelectorModel();
 	private memoryFormat = new FormatSelectorModel();
@@ -21,6 +21,9 @@ export class AppModel {
 	private executorListeners = new ListenerList<AssemblyExecutor>();
 	
 	public constructor() {
+		this.settings = new SettingsModel();
+		this.processorState = new ProcessorState(this.settings);
+		
 		const breakpoints = this.parsedProgram.getBreakpointManager();
 		this.fileLoader.addClearListener(() => breakpoints.clear());
 		this.fileLoader.addOpenListener(() => breakpoints.clear());
