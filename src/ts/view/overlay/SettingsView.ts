@@ -34,6 +34,12 @@ export class SettingsView {
 			setter: v => model.setInstructionDelay(v)
 		}), SETTINGS_CALLER_ID);
 		
+		model.addStorageCellWidthListener(this.addNumberSetting({
+			name: "Storage Cell Width",
+			getter: () => model.getStorageCellWidth(),
+			setter: v => model.setStorageCellWidth(v)
+		}), SETTINGS_CALLER_ID);
+		
 		model.addEditorThemeListener(this.addDropdownSetting({
 			name: "Editor Theme",
 			getter: () => model.getEditorTheme(),

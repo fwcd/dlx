@@ -3,13 +3,14 @@ import { StorageCellView } from "./StorageCellView";
 import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
 import { FormatSelectorView } from "./FormatSelectorView";
 import { format } from "path";
+import { SettingsModel } from "../../model/SettingsModel";
 
 const REGISTERS_VIEW_CALLER_ID = -193820453422;
 
 export class RegistersView {
 	private element = document.getElementById("registers");
 	
-	public initialize(model: ProcessorStorage, formatModel: FormatSelectorModel): void {
+	public initialize(model: ProcessorStorage, formatModel: FormatSelectorModel, settings: SettingsModel): void {
 		// Create header
 		const header = document.createElement("div");
 		header.classList.add("storage-header");
@@ -40,6 +41,7 @@ export class RegistersView {
 				getter: () => model.getRegister(i),
 				setter: value => model.setRegister(i, value, REGISTERS_VIEW_CALLER_ID),
 				formatModel: formatModel,
+				settings: settings,
 				name: "R" + i
 			});
 			if (i == 0) {

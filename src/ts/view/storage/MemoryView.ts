@@ -2,13 +2,14 @@ import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
 import { FormatSelectorView } from "./FormatSelectorView";
 import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
+import { SettingsModel } from "../../model/SettingsModel";
 
 const MEMORY_VIEW_CALLER_ID = 299837458793;
 
 export class MemoryView {
 	private element = document.getElementById("memory");
 	
-	public initialize(model: ProcessorStorage, formatModel: FormatSelectorModel): void {
+	public initialize(model: ProcessorStorage, formatModel: FormatSelectorModel, settings: SettingsModel): void {
 		// Create header
 		const header = document.createElement("div");
 		header.classList.add("storage-header");
@@ -41,6 +42,7 @@ export class MemoryView {
 				getter: () => model.getMemoryWord(address),
 				setter: value => model.setMemoryWord(address, value, MEMORY_VIEW_CALLER_ID),
 				formatModel: formatModel,
+				settings: settings,
 				name: "" + address
 			});
 			model.addMemoryWordListener(address, () => cell.update(), MEMORY_VIEW_CALLER_ID);

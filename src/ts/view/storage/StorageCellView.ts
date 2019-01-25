@@ -1,4 +1,5 @@
 import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
+import { SettingsModel } from "../../model/SettingsModel";
 
 export class StorageCellView {
 	private element = document.createElement("div");
@@ -10,6 +11,7 @@ export class StorageCellView {
 		getter: () => number,
 		setter: (v: number) => void,
 		formatModel: FormatSelectorModel,
+		settings: SettingsModel,
 		name?: string
 	}) {
 		this.getter = params.getter;
@@ -28,8 +30,8 @@ export class StorageCellView {
 		
 		this.textField.type = "text";
 		this.update();
-		this.textField.addEventListener("keyup", e => params.setter(params.formatModel.getFormat().stringToBinary(this.textField.value)));
-		params.formatModel.addFormatListener(_format => this.update());
+		this.textField.addEventListener("keyup", () => params.setter(params.formatModel.getFormat().stringToBinary(this.textField.value)));
+		params.formatModel.addFormatListener(() => this.update());
 		
 		this.element.appendChild(this.textField);
 	}

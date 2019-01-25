@@ -46,7 +46,12 @@ export class AppView {
 	}
 	
 	public initializeStorage(): void {
-		this.storage.initialize(this.model.getProcessorState().getStorage(), this.model.getRegistersFormat(), this.model.getMemoryFormat());
+		this.storage.initialize({
+			model: this.model.getProcessorState().getStorage(),
+			registersFormat: this.model.getRegistersFormat(),
+			memoryFormat: this.model.getMemoryFormat(),
+			settings: this.model.getSettings()
+		});
 	}
 	
 	public initializeEditor(): void {
