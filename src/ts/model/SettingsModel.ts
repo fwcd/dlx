@@ -6,7 +6,7 @@ import { ListenerList, Listener } from "./utils/ListenerList";
 export class SettingsModel {
 	private highlightLines = true;
 	private instructionDelay = 40;
-	private storageCellWidth = 6;
+	private storageCellWidth = 35;
 	private editorTheme = "vs-dark";
 	
 	private instructionDelayListeners = new ListenerList<number>();

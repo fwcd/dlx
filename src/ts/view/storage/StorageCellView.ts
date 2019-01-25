@@ -32,6 +32,7 @@ export class StorageCellView {
 		this.update();
 		this.textField.addEventListener("keyup", () => params.setter(params.formatModel.getFormat().stringToBinary(this.textField.value)));
 		params.formatModel.addFormatListener(() => this.update());
+		params.settings.addStorageCellWidthListener(width => this.textField.style.width = width + "px");
 		
 		this.element.appendChild(this.textField);
 	}
