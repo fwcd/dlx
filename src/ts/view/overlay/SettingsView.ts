@@ -35,7 +35,7 @@ export class SettingsView implements View, Disposable {
 		}), this.settingsCallerId);
 		
 		model.addInstructionDelayListener(this.addNumberSetting({
-			name: "Instruction Delay",
+			name: "Instruction Delay (ms)",
 			getter: () => model.getInstructionDelay(),
 			setter: v => model.setInstructionDelay(v)
 		}), this.settingsCallerId);
@@ -59,7 +59,7 @@ export class SettingsView implements View, Disposable {
 		}), this.settingsCallerId);
 		
 		model.addMemorySizeListener(this.addNumberSetting({
-			name: "Memory Size (in Bytes)",
+			name: "Memory Size (bytes)",
 			getter: () => model.getMemorySize(),
 			setter: v => model.setMemorySize(v)
 		}), this.settingsCallerId);
