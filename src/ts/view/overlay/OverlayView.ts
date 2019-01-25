@@ -1,4 +1,6 @@
 import { PopoverView } from "./PopoverView";
+import { View } from "../utils/View";
+import { Disposable } from "../../model/utils/Disposable";
 
 export class OverlayView {
 	private element = document.getElementById("overlay");
@@ -14,8 +16,9 @@ export class OverlayView {
 		this.setVisible(false);
 	}
 	
-	public show(content: HTMLElement): void {
+	public show(content: View & Disposable): void {
 		if (this.popover) {
+			this.popover.dispose();
 			this.element.removeChild(this.popover.getElement());
 		}
 		

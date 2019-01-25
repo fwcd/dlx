@@ -2,10 +2,10 @@ import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
 import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
 import { FormatSelectorView } from "./FormatSelectorView";
-import { format } from "path";
 import { SettingsModel } from "../../model/SettingsModel";
+import { CALLER_ID_GENERATOR } from "../../model/utils/NumberIdGenerator";
 
-const REGISTERS_VIEW_CALLER_ID = -193820453422;
+const REGISTERS_VIEW_CALLER_ID = CALLER_ID_GENERATOR.nextID();
 
 export class RegistersView {
 	private element = document.getElementById("registers");

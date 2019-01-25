@@ -1,9 +1,11 @@
 import { SettingsModel } from "../../model/SettingsModel";
 import { Listener } from "../../model/utils/ListenerList";
-import { IDGenerator } from "../utils/IDGenerator";
+import { HtmlIdGenerator } from "../utils/HtmlIdGenerator";
+import { CALLER_ID_GENERATOR } from "../../model/utils/NumberIdGenerator";
+import { Disposable } from "../../model/utils/Disposable";
+import { View } from "../utils/View";
 
-const SETTINGS_CALLER_ID = -75929827405666;
-const SETTINGS_ID_GENERATOR = new IDGenerator("SettingsView");
+const SETTINGS_ID_GENERATOR = new HtmlIdGenerator("SettingsView");
 
 interface SettingParams<T> {
 	name: string;
@@ -18,27 +20,31 @@ interface DropdownSettingParams extends SettingParams<string> {
 	}[];
 }
 
-export class SettingsView {
+export class SettingsView implements View, Disposable {
+	private settingsCallerId = CALLER_ID_GENERATOR.nextID();
+	private model: SettingsModel;
 	private element = document.createElement("div");
 	
 	public constructor(model: SettingsModel) {
+		this.model = model;
+		
 		model.addHighlightListener(this.addBoolSetting({
 			name: "Highlight Lines",
 			getter: () => model.getHighlightLines(),
 			setter: v => model.setHighlightLines(v)
-		}), SETTINGS_CALLER_ID);
+		}), this.settingsCallerId);
 		
 		model.addInstructionDelayListener(this.addNumberSetting({
 			name: "Instruction Delay",
 			getter: () => model.getInstructionDelay(),
 			setter: v => model.setInstructionDelay(v)
-		}), SETTINGS_CALLER_ID);
+		}), this.settingsCallerId);
 		
 		model.addStorageCellWidthListener(this.addNumberSetting({
 			name: "Storage Cell Width",
 			getter: () => model.getStorageCellWidth(),
 			setter: v => model.setStorageCellWidth(v)
-		}), SETTINGS_CALLER_ID);
+		}), this.settingsCallerId);
 		
 		model.addEditorThemeListener(this.addDropdownSetting({
 			name: "Editor Theme",
@@ -58,7 +64,7 @@ export class SettingsView {
 					displayName: "High Constrast, Black"
 				}
 			]
-		}), SETTINGS_CALLER_ID);
+		}), this.settingsCallerId);
 	}
 	
 	private addBoolSetting(params: SettingParams<boolean>): Listener<boolean> {
@@ -125,5 +131,9 @@ export class SettingsView {
 	
 	public getElement(): HTMLElement {
 		return this.element;
+	}
+	
+	public dispose(): void {
+		this.model.removeAllListenersFor(this.settingsCallerId);
 	}
 }

@@ -1,4 +1,4 @@
-export class IDGenerator {
+export class HtmlIdGenerator {
 	private prefix: string;
 	private lastID = 0;
 	

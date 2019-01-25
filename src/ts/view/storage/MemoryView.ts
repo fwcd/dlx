@@ -3,8 +3,9 @@ import { StorageCellView } from "./StorageCellView";
 import { FormatSelectorView } from "./FormatSelectorView";
 import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
 import { SettingsModel } from "../../model/SettingsModel";
+import { CALLER_ID_GENERATOR } from "../../model/utils/NumberIdGenerator";
 
-const MEMORY_VIEW_CALLER_ID = 299837458793;
+const MEMORY_VIEW_CALLER_ID = CALLER_ID_GENERATOR.nextID();
 
 export class MemoryView {
 	private element = document.getElementById("memory");

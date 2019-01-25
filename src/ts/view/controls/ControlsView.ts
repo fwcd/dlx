@@ -31,7 +31,7 @@ export class ControlsView {
 		this.pauseButton.addEventListener("click", () => this.performPause());
 		this.stepButton.addEventListener("click", () => this.performStep());
 		this.stopButton.addEventListener("click", () => this.performStop());
-		this.settingsButton.addEventListener("click", () => overlay.show(new SettingsView(model.getSettings()).getElement()));
+		this.settingsButton.addEventListener("click", () => overlay.show(new SettingsView(model.getSettings())));
 	}
 	
 	private showMessage(message: string): void {
