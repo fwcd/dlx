@@ -46,6 +46,18 @@ export class SettingsView implements View, Disposable {
 			setter: v => model.setStorageCellWidth(v)
 		}), this.settingsCallerId);
 		
+		model.addMemoryStartAddressListener(this.addNumberSetting({
+			name: "Memory Start Address",
+			getter: () => model.getMemoryStartAddress(),
+			setter: v => model.setMemoryStartAddress(v)
+		}), this.settingsCallerId);
+		
+		model.addMemorySizeListener(this.addNumberSetting({
+			name: "Memory Size",
+			getter: () => model.getMemorySize(),
+			setter: v => model.setMemorySize(v)
+		}), this.settingsCallerId);
+		
 		model.addEditorThemeListener(this.addDropdownSetting({
 			name: "Editor Theme",
 			getter: () => model.getEditorTheme(),

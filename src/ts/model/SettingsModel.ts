@@ -7,8 +7,12 @@ export class SettingsModel {
 	private highlightLines = true;
 	private instructionDelay = 40;
 	private storageCellWidth = 35;
+	private memoryStartAddress = 1000;
+	private memorySize = 1000;
 	private editorTheme = "vs-dark";
 	
+	private memoryStartAddressListeners = new ListenerList<number>();
+	private memorySizeListeners = new ListenerList<number>();
 	private instructionDelayListeners = new ListenerList<number>();
 	private storageCellWidthListeners = new ListenerList<number>();
 	private editorThemeListeners = new ListenerList<string>();
@@ -30,6 +34,20 @@ export class SettingsModel {
 	public setStorageCellWidth(storageCellWidth: number): void {
 		this.storageCellWidth = storageCellWidth;
 		this.storageCellWidthListeners.fire(storageCellWidth);
+	}
+	
+	public getMemorySize(): number { return this.memorySize; }
+	
+	public setMemorySize(memorySize: number): void {
+		this.memorySize = memorySize;
+		this.memorySizeListeners.fire(memorySize);
+	}
+	
+	public getMemoryStartAddress(): number { return this.memoryStartAddress; }
+	
+	public setMemoryStartAddress(memoryStartAddress: number): void {
+		this.memoryStartAddress = memoryStartAddress;
+		this.memoryStartAddressListeners.fire(memoryStartAddress);
 	}
 	
 	public getHighlightLines(): boolean { return this.highlightLines; }
@@ -73,6 +91,22 @@ export class SettingsModel {
 	
 	public removeStorageCellWidthListener(listener: Listener<number>): void {
 		this.storageCellWidthListeners.remove(listener);
+	}
+	
+	public addMemorySizeListener(listener: Listener<number>, callerID?: number): void {
+		this.memorySizeListeners.add(listener, callerID);
+	}
+	
+	public removeMemorySizeListener(listener: Listener<number>): void {
+		this.memorySizeListeners.remove(listener);
+	}
+	
+	public addMemoryStartAddressListener(listener: Listener<number>, callerID?: number): void {
+		this.memoryStartAddressListeners.add(listener, callerID);
+	}
+	
+	public removeMemoryStartAddressListener(listener: Listener<number>): void {
+		this.memoryStartAddressListeners.remove(listener);
 	}
 	
 	public removeAllListenersFor(callerID: number): void {
