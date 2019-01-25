@@ -114,5 +114,7 @@ export class SettingsModel {
 		this.highlightListeners.removeByID(callerID);
 		this.instructionDelayListeners.removeByID(callerID);
 		this.storageCellWidthListeners.removeByID(callerID);
+		this.memorySizeListeners.removeByID(callerID);
+		this.memoryStartAddressListeners.removeByID(callerID);
 	}
 }
