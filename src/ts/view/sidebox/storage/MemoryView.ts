@@ -1,9 +1,9 @@
-import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
+import { ProcessorStorage } from "../../../model/processor/ProcessorStorage";
 import { StorageCellView } from "./StorageCellView";
 import { FormatSelectorView } from "./FormatSelectorView";
-import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
-import { SettingsModel } from "../../model/SettingsModel";
-import { CALLER_ID_GENERATOR } from "../../model/utils/NumberIdGenerator";
+import { FormatSelectorModel } from "../../../model/format/FormatSelectorModel";
+import { SettingsModel } from "../../../model/SettingsModel";
+import { CALLER_ID_GENERATOR } from "../../../model/utils/NumberIdGenerator";
 
 const MEMORY_VIEW_CALLER_ID = CALLER_ID_GENERATOR.nextID();
 

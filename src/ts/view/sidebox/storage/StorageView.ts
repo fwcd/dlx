@@ -1,8 +1,8 @@
 import { MemoryView } from "./MemoryView";
 import { RegistersView } from "./RegistersView";
-import { ProcessorStorage } from "../../model/processor/ProcessorStorage";
-import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
-import { SettingsModel } from "../../model/SettingsModel";
+import { ProcessorStorage } from "../../../model/processor/ProcessorStorage";
+import { FormatSelectorModel } from "../../../model/format/FormatSelectorModel";
+import { SettingsModel } from "../../../model/SettingsModel";
 
 export class StorageView {
 	private element = document.getElementById("storagebox");

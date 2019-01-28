@@ -1,5 +1,5 @@
-import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
-import { DATA_FORMATS } from "../../model/format/DataFormats";
+import { FormatSelectorModel } from "../../../model/format/FormatSelectorModel";
+import { DATA_FORMATS } from "../../../model/format/DataFormats";
 
 export class FormatSelectorView {
 	private element = document.createElement("select");

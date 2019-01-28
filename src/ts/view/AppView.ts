@@ -6,7 +6,7 @@ import { Listener } from "../model/utils/ListenerList";
 import { ControlsView } from "./controls/ControlsView";
 import { EditorView } from "./editor/EditorView";
 import { FileLoaderView } from "./FileLoaderView";
-import { StorageView } from "./storage/StorageView";
+import { StorageView } from "./sidebox/storage/StorageView";
 import { OverlayView } from "./overlay/OverlayView";
 
 export const APP_VERSION = 1.0;

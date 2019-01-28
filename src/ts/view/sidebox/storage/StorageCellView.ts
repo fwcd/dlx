@@ -1,5 +1,5 @@
-import { FormatSelectorModel } from "../../model/format/FormatSelectorModel";
-import { SettingsModel } from "../../model/SettingsModel";
+import { FormatSelectorModel } from "../../../model/format/FormatSelectorModel";
+import { SettingsModel } from "../../../model/SettingsModel";
 
 export class StorageCellView {
 	private element = document.createElement("div");
