@@ -1,6 +1,6 @@
 import { View } from "./View";
 
-export class TabView implements View {
+export class TabPaneView implements View {
 	private element: HTMLElement;
 	
 	public constructor(element: HTMLElement) {
