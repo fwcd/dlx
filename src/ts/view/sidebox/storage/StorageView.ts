@@ -3,8 +3,9 @@ import { RegistersView } from "./RegistersView";
 import { ProcessorStorage } from "../../../model/processor/ProcessorStorage";
 import { FormatSelectorModel } from "../../../model/format/FormatSelectorModel";
 import { SettingsModel } from "../../../model/SettingsModel";
+import { View } from "../../utils/View";
 
-export class StorageView {
+export class StorageView implements View {
 	private element = document.getElementById("storagebox");
 	private registers = new RegistersView();
 	private memory = new MemoryView();

@@ -1,7 +1,8 @@
 import { FormatSelectorModel } from "../../../model/format/FormatSelectorModel";
 import { SettingsModel } from "../../../model/SettingsModel";
+import { View } from "../../utils/View";
 
-export class StorageCellView {
+export class StorageCellView implements View {
 	private element = document.createElement("div");
 	private textField = document.createElement("input");
 	private formatModel: FormatSelectorModel;
