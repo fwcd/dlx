@@ -10,7 +10,7 @@ export const ASM_LINE_REGEX = /^[ \t]*(?:(\w+):)?[ \t]*(\w+)?[ \t]*([\w\(\)-]+(?
 /**
  * Matches an argument from a raw argument list.
  */
-export const ASM_ARGUMENT_MATCH_REGEX = /[\w#]+/g;
+export const ASM_ARGUMENT_MATCH_REGEX = /[\w#-]+/g;
 
 /**
  * Matches a literal number argument.
