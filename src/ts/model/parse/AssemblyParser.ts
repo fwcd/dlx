@@ -8,8 +8,10 @@ import { Operation } from "../processor/operations/Operation";
 
 type DiagnosticsHandler = (diags: AssemblyDiagnostic[]) => void;
 
-interface ParsedInstruction extends Instruction {
+interface ParsedInstruction {
+	instruction?: Instruction;
 	label?: string;
+	asmCodeLine: number;
 }
 
 interface Indexed<T> {
@@ -33,23 +35,65 @@ export class AssemblyParser {
 	}
 	
 	public parse(asmLines: string[]): AssemblyProgram {
-		const labelledInstructions = asmLines
+		// The parsed lines
+		const parsedInstructions = asmLines
 			.map((line, i) => this.parseLine(line, i + 1))
 			.filter(inst => inst != null);
-			
+		
+		// The instructions together with associated instruction numbers (used by the program counter)
+		const indexedInstructions = this.indexInstructions(parsedInstructions);
+		
+		// The instructions that contain an opcode and not just a label
+		const actualInstructions = parsedInstructions
+			.map(it => it.instruction)
+			.filter(it => it != null);
+		
+		// The line indices of the labels
 		const labelIndices: { [label: string]: number; } = {};
-		labelledInstructions
-			.map((inst, i) => <Indexed<ParsedInstruction>> {
-				value: inst,
-				index: i
-			})
+		indexedInstructions
 			.filter(inst => inst.value.label)
-			.forEach(inst => labelIndices[inst.value.label] = inst.index);
+			.forEach(inst => {
+				if (inst.index >= actualInstructions.length) {
+					if (asmLines.length > 0) {
+						const lineNumber = asmLines.length;
+						const line = asmLines[lineNumber - 1];
+						this.diagnosticsHandler([{
+							line: lineNumber,
+							code: line,
+							startColumn: 1,
+							endColumn: line.length + 1,
+							severity: AssemblyDiagnosticSeverity.WARNING,
+							message: "Could not find instruction after last label"
+						}]);
+					}
+				} else {
+					labelIndices[inst.value.label] = inst.index;
+				}
+			});
 		
 		return {
-			instructions: labelledInstructions,
+			instructions: actualInstructions,
 			labelIndices: labelIndices
 		};
+	}
+	
+	private indexInstructions(instructions: ParsedInstruction[]): Indexed<ParsedInstruction>[] {
+		const result: Indexed<ParsedInstruction>[] = [];
+		let instructionIndex = 0;
+		
+		for (let i = 0; i < instructions.length; i++) {
+			const instruction = instructions[i];
+			result.push({
+				index: instructionIndex,
+				value: instruction
+			});
+			if (instruction.instruction != null) {
+				// Line contains operation (rather than just a label)
+				instructionIndex++;
+			}
+		}
+		
+		return result;
 	}
 	
 	private parseLine(asmLine: string, lineIndex: number): ParsedInstruction | null {
@@ -60,13 +104,23 @@ export class AssemblyParser {
 		}
 		
 		let label = match[1];
-		const opc = match[2].toUpperCase();
-		const rawArgs = match[3];
-		const opcStartCol = asmLine.indexOf(opc) + 1;
+		const rawOpc = match[2];
 		
 		if (label === "") {
-			label = undefined;
+			label = null;
 		}
+		
+		if (rawOpc == null) {
+			// No opcode given, only return label
+			return <ParsedInstruction> {
+				label: label,
+				asmCodeLine: lineIndex
+			};
+		}
+		
+		const opc = rawOpc.toUpperCase();
+		const rawArgs = match[3];
+		const opcStartCol = asmLine.indexOf(opc) + 1;
 		
 		if (!(opc in OPCODES)) {
 			this.diagnosticsHandler([{
@@ -97,11 +151,13 @@ export class AssemblyParser {
 		const parsedArgs = this.parseArgs(rawArgs, operation, asmLine, lineIndex);
 		
 		return <ParsedInstruction> {
-			operation: operation,
-			numericArgs: parsedArgs.numericArgs,
-			labelArgs: parsedArgs.labelArgs,
-			label: label,
-			asmCodeLine: lineIndex
+			instruction: {
+				operation: operation,
+				numericArgs: parsedArgs.numericArgs,
+				labelArgs: parsedArgs.labelArgs,
+				asmCodeLine: lineIndex
+			},
+			label: label
 		};
 	}
 	

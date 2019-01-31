@@ -2,10 +2,10 @@
  * Matches a single line of assembly code.
  * 
  * * Group 1 captures the (optional) label
- * * Group 2 captures the opcode
+ * * Group 2 captures the (optional) opcode
  * * Group 3 captures the (optional) arguments
  */
-export const ASM_LINE_REGEX = /^(?:(\w+):)?[ \t]*(\w+)[ \t]*([\w\(\)-]+(?:,[ \t]*[\w\(\)#-]+)*)?[ \t]*(?:\/.+)*$/;
+export const ASM_LINE_REGEX = /^[ \t]*(?:(\w+):)?[ \t]*(\w+)?[ \t]*([\w\(\)-]+(?:,[ \t]*[\w\(\)#-]+)*)?[ \t]*(?:\/.+)*$/;
 
 /**
  * Matches an argument from a raw argument list.
