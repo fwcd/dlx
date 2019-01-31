@@ -6,7 +6,7 @@ import { OperationResult } from "./OperationResult";
  * Loads an immediate value to a register.
  */
 export class LoadImmediateOperation implements Operation {
-	private argumentSyntax = /^ *R(\d+) *, *#(-?\d+) *$/;
+	private argumentSyntax = /^ *R(\d+) *, *#(\-?\d+) *$/;
 	
 	public constructor() {}
 	

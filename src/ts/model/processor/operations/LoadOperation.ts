@@ -7,7 +7,7 @@ import { OperationResult } from "./OperationResult";
  * Loads from memory to a register.
  */
 export class LoadOperation implements Operation {
-	private argumentSyntax = /^ *R(\d+) *, *(\d+) *\( *R(\d+) *\) *$/;
+	private argumentSyntax = /^ *R(\d+) *, *(\-?\d+) *\( *R(\d+) *\) *$/;
 	
 	private getter: (storage: ProcessorStorage, address: number) => number;
 	

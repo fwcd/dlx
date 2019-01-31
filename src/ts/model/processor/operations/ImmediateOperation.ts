@@ -6,7 +6,7 @@ import { OperationResult } from "./OperationResult";
  * Performs an operation on a register and a literal.
  */
 export class ImmediateOperation implements Operation {
-	private argumentSyntax = /^ *R(\d+) *, *R(\d+) *, *#(-?\d+) *$/;
+	private argumentSyntax = /^ *R(\d+) *, *R(\d+) *, *#(\-?\d+) *$/;
 	private operation: (a: number, b: number) => number;
 	
 	public constructor(operation: (a: number, b: number) => number) {
