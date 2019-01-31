@@ -47,7 +47,7 @@ export class MenuBarView {
 					{
 						label: "Run",
 						accelerator: "CmdOrCtrl+R",
-						click(): void { app.getControls().performRun(); }
+						click(): void { app.getControls().performDebug(); }
 					},
 					{
 						label: "Step",

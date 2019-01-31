@@ -10,6 +10,7 @@ import { BreakpointManager } from "../debugger/BreakpointManager";
  * A running assembly sequence/program.
  */
 export class AssemblyExecutor {
+	private timeout = 10000; // ms - A timeout used to detect potential infinite loops when running programs "instantly"
 	private program: AssemblyProgram;
 	private breakpoints: BreakpointManager;
 	private state: ProcessorState;
@@ -31,14 +32,23 @@ export class AssemblyExecutor {
 		this.breakpoints = params.breakpoints;
 	}
 	
-	public run(): void {
+	public runInstantly(): void {
+		const startTime = new Date().getTime();
+		while (!this.paused) {
+			this.execNextInstruction();
+			if ((new Date().getTime() - startTime) > this.timeout) {
+				this.pause();
+				this.messageHandler("The program took longer than " + (this.timeout / 1000) + " seconds and was paused.");
+			}
+		}
+	}
+	
+	public runWithDelay(): void {
 		if (this.instructionDelay > 0 && !this.paused) {
 			this.execNextInstruction();
-			window.setTimeout(() => this.run(), this.instructionDelay);
+			window.setTimeout(() => this.runWithDelay(), this.instructionDelay);
 		} else {
-			while (!this.paused) {
-				this.execNextInstruction();
-			}
+			this.runInstantly();
 		}
 	}
 	
@@ -134,7 +144,7 @@ export class AssemblyExecutor {
 	public resume(): void {
 		this.paused = false;
 		this.pausedListeners.fire(false);
-		this.run();
+		this.runWithDelay();
 	}
 	
 	public step(): void {

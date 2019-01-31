@@ -10,6 +10,7 @@ const RESUME_LABEL = "Resume";
 export class ControlsView {
 	private model: AppModel;
 	private runButton: HTMLElement;
+	private debugButton: HTMLElement;
 	private pauseButton: HTMLElement;
 	private stepButton: HTMLElement;
 	private stopButton: HTMLElement;
@@ -21,6 +22,7 @@ export class ControlsView {
 		this.model = model;
 		
 		this.runButton = document.getElementById("runbutton");
+		this.debugButton = document.getElementById("debugbutton");
 		this.pauseButton = document.getElementById("pausebutton");
 		this.stepButton = document.getElementById("stepbutton");
 		this.stopButton = document.getElementById("stopbutton");
@@ -28,6 +30,7 @@ export class ControlsView {
 		this.updatePauseLabel(false);
 		
 		this.runButton.addEventListener("click", () => this.performRun());
+		this.debugButton.addEventListener("click", () => this.performDebug());
 		this.pauseButton.addEventListener("click", () => this.performPause());
 		this.stepButton.addEventListener("click", () => this.performStep());
 		this.stopButton.addEventListener("click", () => this.performStop());
@@ -40,7 +43,11 @@ export class ControlsView {
 	}
 	
 	public performRun(): void {
-		this.withExecutor(exec => window.setTimeout(() => exec.run(), 100), /* shouldSetupNewExecutor */ true);
+		this.withExecutor(exec => exec.runInstantly(), /* shouldSetupNewExecutor */ true);
+	}
+	
+	public performDebug(): void {
+		this.withExecutor(exec => window.setTimeout(() => exec.runWithDelay(), 100), /* shouldSetupNewExecutor */ true);
 	}
 	
 	public performPause(): void {
