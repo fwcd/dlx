@@ -4,11 +4,13 @@ import { BinaryFormat } from "./BinaryFormat";
 import { OctalFormat } from "./OctalFormat";
 import { AsciiFormat } from "./AsciiFormat";
 import { DataFormat } from "./DataFormat";
+import { FloatFormat } from "./FloatFormat";
 
 export const DATA_FORMATS: { [formatKey: string]: DataFormat } = {
 	"dec": new DecimalFormat(),
 	"hex": new HexFormat(),
 	"bin": new BinaryFormat(),
 	"oct": new OctalFormat(),
-	"ascii": new AsciiFormat()
+	"ascii": new AsciiFormat(),
+	"float": new FloatFormat()
 };
