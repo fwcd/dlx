@@ -44,11 +44,20 @@ html, body {
 
 #controls {
 	flex: 0 0 0;
+	text-align: center;
+	width: 100%;
 }
 
 .tabpane {
+	flex: 1 0 auto;
+	display: flex;
+	flex-flow: column;
+}
+
+.tabcontent {
 	overflow-y: scroll;
 	flex: 1 0 auto;
+	display: none; /* Tab content is displayed dynamically through TabPaneView.ts */
 }
 
 .tabbutton {
@@ -80,13 +89,14 @@ html, body {
 	display: flex;
 	flex-flow: row;
 	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 #sidebox {
 	flex: 1 0 0;
 	display: flex;
 	flex-flow: column;
-	align-items: center;
 }
 
 #storagebox {
