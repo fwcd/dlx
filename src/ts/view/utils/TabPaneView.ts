@@ -4,15 +4,17 @@ import { View } from "./View";
  * A container panel for labelled tabs.
  */
 export class TabPaneView implements View {
-	private element: HTMLElement;
+	private paneElement: HTMLElement;
+	private barElement: HTMLElement;
 	
-	public constructor(element: HTMLElement) {
-		this.element = element;
-		this.findExistingTabs();
+	public constructor(barElement: HTMLElement, paneElement: HTMLElement) {
+		this.barElement = barElement;
+		this.paneElement = paneElement;
+		this.addExistingTabs();
 	}
 	
-	public findExistingTabs(): void {
-		const found = this.element.getElementsByClassName("tabcontent");
+	public addExistingTabs(): void {
+		const found = this.paneElement.getElementsByClassName("tabcontent");
 		for (let i = 0; i < found.length; i++) {
 			const tabElement = found.item(i) as HTMLElement;
 			const name = tabElement.dataset.tabName;
@@ -21,10 +23,16 @@ export class TabPaneView implements View {
 	}
 	
 	public addTab(name: string, tabElement: HTMLElement): void {
-		// TODO
+		const tabButton = document.createElement("button");
+		tabButton.classList.add("tabbutton", "tabbutton-unselected");
+		tabButton.innerText = name;
+		tabButton.addEventListener("click", () => {
+			tabButton.classList.replace("tabbutton-unselected", "tabbutton-selected");
+		});
+		this.barElement.appendChild(tabButton);
 	}
 	
 	public getElement(): HTMLElement {
-		return this.element;
+		return this.paneElement;
 	}
 }

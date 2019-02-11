@@ -48,6 +48,38 @@ html, body {
 
 .tabpane {
 	overflow-y: scroll;
+	flex: 1 0 auto;
+}
+
+.tabbutton {
+	text-align: left;
+	color: black;
+	border: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	outline: none;
+}
+
+.tabbutton:active {
+	background-color: rgb(180, 180, 180);
+}
+
+.tabbutton-unselected {
+	background-color: rgb(235, 235, 235);
+}
+
+.tabbutton-selected {
+	background-color: rgb(197, 197, 197);
+	border-bottom: 2px solid black;
+}
+
+.tabbar {
+	flex: 0 0 auto;
+	display: flex;
+	flex-flow: row;
+	width: 100%;
 }
 
 #sidebox {
