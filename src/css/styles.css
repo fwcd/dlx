@@ -46,6 +46,10 @@ html, body {
 	flex: 0 0 0;
 }
 
+.tabpane {
+	overflow-y: scroll;
+}
+
 #sidebox {
 	flex: 1 0 0;
 	display: flex;
@@ -58,7 +62,6 @@ html, body {
 	display: flex;
 	flex-flow: column;
 	align-items: center;
-	overflow-y: scroll;
 }
 
 #registers {

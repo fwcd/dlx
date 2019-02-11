@@ -12,7 +12,7 @@ export class TabPaneView implements View {
 	}
 	
 	public findExistingTabs(): void {
-		const found = this.element.getElementsByClassName("tab");
+		const found = this.element.getElementsByClassName("tabcontent");
 		for (let i = 0; i < found.length; i++) {
 			const tabElement = found.item(i) as HTMLElement;
 			const name = tabElement.dataset.tabName;
