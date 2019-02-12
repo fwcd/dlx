@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { AppView } from "./view/AppView";
 import { remote } from "electron";
 import { MenuBarView } from "./view/MenuBarView";

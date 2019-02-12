@@ -23,9 +23,10 @@
 		"typescript": "^2.8.3"
 	},
 	"dependencies": {
-		"monaco-editor": "0.15.6",
-		"split.js": "^1.5.10",
 		"inversify": "4.3.0",
+		"monaco-editor": "0.15.6",
+		"reflect-metadata": "^0.1.13",
+		"split.js": "^1.5.10",
 		"sprotty": "0.4.2"
 	}
 }
