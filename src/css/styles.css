@@ -57,7 +57,7 @@ html, body {
 .tabcontent {
 	overflow-y: scroll;
 	flex: 1 0 auto;
-	display: none; /* Tab content is displayed dynamically through TabPaneView.ts */
+	display: block;
 }
 
 .tabbutton {
@@ -97,6 +97,10 @@ html, body {
 	flex: 1 0 0;
 	display: flex;
 	flex-flow: column;
+}
+
+#pipelinebox {
+	display: flex;
 }
 
 #storagebox {

@@ -3,7 +3,7 @@
 // Licensed under EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
 
 import { ContainerModule, Container } from "inversify";
-import { configureModelElement, ConsoleLogger, LocalModelSource, RectangularNode, SGraph, SGraphView, TYPES, RectangularNodeView, PolylineEdgeView, configureViewerOptions, SEdge, defaultModule, selectModule, moveModule, boundsModule, undoRedoModule, viewportModule, exportModule } from "sprotty/lib";
+import { configureModelElement, ConsoleLogger, LocalModelSource, RectangularNode, SGraph, SGraphView, TYPES, RectangularNodeView, PolylineEdgeView, configureViewerOptions, SEdge, defaultModule, selectModule, moveModule, boundsModule, undoRedoModule, viewportModule, exportModule, SLabel, SLabelView } from "sprotty/lib";
 
 export default () => {
 	const graphModule = new ContainerModule((bind, unbind, isBound, rebind) => {
@@ -11,6 +11,7 @@ export default () => {
 		rebind(TYPES.ILogger).to(ConsoleLogger).inSingletonScope();
 		const context = { bind, unbind, isBound, rebind };
 		configureModelElement(context, "graph", SGraph, SGraphView);
+		configureModelElement(context, 'label:text', SLabel, SLabelView);
 		configureModelElement(context, "node:rectangular", RectangularNode, RectangularNodeView);
 		configureModelElement(context, "edge:straight", SEdge, PolylineEdgeView);
 	});

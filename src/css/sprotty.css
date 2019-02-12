@@ -1,0 +1,24 @@
+.sprotty {
+	display: flex;
+	flex-flow: column;
+	flex: 1 0 auto;
+}
+
+.sprotty-graph {
+	display: flex;
+	flex-flow: column;
+	flex: 1 0 auto;
+}
+
+.sprotty-node {
+	fill: rgb(236, 236, 97);
+}
+
+.sprotty-text {
+	font-size: 14pt;
+	color: black;
+}
+
+.sprotty-edge {
+	fill: black;
+}

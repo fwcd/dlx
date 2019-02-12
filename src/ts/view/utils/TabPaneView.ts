@@ -3,6 +3,7 @@ import { View } from "./View";
 interface Tab {
 	button: HTMLElement;
 	content: HTMLElement;
+	preferredDisplay: string;
 }
 
 const SELECTED_CLASS = "tabbutton-selected";
@@ -40,8 +41,10 @@ export class TabPaneView implements View {
 		// Setup tab compound and listeners
 		const tab = {
 			button: tabButton,
-			content: tabContent
+			content: tabContent,
+			preferredDisplay: tabContent.style.display
 		};
+		tabContent.style.display = "none";
 		tabButton.addEventListener("click", () => this.select(tab));
 		
 		if (!this.selectedTab) {
@@ -60,7 +63,7 @@ export class TabPaneView implements View {
 		
 		// Prepare and assign new tab
 		tab.button.classList.replace(UNSELECTED_CLASS, SELECTED_CLASS);
-		tab.content.style.display = "block";
+		tab.content.style.display = tab.preferredDisplay;
 		this.selectedTab = tab;
 	}
 	

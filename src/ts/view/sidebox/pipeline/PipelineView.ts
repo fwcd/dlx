@@ -4,7 +4,7 @@
 
 import { View } from "../../utils/View";
 import { PipelineModel } from "../../../model/pipeline/PipelineModel";
-import { SGraphSchema, SModelElementSchema, SNodeSchema, SEdgeSchema, LocalModelSource, TYPES, IActionDispatcher, SGraphFactory, ElementMove, MoveAction } from "sprotty/lib";
+import { SGraphSchema, SModelElementSchema, SNodeSchema, SEdgeSchema, LocalModelSource, TYPES, IActionDispatcher, SGraphFactory, ElementMove, MoveAction, SLabelSchema } from "sprotty/lib";
 import createContainer from "./Diagram.config";
 
 export class PipelineView implements View {
@@ -14,14 +14,14 @@ export class PipelineView implements View {
 		const container = createContainer();
 		
 		// Initialize gmodel
-		const node0 = { id: 'node0', type: 'node:rectangular', position: { x: 100, y: 100 }, size: { width: 80, height: 80 } };
-		const graph: SGraphSchema = { id: 'pielinegraph', type: 'graph', children: [node0] };
+		const node0 = { id: "node0", type: "node:rectangular", position: { x: 100, y: 100 }, size: { width: 80, height: 80 } };
+		const graph: SGraphSchema = { id: "graph", type: "graph", children: [node0] };
 		let count = 2;
 		
 		function addNode(): SModelElementSchema[] {
 			const newNode: SNodeSchema = {
-				id: 'node' + count,
-				type: 'node:rectangular',
+				id: "node" + count,
+				type: "node:rectangular",
 				position: {
 					x: Math.random() * 1024,
 					y: Math.random() * 768
@@ -29,13 +29,24 @@ export class PipelineView implements View {
 				size: {
 					width: 80,
 					height: 80
-				}
+				},
+				children: [
+					<SLabelSchema> {
+						id: "node" + count + "label",
+						type: "label:text",
+						position: {
+							x: 10,
+							y: 10
+						},
+						text: "Test"
+					}
+				]
 			};
 			const newEdge: SEdgeSchema = {
-				id: 'edge' + count,
-				type: 'edge:straight',
-				sourceId: 'node0',
-				targetId: 'node' + count++
+				id: "edge" + count,
+				type: "edge:straight",
+				sourceId: "node0",
+				targetId: "node" + count++
 			};
 			return [newNode, newEdge];
 		}
