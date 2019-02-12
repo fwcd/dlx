@@ -5,6 +5,7 @@ import { SettingsModel } from "./SettingsModel";
 import { ListenerList, Listener } from "./utils/ListenerList";
 import { FileLoaderModel } from "./FileLoaderModel";
 import { FormatSelectorModel } from "./format/FormatSelectorModel";
+import { PipelineModel } from "./pipeline/PipelineModel";
 
 /**
  * Encapsulates GUI-independent state of the application.
@@ -12,6 +13,7 @@ import { FormatSelectorModel } from "./format/FormatSelectorModel";
 export class AppModel {
 	private processorState: ProcessorState;
 	private parsedProgram = new ParsedProgram();
+	private pipeline = new PipelineModel();
 	private executor?: AssemblyExecutor = null;
 	private settings: SettingsModel;
 	private fileLoader = new FileLoaderModel();
@@ -43,6 +45,8 @@ export class AppModel {
 	public getExecutor(): AssemblyExecutor | null { return this.executor; }
 	
 	public getSettings(): SettingsModel { return this.settings; }
+	
+	public getPipeline(): PipelineModel { return this.pipeline; }
 	
 	public getRegistersFormat(): FormatSelectorModel { return this.registersFormat; }
 	

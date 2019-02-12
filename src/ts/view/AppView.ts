@@ -9,6 +9,7 @@ import { FileLoaderView } from "./FileLoaderView";
 import { StorageView } from "./sidebox/storage/StorageView";
 import { OverlayView } from "./overlay/OverlayView";
 import { TabPaneView } from "./utils/TabPaneView";
+import { PipelineView } from "./sidebox/pipeline/PipelineView";
 
 export const APP_VERSION = 1.0;
 
@@ -17,8 +18,8 @@ export class AppView {
 	private editor: EditorView;
 	private storage = new StorageView();
 	private fileLoader: FileLoaderView;
-	private tabPane: TabPaneView;
 	private controls: ControlsView;
+	private pipeline: PipelineView;
 	private overlay = new OverlayView();
 	
 	private executorListener?: Listener<AssemblyExecutor>;
@@ -26,10 +27,12 @@ export class AppView {
 	public constructor() {
 		this.model = new AppModel();
 		this.editor = new EditorView(this.model.getParsedProgram(), this.model.getFileLoader(), this.model.getSettings());
-		this.tabPane = new TabPaneView(document.getElementById("sidebox-tabbar"), document.getElementById("sidebox-tabpane"));
 		this.controls = new ControlsView(this.model, this.overlay);
+		this.pipeline = new PipelineView(this.model.getPipeline());
 		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
 		this.setupTitle();
+		
+		new TabPaneView(document.getElementById("sidebox-tabbar"), document.getElementById("sidebox-tabpane"));
 	}
 	
 	private setupTitle(): void {
@@ -108,4 +111,6 @@ export class AppView {
 	public getFileLoader(): FileLoaderView { return this.fileLoader; }
 	
 	public getControls(): ControlsView { return this.controls; }
+	
+	public getPipeline(): PipelineView { return this.pipeline; }
 }
