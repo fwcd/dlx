@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
+		"target": "es6",
 		"noImplicitAny": true,
 		"sourceMap": true,
 		"outDir": "src/js",
@@ -11,5 +12,8 @@
 	},
 	"include": [
 		"src/ts/**/*"
+	],
+	"exclude": [
+		"node_modules/**/*"
 	]
 }
