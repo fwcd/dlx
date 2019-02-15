@@ -1,15 +1,14 @@
-import * as Split from "split.js";
 import * as path from "path";
+import * as Split from "split.js";
 import { AppModel } from "../model/AppModel";
 import { AssemblyExecutor } from "../model/processor/AssemblyExecutor";
 import { Listener } from "../model/utils/ListenerList";
 import { ControlsView } from "./controls/ControlsView";
 import { EditorView } from "./editor/EditorView";
 import { FileLoaderView } from "./FileLoaderView";
-import { StorageView } from "./sidebox/storage/StorageView";
 import { OverlayView } from "./overlay/OverlayView";
+import { StorageView } from "./sidebox/storage/StorageView";
 import { TabPaneView } from "./utils/TabPaneView";
-import { PipelineView } from "./sidebox/pipeline/PipelineView";
 
 export const APP_VERSION = 1.0;
 
@@ -19,7 +18,6 @@ export class AppView {
 	private storage = new StorageView();
 	private fileLoader: FileLoaderView;
 	private controls: ControlsView;
-	private pipeline: PipelineView;
 	private overlay = new OverlayView();
 	
 	private executorListener?: Listener<AssemblyExecutor>;
@@ -28,7 +26,7 @@ export class AppView {
 		this.model = new AppModel();
 		this.editor = new EditorView(this.model.getParsedProgram(), this.model.getFileLoader(), this.model.getSettings());
 		this.controls = new ControlsView(this.model, this.overlay);
-		this.pipeline = new PipelineView(this.model.getPipeline());
+		// this.pipeline = new PipelineView(this.model.getPipeline());
 		this.fileLoader = new FileLoaderView(this.model.getFileLoader());
 		this.setupTitle();
 		
@@ -111,6 +109,4 @@ export class AppView {
 	public getFileLoader(): FileLoaderView { return this.fileLoader; }
 	
 	public getControls(): ControlsView { return this.controls; }
-	
-	public getPipeline(): PipelineView { return this.pipeline; }
 }
