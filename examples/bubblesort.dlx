@@ -1,0 +1,74 @@
+/ Registers:
+/   R1 bis R3 are used differently depending on subroutine
+/   R30 = Top of Stack (ToS)
+/   R31 = Return address
+/ Memory:
+/   from 1000: Stack
+/   from 1200: List
+
+        / Main Program
+start:  ADDI R30, R0, #1000     / Intialize ToS to address 1000
+        JAL bubblesort          / Jump to "bubblesort" subroutine
+        J end                   / Jump to end
+        / Subroutine "bubblesort"
+        / Parameters:
+        /   (keine)
+        / Registers:
+        /   R1 = n (List length)
+        /   R2 = i
+        /   R3 = j
+        /   R4 = Helper (doesn't need recovery)
+bubblesort:
+        SW 0(R30), R31          / Store return address on stack
+        ADDI R30, R30, #4       / Increase ToS (1x push)
+        ADD R2, R0, R1          / i = n
+i_loop: SLEI R4, R2, #1         / R3 = i <= 1
+        BNEZ R4, i_loop_end     / Jump to end of loop if i <= 1
+        ADDI R3, R0, #0         / Otherwise set j = 0 (and continue with inner loop)
+j_loop: SUBI R4, R2, #1         / Set helper register to i - 1
+        SLT R4, R3, R4          / Set helper register to j < (i - 1)
+        BEQZ R4, next_i_loop    / Jump to next iteration of i if j >= (i - 1)
+        SW 0(R30), R3           / Otherwise push the parameter j to the stack
+        ADDI R30, R30, #4       / Increase ToS by 4 (1x push)
+        JAL sort                / and jump to subroutine "sort"
+        SUBI R30, R30, #4       / Decrease ToS by 4 (1x pop)
+        ADDI R3, R3, #1         / Increment j (C-Style: j++)
+        J j_loop                / Jump to next iteration of the inner loop
+next_i_loop:
+        SUBI R2, R2, #1         / Decrement i (as the corresponding element has
+                                / already been moved to the right location)
+                                / (C-Style: i++)
+        J i_loop                / Jump to next iteration of outer loop
+i_loop_end:
+        SUBI R30, R30, #4       / Decrease ToS (1x pop)
+        LW R31, 0(R30)          / Recover return address from stack
+        JR R31                  / Jump back
+        / Subroutine "sort"
+        / Parameters:
+        /   R1 = j (List offset)
+        / Registers:
+        /   R2 = Mem[1200 + j]
+        /   R3 = Mem[1204 + j]
+        /   R4 = Helper
+        /   R5 = Helper 2 (for j * 4)
+sort:   SW 0(R30), R1           / Recover registers R1 to R3
+        SW 4(R30), R2
+        SW 8(R30), R3          
+        SW 12(R30), R31         / Write return address to stack
+        LW R1, -4(R30)          
+        ADDI R30, R30, #16      / Increase ToS by 16 (4x push)
+        SLLI R5, R1, #2         / Write j * 4 to helper register 2
+        LW R2, 1200(R5)         / Load a[j] from memory to R2
+        LW R3, 1204(R5)         / Load a[j + 1] from memory to R2
+        SLE R4, R2, R3          / R4 = a[j] <= a[j + 1]
+        BNEZ R4, endsort        / Branch if a[j] <= a[j + 1]
+        SW 1200(R5), R3         / Otherwise write R3 (previously a[j + 1])
+                                / to a[j] (we have a[j] > a[j + 1])
+        SW 1204(R5), R2         / Write R2 (previously a[j]) to a[j + 1]
+endsort:SUBI R30, R30, #16      / Decrease ToS by 16 (4x pop)
+        LW R1, 0(R30)           / Retrieve "recovered" registers R1 to R3 from memory
+        LW R2, 4(R30)
+        LW R3, 8(R30)
+        LW R31, 12(R30)
+        JR R31                  / Jump back
+end:    HALT
