@@ -1,0 +1,24 @@
+/ Check whether Mem[1000] contains
+/ a prime number. Store the result
+/ (1 or 0) in Mem[1004].
+
+        ADDI R2, R0, #2
+        LW   R1, 1000(R0)
+        ADD  R4, R0, R1
+        SUBI R3, R4, #2
+Loop1:  SLT  R5, R3, R2
+        BNEZ R5, Prime
+Loop2:  SLT  R5, R3, R4
+        BEQZ R5, EqTest
+        SUB  R4, R4, R3
+        J    Loop2
+EqTest: SEQ  R5, R3, R4
+        BNEZ R5, NotPrm
+        ADD  R4, R0, R1
+        SUBI R3, R3, #1
+        J    Loop1
+Prime:  ADDI R5, R0, #1
+        SW   1004(R0), R5
+        J    End
+NotPrm: SW   1004(R0), R0
+End:    HALT
