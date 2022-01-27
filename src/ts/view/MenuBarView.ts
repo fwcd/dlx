@@ -1,7 +1,5 @@
 import { AppView, APP_VERSION } from "./AppView";
-import { remote } from "electron";
-
-const { Menu } = remote;
+import { Menu } from "@electron/remote";
 
 export class MenuBarView {
 	private menuTemplate: Electron.MenuItemConstructorOptions[];
@@ -70,7 +68,7 @@ export class MenuBarView {
 				label: "Other",
 				submenu: [
 					{
-						role: "toggledevtools"
+						role: "toggleDevTools"
 					},
 					{
 						label: "About DLX...",
@@ -92,10 +90,10 @@ export class MenuBarView {
 					{role: 'services', submenu: []},
 					{type: 'separator'},
 					{role: 'hide'},
-					{role: 'hideothers'},
+					{role: 'hideOthers'},
 					{role: 'unhide'},
 					{type: 'separator'},
-					{role: 'toggledevtools'},
+					{role: 'toggleDevTools'},
 					{type: 'separator'},
 					{role: 'quit'}
 				]

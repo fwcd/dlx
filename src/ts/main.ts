@@ -1,5 +1,8 @@
 import { app, BrowserWindow } from "electron";
+import * as remote from "@electron/remote/main";
 import * as path from "path";
+
+remote.initialize();
 
 let mainWindow: Electron.BrowserWindow;
 
@@ -8,7 +11,13 @@ function createWindow() {
 	mainWindow = new BrowserWindow({
 		height: 600,
 		width: 800,
+		webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false,
+		},
 	});
+
+	remote.enable(mainWindow.webContents);
 	
 	// and load the index.html of the app.
 	mainWindow.loadFile(path.join(__dirname, "../index.html"));

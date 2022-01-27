@@ -1,4 +1,4 @@
-import { remote } from "electron";
+import * as remote from "@electron/remote";
 import { FileLoaderModel } from "../model/FileLoaderModel";
 
 export class FileLoaderView {
@@ -11,19 +11,19 @@ export class FileLoaderView {
 	public showOpenDialog(): void {
 		remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
 			properties: ["openFile"]
-		}, files => {
-			if (files && (files.length > 0)) {
+		}).then(res => {
+			if (!res.canceled && (res.filePaths.length > 0)) {
 				if (this.confirmIfUnsaved()) {
-					this.model.openFile(files[0]);
+					this.model.openFile(res.filePaths[0]);
 				}
 			}
 		});
 	}
 	
 	public showSaveAsDialog(): void {
-		remote.dialog.showSaveDialog(remote.getCurrentWindow(), {}, fileName => {
-			if (fileName) {
-				this.model.saveFile(fileName);
+		remote.dialog.showSaveDialog(remote.getCurrentWindow(), {}).then(res => {
+			if (!res.canceled) {
+				this.model.saveFile(res.filePath);
 			}
 		});
 	}

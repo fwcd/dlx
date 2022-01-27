@@ -17,16 +17,16 @@
 	"author": "fwcd",
 	"license": "EPL-2.0",
 	"devDependencies": {
-		"@types/split.js": "^1.3.1",
-		"electron": "^2.0.2",
-		"tslint": "^5.10.0",
-		"typescript": "^2.8.3"
+		"@types/split.js": "^1.6.0",
+		"electron": "^16.0.8",
+		"typescript": "^4.5.5"
 	},
 	"dependencies": {
-		"inversify": "4.3.0",
-		"monaco-editor": "0.15.6",
+		"@electron/remote": "^2.0.4",
+		"inversify": "^6.0.1",
+		"monaco-editor": "^0.31.1",
 		"reflect-metadata": "^0.1.13",
-		"split.js": "^1.5.10",
-		"sprotty": "0.4.2"
+		"split.js": "^1.6.5",
+		"sprotty": "^0.11.1"
 	}
 }

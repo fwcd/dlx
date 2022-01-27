@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { AppView } from "./view/AppView";
-import { remote } from "electron";
+import * as remote from "@electron/remote";
 import { MenuBarView } from "./view/MenuBarView";
 
 const { Menu } = remote;
