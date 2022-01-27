@@ -15,7 +15,7 @@
 		"assembly"
 	],
 	"author": "fwcd",
-	"license": "GPL-3.0-only",
+	"license": "EPL-2.0",
 	"devDependencies": {
 		"@types/split.js": "^1.3.1",
 		"electron": "^2.0.2",
